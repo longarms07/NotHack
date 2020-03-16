@@ -2,6 +2,7 @@
 #include <string>
 #include <iostream>
 #include "hackerWindow.cpp"
+#include "cooler.cpp"
 
 
 class Game {
@@ -9,7 +10,8 @@ class Game {
         Game()
         : renderWindow(sf::VideoMode(640,480), "NotHack: WPM"),
         debugFPS(),
-        testCircle()
+        testCircle(),
+        cooler(400.f, 0.f)
         {
             if(!font.loadFromFile("Oxanium-Regular.ttf")){
                 std::cout << "The font could not be loaded! Oh noes!!!\n";
@@ -64,6 +66,7 @@ class Game {
         sf::Text debugFPS;
         HackerWindow* l33tHackerWindow;
         sf::Font font;
+        Cooler cooler;
         
         void update(sf::Time deltaTime) {
         }
@@ -80,6 +83,24 @@ class Game {
                     case sf::Event::Closed:
                         renderWindow.close();
                         break;
+                    case sf::Event::MouseMoved:
+                        if (cooler.getGlobalBounds().contains(sf::Vector2f(event.mouseMove.x, event.mouseMove.y))) {
+                            if (!cooler.isMouseOver()) {
+                                cooler.onMouseOver(true);
+                                std::cout << "The Mouse is over the cooler!\n";
+                            }
+                        }
+                        else if (cooler.isMouseOver()) {
+                            cooler.onMouseOver(false);
+                            std::cout << "The Mouse has left the cooler!\n";
+                        }
+                        break;
+                    case sf::Event::MouseButtonReleased:
+                        if (cooler.getGlobalBounds().contains(sf::Vector2f(event.mouseButton.x, event.mouseButton.y))) {
+                            cooler.onClick();
+                            std::cout << "Clicked on Cooler!\n";
+                        }
+                        break;
                 }   
             }
         }
@@ -88,6 +109,7 @@ class Game {
             renderWindow.clear();
             //renderWindow.draw(testCircle);
             renderWindow.draw(debugFPS);
+            renderWindow.draw(cooler);
             renderWindow.draw(*l33tHackerWindow);
             renderWindow.display();
         }
