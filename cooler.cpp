@@ -8,19 +8,19 @@ class Cooler : public sf::Drawable {
     public:
         Cooler(sf::Vector2f aP);
         Cooler(float aPX, float aPY);
-        void getCoolant();
-        void onMouseOver(bool mouseOver);
-        bool isMouseOver();
-        void onClick();
-        sf::FloatRect getGlobalBounds();
+        void getCoolant(); 
+        void onMouseOver(bool mouseOver); // Sets open to the mouseOver value passed
+        bool isMouseOver(); // Returns true if open (which is only true when the mouse if over this)
+        void onClick(); 
+        sf::FloatRect getGlobalBounds(); // Returns the bounds this object occupies
     private:
         sf::Texture coolerTexture;
         sf::Sprite coolerOpenSprite;
         sf::Sprite coolerClosedSprite;
         sf::FloatRect closedFloatRect;
         sf::Vector2f anchorPoint;
-        const sf::Vector2f widthHeight = sf::Vector2f(115, 99);
-        const float lidHeight = 38.f;
+        const sf::Vector2f widthHeight = sf::Vector2f(115, 99); // Dimensions of the Cooler sprite
+        const float lidHeight = 38.f; // Size of the lid in the cooler sprite, used for calculating bounds.
         bool open;
         virtual void draw(sf::RenderTarget& renderTarget, sf::RenderStates states) const;
 };
