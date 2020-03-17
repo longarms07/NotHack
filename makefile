@@ -1,18 +1,19 @@
 CC=g++
-CFLAGS=-std=c++11
+CFLAGS=-std=c++11 -MMD -MP
 SFMLFLAGS=-lsfml-graphics -lsfml-window -lsfml-system
 
-%.d: %.cpp
-
-%.o: game.cpp %.d
+%.o: %.cpp
 	$(CC) -c $(CFLAGS) $<
 
-sfml-app: game.o
+game.app: game.o
 	$(CC) $< -o $@ $(SFMLFLAGS)
 
-run: sfml-app
-	./sfml-app
+run: game.app
+	./game.app
 
 clean:
 	rm -f sfml-app
 	rm -f *.o
+	rm -f *.d
+
+-include *.d
