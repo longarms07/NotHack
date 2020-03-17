@@ -1,34 +1,15 @@
-#include <SFML/Graphics.hpp>
-#include <string>
-#include <iostream>
-#include <fstream>
-#include <list> 
+#include "cooler.h"
+#include "game.h"
 
-class Cooler : public sf::Drawable {
-    public:
-        Cooler(sf::Vector2f aP);
-        Cooler(float aPX, float aPY);
-        void getCoolant(); 
-        void onMouseOver(bool mouseOver); // Sets open to the mouseOver value passed
-        bool isMouseOver(); // Returns true if open (which is only true when the mouse if over this)
-        void onClick(); 
-        sf::FloatRect getGlobalBounds(); // Returns the bounds this object occupies
-    private:
-        sf::Texture coolerTexture;
-        sf::Sprite coolerOpenSprite;
-        sf::Sprite coolerClosedSprite;
-        sf::FloatRect closedFloatRect;
-        sf::Vector2f anchorPoint;
-        const sf::Vector2f widthHeight = sf::Vector2f(115, 99); // Dimensions of the Cooler sprite
-        const float lidHeight = 38.f; // Size of the lid in the cooler sprite, used for calculating bounds.
-        bool open;
-        virtual void draw(sf::RenderTarget& renderTarget, sf::RenderStates states) const;
-};
-
-Cooler::Cooler(sf::Vector2f aP) {
+Cooler::Cooler(sf::Vector2f aP, Game* g) {
+    game = g;
     anchorPoint = aP;
     if (!coolerTexture.loadFromFile("Cooler.png")) {
         std::cout << "Error! Could not load Cooler.png!!!";
+        exit (8);
+    }
+    if (!coolantTexture.loadFromFile("Coolant.png")) {
+        std::cout << "Error! Could not load Coolant.png!!!";
         exit (8);
     }
     coolerOpenSprite.setTexture(coolerTexture);
@@ -41,10 +22,15 @@ Cooler::Cooler(sf::Vector2f aP) {
     open = false;
 }
 
-Cooler::Cooler(float aPX, float aPY) {
+Cooler::Cooler(float aPX, float aPY, Game* g) {
+    game = g;
     anchorPoint = sf::Vector2f(aPX, aPY);
     if (!coolerTexture.loadFromFile("Cooler.png")) {
         std::cout << "Error! Could not load Cooler.png!!!";
+        exit (8);
+    }
+    if (!coolantTexture.loadFromFile("Coolant.png")) {
+        std::cout << "Error! Could not load Coolant.png!!!";
         exit (8);
     }
     coolerOpenSprite.setTexture(coolerTexture);
@@ -65,12 +51,13 @@ bool Cooler::isMouseOver() {
     return open;
 }
 
-void Cooler::onClick() {
-    getCoolant();
+void Cooler::onClick(sf::Vector2f pos) {
+    getCoolant(pos);
 }
 
-void Cooler::getCoolant() {
-    //stubbed;
+void Cooler::getCoolant(sf::Vector2f pos) {
+    Coolant* c  = new Coolant(pos, game->getHackerWindow(), coolantTexture);
+    game->setDraggable(dynamic_cast<IDraggable*>(c));
 }
 
 sf::FloatRect Cooler::getGlobalBounds() {
