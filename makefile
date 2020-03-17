@@ -1,12 +1,19 @@
 CC=g++
+
+ODIR = objects
+DDIR = dependencies
+
 CFLAGS=-std=c++11 -MMD -MP
 SFMLFLAGS=-lsfml-graphics -lsfml-window -lsfml-system
 
-%.o: %.cpp
-	$(CC) -c $(CFLAGS) $<
+$(ODIR)/%.o: %.cpp | $(ODIR) $(DDIR)
+	$(CC) -c $< -o $@ $(CFLAGS) -MF $(DDIR)/$(patsubst %.o,%.d,$(@F))
 
-game.app: game.o
+game.app: $(ODIR)/game.o
 	$(CC) $< -o $@ $(SFMLFLAGS)
+
+$(ODIR) $(DDIR):
+	mkdir -p $@
 
 run: game.app
 	./game.app
@@ -15,5 +22,7 @@ clean:
 	rm -f sfml-app
 	rm -f *.o
 	rm -f *.d
+	rm -f -r objects/
+	rm -f -r dependencies/
 
--include *.d
+-include $(DDIR)/*.d
