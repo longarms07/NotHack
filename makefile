@@ -19,7 +19,8 @@ run: game.app
 	./game.app
 
 clean:
-	rm -f sfml-app
+	rm -f sfml-app # deprecated
+	rm -f *.app
 	rm -f *.o
 	rm -f *.d
 	rm -f -r objects/
