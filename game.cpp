@@ -1,5 +1,5 @@
 #include "game.h"
-#include "hackerWindow.cpp"
+#include "hackerWindow.cpp" // Must import cpp files here in order to get the implementations for each class
 #include "cooler.cpp"
 #include "coolant.cpp"
 
@@ -59,6 +59,8 @@ void Game::run() {
 }
 
 void Game::setDraggable(IDraggable* iDraggable) {
+    // If there is a current draggable call onDragEnd on it.
+    if (draggable != NULL) draggable->onDragEnd(draggable->getSprite().getPosition()); 
     draggable = iDraggable;
 }
 
@@ -84,7 +86,6 @@ void Game::processEvents() {
                 renderWindow.close();
                 break;
             case sf::Event::MouseMoved:
-                //sf::Vector2f mouseMovedPos = sf::Vector2f(event.mouseMove.x, event.mouseMove.y);
                 if (draggable != NULL) draggable->onDragMove(sf::Vector2f(event.mouseMove.x, event.mouseMove.y));
                 if (cooler->getGlobalBounds().contains(sf::Vector2f(event.mouseMove.x, event.mouseMove.y))) {
                     if (!cooler->isMouseOver()) {
@@ -98,7 +99,9 @@ void Game::processEvents() {
                 }
                 break;
             case sf::Event::MouseButtonReleased:
-                //sf::Vector2f mouseButtonPos = sf::Vector2f(event.mouseButton.x, event.mouseButton.y);
+                /* If there is currently a draggable, when the mouse is clicked call it's onDragEnd.
+                   Since onDragEnd will either destroy it or make the draggable not our concern, set the pointer to null.
+                */
                 if (draggable != NULL) {
                     draggable->onDragEnd(sf::Vector2f(event.mouseButton.x, event.mouseButton.y));
                     draggable = NULL;

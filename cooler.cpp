@@ -57,7 +57,7 @@ void Cooler::onClick(sf::Vector2f pos) {
 
 void Cooler::getCoolant(sf::Vector2f pos) {
     Coolant* c  = new Coolant(pos, game->getHackerWindow(), coolantTexture);
-    game->setDraggable(dynamic_cast<IDraggable*>(c));
+    game->setDraggable(dynamic_cast<IDraggable*>(c)); // Must cast the coolant as an IDraggable
 }
 
 sf::FloatRect Cooler::getGlobalBounds() {

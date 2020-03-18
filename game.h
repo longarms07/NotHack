@@ -1,4 +1,4 @@
-#pragma once
+#pragma once // Tells compiler to include the source file only once
 #include <SFML/Graphics.hpp>
 #include <string>
 #include <iostream>
@@ -13,7 +13,7 @@ class Game {
         ~Game();      
         void run();
         void setDraggable(IDraggable* iDraggable);
-        HackerWindow* getHackerWindow();
+        HackerWindow* getHackerWindow(); 
     
     private:
         sf::RenderWindow renderWindow;
@@ -22,7 +22,7 @@ class Game {
         HackerWindow* l33tHackerWindow;
         sf::Font font;
         Cooler* cooler;
-        IDraggable* draggable;
+        IDraggable* draggable; // The current iDraggable assigned to the mouse. Can only drag one thing at a time.
         
         void update(sf::Time deltaTime);
 
