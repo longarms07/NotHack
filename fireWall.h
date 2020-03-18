@@ -1,18 +1,18 @@
+#pragma once
 #include <SFML/Graphics.hpp>
 #include <string>
-#include "hackerWindow.h"
+#include <iostream>
+
+class HackerWindow;
 
 class FireWall : public sf::Drawable {
-
     public:
-
-        FireWall(HackerWindow& parent, int targetChars, sf::Time maxTime, sf::Time coolTime); 
+        FireWall(HackerWindow* parent, int targetChars, sf::Time maxTime, sf::Time coolTime); 
         void charEntered(); // Increments numEnteredChars, ends the firewall if target has been reached.
         /* Adds delta time to elapsed time, ends job in failure is greater than maximumTime.
            Calls updateWallGraphic(). */
         void update(sf::Time deltaTime); 
         void coolantApplied(); // Subtracts coolant time from maximum time, calls updateWallGraphic().
-
 
     private: 
         sf::Time elapsedTime; // The time the firewall has been active (the coolant subtracts time from it)
@@ -26,9 +26,9 @@ class FireWall : public sf::Drawable {
         sf::RectangleShape wallGraphic; // The red, semi-transparent rectangle representing the firewall. 
         HackerWindow* parentHackerWindow;
 
-        void EndFireWall(); // Notifies HackerWindow to set the firewall to null, deletes self. 
-        void EndJob(); // Ends the current job in the parent
-        void UpdateWallGraphic(); // Changes size of wall graphic to reflect the remaining time left. Bigger = less time. 
+        void endFireWall(); // Notifies HackerWindow to set the firewall to null, deletes self. 
+        void endJob(); // Ends the current job in the parent
+        void updateWallGraphic(); // Changes size of wall graphic to reflect the remaining time left. Bigger = less time. 
         virtual void draw(sf::RenderTarget& renderTarget, sf::RenderStates states) const;
 
 };

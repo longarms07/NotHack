@@ -13,6 +13,7 @@ HackerWindow::HackerWindow(sf::Vector2f anchorPt, sf::Vector2f wH, sf::Font& fon
         hackerScreen.setSize(widthHeight);
         hackerScreen.setFillColor(sf::Color::Green);
         hackerText.setPosition(anchorPoint);
+        startFireWall(30, sf::seconds(1), sf::seconds(.5));
     };
 
 HackerWindow::HackerWindow(float anchorPointX, float anchorPointY, float width, float height, sf::Font& font, const sf::Color& color)
@@ -28,6 +29,7 @@ HackerWindow::HackerWindow(float anchorPointX, float anchorPointY, float width, 
         hackerScreen.setSize(widthHeight);
         hackerScreen.setFillColor(sf::Color::Green);
         hackerText.setPosition(anchorPoint);
+        startFireWall(30, sf::seconds(1), sf::seconds(.5));
     };
 
 sf::Vector2f HackerWindow::getAnchorPoint() {
@@ -72,6 +74,7 @@ void HackerWindow::setTextColor(const sf::Color& color) {
 
 void HackerWindow::draw(sf::RenderTarget& renderTarget, sf::RenderStates states) const {
     renderTarget.draw(hackerScreen, states);
+    if (fireWall!=NULL) renderTarget.draw(*fireWall);
     renderTarget.draw(hackerText, states);
 }
 
@@ -116,6 +119,7 @@ void HackerWindow::loadNextChar() {
         hackerTextFile >> std::noskipws >> nextChar;
         // std::cout << nextChar << '\n';
         updateList(nextChar);
+        if (fireWall!=NULL) fireWall->charEntered();
     }
 }
 
@@ -130,4 +134,26 @@ void HackerWindow::updateList(char c) {
     }
     
     updateHackerText();
+}
+
+void HackerWindow::startFireWall(int targetChars, sf::Time maxTime, sf::Time coolantTime) {
+    if (fireWall == NULL) {
+        fireWall = new FireWall(this, targetChars, maxTime, coolantTime);
+    }
+}
+
+void HackerWindow::derefFireWall() {
+    if (fireWall!=NULL) fireWall = NULL;
+}
+
+void HackerWindow::coolFireWall() {
+    if (fireWall!=NULL) fireWall->coolantApplied();
+}
+
+void HackerWindow::update(sf::Time deltaTime) {
+    if (fireWall!=NULL) fireWall->update(deltaTime);
+}
+
+bool HackerWindow::contains(sf::Vector2f pos) {
+    return hackerScreen.getGlobalBounds().contains(pos);
 }

@@ -19,6 +19,7 @@ Coolant::~Coolant() {
 
 void Coolant::onDragEnd(sf::Vector2f position) {
     // Stubbed, check if on target and if a firewall is active. If so cool down the firewall.
+    if (target->contains(position)) target->coolFireWall();
     std::cout << "Drag ended on coolant. \n";
     delete this; // Coolants are only ever created with the "new" keyword
 }

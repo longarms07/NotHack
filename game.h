@@ -6,6 +6,7 @@
 #include "cooler.h"
 #include "idraggable.h"
 #include "coolant.h"
+#include "fireWall.h"
 
 class Game {
     public:

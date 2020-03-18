@@ -2,6 +2,7 @@
 #include "hackerWindow.cpp" // Must import cpp files here in order to get the implementations for each class
 #include "cooler.cpp"
 #include "coolant.cpp"
+#include "fireWall.cpp"
 
 Game::Game()
 : renderWindow(sf::VideoMode(640,480), "NotHack: WPM"),
@@ -69,6 +70,7 @@ HackerWindow* Game::getHackerWindow() {
 }
 
 void Game::update(sf::Time deltaTime) {
+    l33tHackerWindow->update(deltaTime);
 }
 
 
