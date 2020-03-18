@@ -13,7 +13,7 @@ HackerWindow::HackerWindow(sf::Vector2f anchorPt, sf::Vector2f wH, sf::Font& fon
         hackerScreen.setSize(widthHeight);
         hackerScreen.setFillColor(sf::Color::Green);
         hackerText.setPosition(anchorPoint);
-        startFireWall(30, sf::seconds(1), sf::seconds(.5));
+        //startFireWall(30, sf::seconds(1), sf::seconds(.5));
     };
 
 HackerWindow::HackerWindow(float anchorPointX, float anchorPointY, float width, float height, sf::Font& font, const sf::Color& color)
@@ -29,7 +29,7 @@ HackerWindow::HackerWindow(float anchorPointX, float anchorPointY, float width, 
         hackerScreen.setSize(widthHeight);
         hackerScreen.setFillColor(sf::Color::Green);
         hackerText.setPosition(anchorPoint);
-        startFireWall(30, sf::seconds(1), sf::seconds(.5));
+        //startFireWall(30, sf::seconds(1), sf::seconds(.5));
     };
 
 sf::Vector2f HackerWindow::getAnchorPoint() {
