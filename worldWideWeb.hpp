@@ -1,21 +1,46 @@
 #pragma once
 #include <SFML/Graphics.hpp>
+#include "eventSystem.hpp"
+
+/*
+TODO:
+    - Maybe all the event passing should instead be done by const reference instead
+        of by copy?
+
+    - Abstract dragable
+
+    - Check difference between mouse0, 1, 2 and events
+    - Implement states better
+
+    - Implement sf::Transform support
+    - Implement generic bounds (instead of using bounding box)
+*/
 
 namespace WorldWideWeb {
     class WindowPart;
 
-    class BrowserWindow : public sf::Drawable {
+    class BrowserWindow : public sf::Drawable, public EventSystem::MouseMoveObserver, public EventSystem::MouseDownObserver, public EventSystem::MouseUpObserver {
         public:
             WindowPart* currentSite;
 
         private:
             sf::RectangleShape windowBackground;
 
+            /*Dragging State*/
+            bool dragging;
+            sf::Vector2f mouseOffsetFromOrigin;
+
         public:
             BrowserWindow(sf::Vector2f, sf::Vector2f);
             ~BrowserWindow();
 
+            /*sf::Drawable*/
             void draw(sf::RenderTarget&, sf::RenderStates) const;
+
+            /*EventSystem Observeres*/
+            void mouseMove(sf::Event::MouseMoveEvent);
+            void mouseDown(sf::Event::MouseButtonEvent);
+            void mouseUp(sf::Event::MouseButtonEvent);
     };
 
     /*

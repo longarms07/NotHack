@@ -4,6 +4,8 @@
 #include "coolant.cpp"
 #include "fireWall.cpp"
 #include "worldWideWeb.cpp"
+#include "eventSystem.cpp"
+#include "Singleton.cpp"
 
 Game::Game()
     : renderWindow(sf::VideoMode(640,480), "NotHack: WPM"),
@@ -30,6 +32,8 @@ Game::Game()
     testCircle.setRadius(200.f);
     testCircle.setPosition(0.f,0.f);
     testCircle.setFillColor(sf::Color::Red);
+
+    EventSystem::EventHandler::getInstance();
 };
 
 Game::~Game() {
@@ -86,6 +90,8 @@ void Game::processEvents() {
     sf::Event event;
     while (renderWindow.pollEvent(event))
     {
+        EventSystem::EventHandler::getInstance()->processEvent(event);
+
         switch (event.type) {
             /* Disabled
             case sf::Event::KeyReleased:
