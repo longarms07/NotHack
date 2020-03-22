@@ -15,6 +15,9 @@ namespace EventSystem {
     class MouseMoveObserver;
     class MouseDownObserver;
     class MouseUpObserver;
+    class TextEnteredObserver;
+    class KeyPressedObserver;
+    class KeyReleasedObserver;
 
     // Should be singleton
     class EventHandler : public Singleton<EventHandler> {
@@ -25,6 +28,9 @@ namespace EventSystem {
             std::list<MouseMoveObserver*> mouseMoveRegistrants;
             std::list<MouseDownObserver*> mouseDownRegistrants;
             std::list<MouseUpObserver*> mouseUpRegistrants;
+            std::list<TextEnteredObserver*> textEnteredRegistrants;
+            std::list<KeyPressedObserver*> keyPressedRegistrants;
+            std::list<KeyReleasedObserver*> keyReleasedRegistrants;
 
         public:
             void processEvent(sf::Event);
@@ -32,10 +38,16 @@ namespace EventSystem {
             bool registerMouseMoveObserver(MouseMoveObserver*);
             bool registerMouseDownObserver(MouseDownObserver*);
             bool registerMouseUpObserver(MouseUpObserver*);
+            bool registerTextEnteredObserver(TextEnteredObserver*);
+            bool registerKeyPressedObserver(KeyPressedObserver*);
+            bool registerKeyReleasedObserver(KeyReleasedObserver*);
 
             bool unregisterMouseMoveObserver(MouseMoveObserver*);
             bool unregisterMouseDownObserver(MouseDownObserver*);
             bool unregisterMouseUpObserver(MouseUpObserver*);
+            bool unregisterTextEnteredObserver(TextEnteredObserver*);
+            bool unregisterKeyPressedObserver(KeyPressedObserver*);
+            bool unregisterKeyReleasedObserver(KeyReleasedObserver*);
 
         private:
             EventHandler(); // Should never be called
@@ -44,7 +56,12 @@ namespace EventSystem {
             void mouseMoveEvent(sf::Event::MouseMoveEvent);
             void mouseDownEvent(sf::Event::MouseButtonEvent);
             void mouseUpEvent(sf::Event::MouseButtonEvent);
+            void textEnteredEvent(sf::Event::TextEvent);
+            void keyPressedEvent(sf::Event::KeyEvent);
+            void keyReleasedEvent(sf::Event::KeyEvent);
     };
+
+    /*Mouse Observers*/
 
     class MouseMoveObserver {
         public:
@@ -68,5 +85,31 @@ namespace EventSystem {
             ~MouseUpObserver();
 
             virtual void mouseUp(sf::Event::MouseButtonEvent) = 0;
+    };
+
+    /*Text Observers*/
+    class TextEnteredObserver {
+        public:
+            TextEnteredObserver();
+            ~TextEnteredObserver();
+
+            virtual void textEntered(sf::Event::TextEvent event) = 0;
+    };
+
+    /*Key Observers*/
+    class KeyPressedObserver {
+        public:
+            KeyPressedObserver();
+            ~KeyPressedObserver();
+
+            virtual void keyPressed(sf::Event::KeyEvent) = 0;
+    };
+
+    class KeyReleasedObserver {
+        public:
+            KeyReleasedObserver();
+            ~KeyReleasedObserver();
+
+            virtual void keyReleased(sf::Event::KeyEvent) = 0;
     };
 }

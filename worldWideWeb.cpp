@@ -33,15 +33,15 @@ void WorldWideWeb::BrowserWindow::mouseDown(sf::Event::MouseButtonEvent event) {
     sf::Vector2f eventLocation(event.x, event.y);
 
     if (windowBackground.getGlobalBounds().contains(eventLocation)) {
-        std::cout << "Mouse down in bounds" << std::endl;
+        // std::cout << "Mouse down in bounds" << std::endl;
         mouseOffsetFromOrigin = eventLocation - windowBackground.getPosition();
         dragging = true;
     } else {
-        std::cout << "Mouse down outside bounds" << std::endl;
+        // std::cout << "Mouse down outside bounds" << std::endl;
     }
 }
 
 void WorldWideWeb::BrowserWindow::mouseUp(sf::Event::MouseButtonEvent event) {
-    std::cout << "Mouse up event" << std::endl;
+    // std::cout << "Mouse up event" << std::endl;
     dragging = false;
 }

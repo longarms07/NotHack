@@ -25,8 +25,20 @@ void EventSystem::EventHandler::processEvent(sf::Event event) {
         case sf::Event::MouseButtonReleased:
             mouseUpEvent(event.mouseButton);
             break;
+        case sf::Event::TextEntered:
+            textEnteredEvent(event.text);
+            break;
+        case sf::Event::KeyPressed:
+            keyPressedEvent(event.key);
+            break;
+        case sf::Event::KeyReleased:
+            keyReleasedEvent(event.key);
+            break;
     }
 }
+
+
+/*Un/Registration*/
 
 bool EventSystem::EventHandler::registerMouseMoveObserver(MouseMoveObserver* observer) {
     if (std::find(mouseMoveRegistrants.begin(), mouseMoveRegistrants.end(), observer) != mouseMoveRegistrants.end()) {
@@ -55,12 +67,39 @@ bool EventSystem::EventHandler::registerMouseUpObserver(MouseUpObserver* observe
     }
 }
 
+bool EventSystem::EventHandler::registerTextEnteredObserver(TextEnteredObserver* observer) {
+    if (std::find(textEnteredRegistrants.begin(), textEnteredRegistrants.end(), observer) != textEnteredRegistrants.end()) {
+        return false;
+    } else {
+        textEnteredRegistrants.push_back(observer);
+        return true;
+    }
+}
+
+bool EventSystem::EventHandler::registerKeyPressedObserver(KeyPressedObserver* observer) {
+    if (std::find(keyPressedRegistrants.begin(), keyPressedRegistrants.end(), observer) != keyPressedRegistrants.end()) {
+        return false;
+    } else {
+        keyPressedRegistrants.push_back(observer);
+        return true;
+    }
+}
+
+bool EventSystem::EventHandler::registerKeyReleasedObserver(KeyReleasedObserver* observer) {
+    if (std::find(keyReleasedRegistrants.begin(), keyReleasedRegistrants.end(), observer) != keyReleasedRegistrants.end()) {
+        return false;
+    } else {
+        keyReleasedRegistrants.push_back(observer);
+        return true;
+    }
+}
+
 bool EventSystem::EventHandler::unregisterMouseMoveObserver(MouseMoveObserver* observer) {
     if (std::find(mouseMoveRegistrants.begin(), mouseMoveRegistrants.end(), observer) != mouseMoveRegistrants.end()) {
         mouseMoveRegistrants.remove(observer);
         return true;
     } else {
-       return false;
+        return false;
     }
 }
 
@@ -69,7 +108,7 @@ bool EventSystem::EventHandler::unregisterMouseDownObserver(MouseDownObserver* o
         mouseDownRegistrants.remove(observer);
         return true;
     } else {
-       return false;
+        return false;
     }
 }
 
@@ -78,9 +117,38 @@ bool EventSystem::EventHandler::unregisterMouseUpObserver(MouseUpObserver* obser
         mouseUpRegistrants.remove(observer);
         return true;
     } else {
-       return false;
+        return false;
     }
 }
+
+bool EventSystem::EventHandler::unregisterTextEnteredObserver(TextEnteredObserver* observer) {
+    if (std::find(textEnteredRegistrants.begin(), textEnteredRegistrants.end(), observer) != textEnteredRegistrants.end()) {
+        textEnteredRegistrants.remove(observer);
+        return true;
+    } else {
+        return false;
+    }
+}
+
+bool EventSystem::EventHandler::unregisterKeyPressedObserver(KeyPressedObserver* observer) {
+    if (std::find(keyPressedRegistrants.begin(), keyPressedRegistrants.end(), observer) != keyPressedRegistrants.end()) {
+        keyPressedRegistrants.remove(observer);
+        return true;
+    } else {
+        return false;
+    }
+}
+
+bool EventSystem::EventHandler::unregisterKeyReleasedObserver(KeyReleasedObserver* observer) {
+    if (std::find(keyReleasedRegistrants.begin(), keyReleasedRegistrants.end(), observer) != keyReleasedRegistrants.end()) {
+        keyReleasedRegistrants.remove(observer);
+        return true;
+    } else {
+        return false;
+    }
+}
+
+/*Event Handling*/
 
 void EventSystem::EventHandler::mouseMoveEvent(sf::Event::MouseMoveEvent event) {
     for (MouseMoveObserver* observer : mouseMoveRegistrants) {
@@ -100,9 +168,34 @@ void EventSystem::EventHandler::mouseUpEvent(sf::Event::MouseButtonEvent event) 
     }
 }
 
+void EventSystem::EventHandler::textEnteredEvent(sf::Event::TextEvent event) {
+    // std::cout << event.unicode << std::endl;
+    if (event.unicode > 31 && event.unicode < 127) {
+        for (TextEnteredObserver* observer : textEnteredRegistrants) {
+            observer->textEntered(event);
+        }
+    } else {
+        // Do nothing for non-latin+punctuation characters
+    }
+}
+
+void EventSystem::EventHandler::keyPressedEvent(sf::Event::KeyEvent event) {
+    for (KeyPressedObserver* observer : keyPressedRegistrants) {
+        observer->keyPressed(event);
+    }
+}
+
+void EventSystem::EventHandler::keyReleasedEvent(sf::Event::KeyEvent event) {
+    for (KeyReleasedObserver* observer : keyReleasedRegistrants) {
+        observer->keyReleased(event);
+    }
+}
+
 /**************
  * Observers
  **************/
+
+/*Mouse Observers*/
 
 EventSystem::MouseMoveObserver::MouseMoveObserver() {
     EventSystem::EventHandler::getInstance()->registerMouseMoveObserver(this);
@@ -126,4 +219,30 @@ EventSystem::MouseUpObserver::MouseUpObserver() {
 
 EventSystem::MouseUpObserver::~MouseUpObserver() {
     EventSystem::EventHandler::getInstance()->unregisterMouseUpObserver(this);
+}
+
+/*Text Observers*/
+EventSystem::TextEnteredObserver::TextEnteredObserver() {
+    EventSystem::EventHandler::getInstance()->registerTextEnteredObserver(this);
+}
+
+EventSystem::TextEnteredObserver::~TextEnteredObserver() {
+    EventSystem::EventHandler::getInstance()->unregisterTextEnteredObserver(this);
+}
+
+/*Key Observers*/
+EventSystem::KeyPressedObserver::KeyPressedObserver() {
+    EventSystem::EventHandler::getInstance()->registerKeyPressedObserver(this);
+}
+
+EventSystem::KeyPressedObserver::~KeyPressedObserver() {
+    EventSystem::EventHandler::getInstance()->unregisterKeyPressedObserver(this);
+}
+
+EventSystem::KeyReleasedObserver::KeyReleasedObserver() {
+    EventSystem::EventHandler::getInstance()->registerKeyReleasedObserver(this);
+}
+
+EventSystem::KeyReleasedObserver::~KeyReleasedObserver() {
+    EventSystem::EventHandler::getInstance()->unregisterKeyReleasedObserver(this);
 }

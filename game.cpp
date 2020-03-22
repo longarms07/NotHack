@@ -6,6 +6,7 @@
 #include "worldWideWeb.cpp"
 #include "eventSystem.cpp"
 #include "Singleton.cpp"
+#include "textField.cpp"
 
 Game::Game()
     : renderWindow(sf::VideoMode(640,480), "NotHack: WPM"),
@@ -25,6 +26,8 @@ Game::Game()
 
     browserWindow = new WorldWideWeb::BrowserWindow(sf::Vector2f(50.f,50.f), sf::Vector2f(200.f,300.f));
 
+    testTextField = new TextField(sf::Vector2f(50.f, 100.f), sf::Vector2f(400.f, 50.f), font);
+
     std::cout << "The font has been set. Ready to hacktivate.\n";
     debugFPS.setString("FPS Text Initialized");
     debugFPS.setFillColor(sf::Color::Blue);
@@ -40,6 +43,7 @@ Game::~Game() {
     delete l33tHackerWindow;
     delete cooler;
     delete browserWindow;
+    delete testTextField;
     if (draggable != NULL) delete draggable;
 }
 
@@ -140,6 +144,8 @@ void Game::render() {
     renderWindow.draw(debugFPS);
 
     renderWindow.draw(*browserWindow);
+
+    renderWindow.draw(*testTextField);
 
     /* Disabled
     renderWindow.draw(*cooler);

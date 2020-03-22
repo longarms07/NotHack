@@ -8,6 +8,7 @@
 #include "coolant.h"
 #include "fireWall.h"
 #include "worldWideWeb.hpp"
+#include "textField.hpp"
 
 class Game {
     public:
@@ -27,6 +28,7 @@ class Game {
         Cooler* cooler;
         IDraggable* draggable; // The current iDraggable assigned to the mouse. Can only drag one thing at a time.
         WorldWideWeb::BrowserWindow* browserWindow;
+        TextField* testTextField;
         
         void update(sf::Time deltaTime);
 
