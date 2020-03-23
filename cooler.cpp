@@ -1,7 +1,8 @@
 #include "cooler.h"
 #include "game.h"
 
-Cooler::Cooler(sf::Vector2f aP, Game* g) {
+Cooler::Cooler(sf::Vector2f aP, Game* g)
+    : cooldownTimer(sf::Vector2f(aP.x, aP.y+14), sf::Vector2f(115, 14), sf::Color::Blue, 0.5) {
     game = g;
     anchorPoint = aP;
     if (!coolerTexture.loadFromFile("Cooler.png")) {
@@ -22,7 +23,8 @@ Cooler::Cooler(sf::Vector2f aP, Game* g) {
     open = false;
 }
 
-Cooler::Cooler(float aPX, float aPY, Game* g) {
+Cooler::Cooler(float aPX, float aPY, Game* g) 
+    : cooldownTimer(sf::Vector2f(aPX, aPY+14), sf::Vector2f(115, 14), sf::Color::Blue, 0.5) {
     game = g;
     anchorPoint = sf::Vector2f(aPX, aPY);
     if (!coolerTexture.loadFromFile("Cooler.png")) {
@@ -56,8 +58,19 @@ void Cooler::onClick(sf::Vector2f pos) {
 }
 
 void Cooler::getCoolant(sf::Vector2f pos) {
-    Coolant* c  = new Coolant(pos, game->getHackerWindow(), coolantTexture);
-    game->setDraggable(dynamic_cast<IDraggable*>(c)); // Must cast the coolant as an IDraggable
+    if (!inCooldown) {
+        Coolant* c  = new Coolant(pos, game->getHackerWindow(), coolantTexture);
+        game->setDraggable(dynamic_cast<IDraggable*>(c)); // Must cast the coolant as an IDraggable
+        cooldownTimer.setProgress(0);
+        inCooldown = true;
+    }
+}
+
+void Cooler::update(sf::Time deltaTime) {
+    if (inCooldown) {
+        cooldownTimer.incrementProgress(deltaTime.asSeconds());
+        if (cooldownTimer.getProgress() == cooldownTime) inCooldown = false;
+    }
 }
 
 sf::FloatRect Cooler::getGlobalBounds() {
@@ -65,6 +78,7 @@ sf::FloatRect Cooler::getGlobalBounds() {
 }
 
 void Cooler::draw(sf::RenderTarget& renderTarget, sf::RenderStates states) const {
-    if(open) renderTarget.draw(coolerOpenSprite, states);
+    if (open) renderTarget.draw(coolerOpenSprite, states);
     else renderTarget.draw(coolerClosedSprite, states);
+    if (inCooldown) renderTarget.draw(cooldownTimer, states);
 }

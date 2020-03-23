@@ -3,6 +3,7 @@
 #include "cooler.cpp"
 #include "coolant.cpp"
 #include "fireWall.cpp"
+#include "progressBar.cpp"
 
 Game::Game()
 : renderWindow(sf::VideoMode(640,480), "NotHack: WPM"),
@@ -59,6 +60,10 @@ void Game::run() {
     }
 }
 
+sf::Font Game::getFont() {
+    return font;
+}
+
 void Game::setDraggable(IDraggable* iDraggable) {
     // If there is a current draggable call onDragEnd on it.
     if (draggable != NULL) draggable->onDragEnd(draggable->getSprite().getPosition()); 
@@ -71,6 +76,7 @@ HackerWindow* Game::getHackerWindow() {
 
 void Game::update(sf::Time deltaTime) {
     l33tHackerWindow->update(deltaTime);
+    cooler->update(deltaTime);
 }
 
 

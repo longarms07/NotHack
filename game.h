@@ -12,6 +12,7 @@ class Game {
     public:
         Game();
         ~Game();      
+        sf::Font getFont();
         void run();
         void setDraggable(IDraggable* iDraggable);
         HackerWindow* getHackerWindow(); 

@@ -2,6 +2,7 @@
 #include <SFML/Graphics.hpp>
 #include <string>
 #include <iostream>
+#include "progressBar.h"
 
 class HackerWindow;
 
@@ -25,6 +26,7 @@ class FireWall : public sf::Drawable {
         sf::Vector2f maxBounds; // Maximum bounds of wallGraphic, equal to the bounds of HackerWindow. x is width, y is height.
         sf::RectangleShape wallGraphic; // The red, semi-transparent rectangle representing the firewall. 
         HackerWindow* parentHackerWindow;
+        ProgressBar* progressBar;
 
         void endFireWall(); // Notifies HackerWindow to set the firewall to null, deletes self. 
         void endJob(); // Ends the current job in the parent

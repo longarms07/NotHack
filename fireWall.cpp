@@ -15,12 +15,15 @@ FireWall::FireWall(HackerWindow* parent, int targetChars, sf::Time maxTime, sf::
     elapsedTime = sf::Time::Zero;
     numTargetChars = targetChars;
     numEnteredChars = 0;
+    std::string progressString = "Breaking Firewall in Progress...";
+    progressBar = new ProgressBar(minAnchorPoint, sf::Vector2f(maxBounds.x, 30), sf::Color::Green, numTargetChars);
     std::cout << "The firewall has been created!\n";
 }
 
 void FireWall::charEntered() {
     numEnteredChars++;
     std::cout << "The firewall has recieved a char!\n";
+    progressBar->incrementProgress(1);
     if (numEnteredChars >= numTargetChars) endFireWall();
 }
 
@@ -43,13 +46,14 @@ void FireWall::endFireWall() {
     // Stubbed
     std::cout << "FireWall has been defeated!\n";
     parentHackerWindow->derefFireWall();
+    delete progressBar;
     delete this;
 }
 
 void FireWall::endJob() {
     // Stubbed
     std::cout << "Oh noes! The FireWall has melted your computer!\n";
-    //parentHackerWindow->derefFireWall();
+    parentHackerWindow->derefFireWall();
 }
 
 void FireWall::updateWallGraphic() {
@@ -68,4 +72,5 @@ void FireWall::updateWallGraphic() {
 
 void FireWall::draw(sf::RenderTarget& renderTarget, sf::RenderStates states) const {
     renderTarget.draw(wallGraphic, states);
+    renderTarget.draw(*progressBar, states);
 }
