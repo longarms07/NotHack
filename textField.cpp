@@ -36,3 +36,25 @@ void TextField::textEntered(sf::Event::TextEvent event) {
         text.setString(text.getString()+inputCharacter);
     }
 }
+
+void TextField::keyPressed(sf::Event::KeyEvent event) {
+    if (focused) {
+        switch (event.code) {
+            case sf::Keyboard::Escape:
+                focused = false;
+                break;
+            case sf::Keyboard::BackSpace:
+            {
+                sf::String currentString = text.getString();
+                size_t size = currentString.getSize();
+                if (size > 0) {
+                    currentString.erase(size-1);
+                    text.setString(currentString);
+                }
+                break;
+            }
+            case sf::Keyboard::Return:
+                break;
+        }
+    }
+}

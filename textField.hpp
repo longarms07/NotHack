@@ -6,7 +6,7 @@
     - Make Textfield have bounds and an optional background (to show bounds)
 ***************/
 
-class TextField : public sf::Drawable, public EventSystem::MouseDownObserver, public EventSystem::TextEnteredObserver {
+class TextField : public sf::Drawable, public EventSystem::MouseDownObserver, public EventSystem::TextEnteredObserver, public EventSystem::KeyPressedObserver {
     private:
         sf::Text text;
         sf::RectangleShape background;
@@ -21,4 +21,5 @@ class TextField : public sf::Drawable, public EventSystem::MouseDownObserver, pu
         /*EventSystem Observers*/
         void mouseDown(sf::Event::MouseButtonEvent);
         void textEntered(sf::Event::TextEvent);
+        void keyPressed(sf::Event::KeyEvent);
 };
