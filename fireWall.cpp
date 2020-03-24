@@ -43,7 +43,6 @@ void FireWall::coolantApplied() {
 }
 
 void FireWall::endFireWall() {
-    // Stubbed
     std::cout << "FireWall has been defeated!\n";
     parentHackerWindow->derefFireWall();
     delete progressBar;
@@ -54,6 +53,8 @@ void FireWall::endJob() {
     // Stubbed
     std::cout << "Oh noes! The FireWall has melted your computer!\n";
     parentHackerWindow->derefFireWall();
+    delete progressBar;
+    delete this;
 }
 
 void FireWall::updateWallGraphic() {
