@@ -1,7 +1,7 @@
 #include "fireWall.h"
 #include "hackerWindow.h"
 
-FireWall::FireWall(HackerWindow* parent, int targetChars, sf::Time maxTime, sf::Time coolTime)
+FireWall::FireWall(HackerWindow* parent, int targetChars, sf::Time maxTime, sf::Time coolTime, sf::Font& font)
     : wallGraphic() {
     parentHackerWindow = parent;
     maxAnchorPoint = parent->getAnchorPoint();
@@ -15,8 +15,7 @@ FireWall::FireWall(HackerWindow* parent, int targetChars, sf::Time maxTime, sf::
     elapsedTime = sf::Time::Zero;
     numTargetChars = targetChars;
     numEnteredChars = 0;
-    std::string progressString = "Breaking Firewall in Progress...";
-    progressBar = new ProgressBar(minAnchorPoint, sf::Vector2f(maxBounds.x, 30), sf::Color::Green, numTargetChars);
+    progressBar = new ProgressBar(minAnchorPoint, sf::Vector2f(maxBounds.x, 30), sf::Color::Green, numTargetChars, font, "Breaking Firewall", 20);
     std::cout << "The firewall has been created!\n";
 }
 

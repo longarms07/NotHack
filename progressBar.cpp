@@ -6,13 +6,13 @@ ProgressBar::ProgressBar(sf::Vector2f anchorPoint, sf::Vector2f widthHeight, sf:
     constructProgressBar(anchorPoint, widthHeight, color, maxProgress);
 }
 
-ProgressBar::ProgressBar(sf::Vector2f anchorPoint, sf::Vector2f widthHeight, sf::Color color, float maxProgress, sf::Font f, std::string displayText)
+ProgressBar::ProgressBar(sf::Vector2f anchorPoint, sf::Vector2f widthHeight, sf::Color color, float maxProgress, sf::Font& f, std::string displayText, int fontSize)
     : bottomLayer(), progressLayer(), text() {
     constructProgressBar(anchorPoint, widthHeight, color, maxProgress);
-    font = f;
-    text.setFont(font);
+    text.setFont(f);
+    text.setCharacterSize(fontSize);
     text.setString(displayText);
-    text.setPosition(anchorPoint);
+    text.setPosition(progressLayer.getPosition());
 }
 
 float ProgressBar::getProgress() {

@@ -138,7 +138,7 @@ void HackerWindow::updateList(char c) {
 
 void HackerWindow::startFireWall(int targetChars, sf::Time maxTime, sf::Time coolantTime) {
     if (fireWall == NULL) {
-        fireWall = new FireWall(this, targetChars, maxTime, coolantTime);
+        fireWall = new FireWall(this, targetChars, maxTime, coolantTime, hackerFont);
     }
 }
 

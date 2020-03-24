@@ -4,11 +4,15 @@
 #include "coolant.cpp"
 #include "fireWall.cpp"
 #include "progressBar.cpp"
+#include "worldWideWeb.cpp"
+#include "eventSystem.cpp"
+#include "Singleton.cpp"
+#include "textField.cpp"
 
 Game::Game()
-: renderWindow(sf::VideoMode(640,480), "NotHack: WPM"),
-debugFPS(),
-testCircle()
+    : renderWindow(sf::VideoMode(640,480), "NotHack: WPM"),
+      debugFPS(),
+      testCircle()
 {
     if(!font.loadFromFile("Oxanium-Regular.ttf")){
         std::cout << "The font could not be loaded! Oh noes!!!\n";
@@ -20,6 +24,9 @@ testCircle()
     
     l33tHackerWindow = new HackerWindow(50.f,50.f,200.f,300.f, font, sf::Color::White);
     cooler = new Cooler(400.f, 0.f, this);
+
+    browserWindow = new WorldWideWeb::BrowserWindow(sf::Vector2f(300.f,50.f), sf::Vector2f(300.f,300.f), font);
+
     std::cout << "The font has been set. Ready to hacktivate.\n";
     debugFPS.setString("FPS Text Initialized");
     debugFPS.setFillColor(sf::Color::Blue);
@@ -27,11 +34,14 @@ testCircle()
     testCircle.setRadius(200.f);
     testCircle.setPosition(0.f,0.f);
     testCircle.setFillColor(sf::Color::Red);
+
+    EventSystem::EventHandler::getInstance();
 };
 
 Game::~Game() {
     delete l33tHackerWindow;
     delete cooler;
+    delete browserWindow;
     if (draggable != NULL) delete draggable;
 }
 
@@ -60,7 +70,7 @@ void Game::run() {
     }
 }
 
-sf::Font Game::getFont() {
+sf::Font& Game::getFont() {
     return font;
 }
 
@@ -85,6 +95,8 @@ void Game::processEvents() {
     sf::Event event;
     while (renderWindow.pollEvent(event))
     {
+        EventSystem::EventHandler::getInstance()->processEvent(event);
+
         switch (event.type) {
             case sf::Event::KeyReleased:
                 std::cout << "Key " << event.key.code << " has been released!!!!!\n";
@@ -107,9 +119,8 @@ void Game::processEvents() {
                 }
                 break;
             case sf::Event::MouseButtonReleased:
-                /* If there is currently a draggable, when the mouse is clicked call it's onDragEnd.
-                   Since onDragEnd will either destroy it or make the draggable not our concern, set the pointer to null.
-                */
+                // If there is currently a draggable, when the mouse is clicked call it's onDragEnd.
+                // Since onDragEnd will either destroy it or make the draggable not our concern, set the pointer to null.
                 if (draggable != NULL) {
                     draggable->onDragEnd(sf::Vector2f(event.mouseButton.x, event.mouseButton.y));
                     draggable = NULL;
@@ -127,9 +138,13 @@ void Game::render() {
     renderWindow.clear();
     //renderWindow.draw(testCircle);
     renderWindow.draw(debugFPS);
+
+    renderWindow.draw(*browserWindow);
+
     renderWindow.draw(*cooler);
     renderWindow.draw(*l33tHackerWindow);
-    if (draggable!=NULL) renderWindow.draw(draggable->getSprite()); 
+    if (draggable!=NULL) renderWindow.draw(draggable->getSprite());
+
     renderWindow.display();
 }
 

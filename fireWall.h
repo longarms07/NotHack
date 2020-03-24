@@ -8,7 +8,7 @@ class HackerWindow;
 
 class FireWall : public sf::Drawable {
     public:
-        FireWall(HackerWindow* parent, int targetChars, sf::Time maxTime, sf::Time coolTime); 
+        FireWall(HackerWindow* parent, int targetChars, sf::Time maxTime, sf::Time coolTime, sf::Font& font); 
         void charEntered(); // Increments numEnteredChars, ends the firewall if target has been reached.
         /* Adds delta time to elapsed time, ends job in failure is greater than maximumTime.
            Calls updateWallGraphic(). */

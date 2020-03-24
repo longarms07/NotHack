@@ -7,15 +7,18 @@
 #include "idraggable.h"
 #include "coolant.h"
 #include "fireWall.h"
+#include "worldWideWeb.hpp"
+#include "textField.hpp"
 
 class Game {
     public:
         Game();
         ~Game();      
-        sf::Font getFont();
+        sf::Font& getFont();
         void run();
         void setDraggable(IDraggable* iDraggable);
-        HackerWindow* getHackerWindow(); 
+        HackerWindow* getHackerWindow();
+
     
     private:
         sf::RenderWindow renderWindow;
@@ -25,6 +28,7 @@ class Game {
         sf::Font font;
         Cooler* cooler;
         IDraggable* draggable; // The current iDraggable assigned to the mouse. Can only drag one thing at a time.
+        WorldWideWeb::BrowserWindow* browserWindow;
         
         void update(sf::Time deltaTime);
 
