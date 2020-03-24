@@ -1,7 +1,7 @@
 #include "textField.hpp"
 #include <iostream>
 
-TextField::TextField(sf::Vector2f position, sf::Vector2f widthHeight, const sf::Font& font)
+TextField::TextField(sf::Vector2f position, sf::Vector2f widthHeight, sf::Font& font)
     : background(widthHeight) {
     focused = false;
 
@@ -10,6 +10,14 @@ TextField::TextField(sf::Vector2f position, sf::Vector2f widthHeight, const sf::
     text.setFont(font);
     text.setFillColor(sf::Color::Black);
     text.setPosition(position.x, position.y);
+}
+
+bool TextField::isFocused() {
+    return focused;
+}
+
+sf::String TextField::getText() {
+    return text.getString();
 }
 
 void TextField::draw(sf::RenderTarget& target, sf::RenderStates states) const {
@@ -44,7 +52,7 @@ void TextField::keyPressed(sf::Event::KeyEvent event) {
                 focused = false;
                 break;
             case sf::Keyboard::BackSpace:
-            {
+            { // Brackets used to add scope to local variable
                 sf::String currentString = text.getString();
                 size_t size = currentString.getSize();
                 if (size > 0) {
@@ -53,8 +61,6 @@ void TextField::keyPressed(sf::Event::KeyEvent event) {
                 }
                 break;
             }
-            case sf::Keyboard::Return:
-                break;
         }
     }
 }

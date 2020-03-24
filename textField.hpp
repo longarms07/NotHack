@@ -13,7 +13,10 @@ class TextField : public sf::Drawable, public EventSystem::MouseDownObserver, pu
         bool focused;
 
     public:
-        TextField(sf::Vector2f, sf::Vector2f, const sf::Font&);
+        TextField(sf::Vector2f, sf::Vector2f, sf::Font&);
+
+        bool isFocused();
+        sf::String getText();
 
         /*sf::Drawable*/
         void draw(sf::RenderTarget&, sf::RenderStates) const;

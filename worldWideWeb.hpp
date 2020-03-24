@@ -1,6 +1,8 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 #include "eventSystem.hpp"
+#include "textField.hpp"
+#include "Singleton.hpp"
 
 /*
 TODO:
@@ -14,13 +16,21 @@ TODO:
 
     - Implement sf::Transform support
     - Implement generic bounds (instead of using bounding box)
+
+    - Should Drawable inheritance be virtual?
+
+    - Transform hierarchy
+
+    - Better way to compare strings?
 */
 
 namespace WorldWideWeb {
     class WindowPart;
+    class URLBar;
 
-    class BrowserWindow : public sf::Drawable, public EventSystem::MouseMoveObserver, public EventSystem::MouseDownObserver, public EventSystem::MouseUpObserver {
+    class BrowserWindow : public sf::Drawable, public EventSystem::MouseMoveObserver, public EventSystem::MouseDownObserver, public EventSystem::MouseUpObserver, public EventSystem::KeyPressedObserver {
         public:
+            URLBar* urlBar;
             WindowPart* currentSite;
 
         private:
@@ -31,7 +41,7 @@ namespace WorldWideWeb {
             sf::Vector2f mouseOffsetFromOrigin;
 
         public:
-            BrowserWindow(sf::Vector2f, sf::Vector2f);
+            BrowserWindow(sf::Vector2f, sf::Vector2f, sf::Font&);
             ~BrowserWindow();
 
             /*sf::Drawable*/
@@ -41,6 +51,7 @@ namespace WorldWideWeb {
             void mouseMove(sf::Event::MouseMoveEvent);
             void mouseDown(sf::Event::MouseButtonEvent);
             void mouseUp(sf::Event::MouseButtonEvent);
+            void keyPressed(sf::Event::KeyEvent);
     };
 
     /*
@@ -58,17 +69,43 @@ namespace WorldWideWeb {
         // Part of the window, inherited by everything
         // Handles its own rendering and events
         public:
-            virtual void draw(sf::RenderTarget&, sf::RenderStates) const;
-            virtual void mouseDown();
-            virtual void mouseUp();
+            virtual void draw(sf::RenderTarget&, sf::RenderStates) const = 0;
+            // virtual void mouseDown();
+            // virtual void mouseUp();
     };
 
     namespace Sites {
         // Sites should all follow the singleton pattern, since they have state
 
-        class Bank : public WindowPart {
-            public:
-                void draw(sf::RenderTarget& renderTarget, sf::RenderStates states) const;
+        // class Bank : public WindowPart {
+        //     public:
+        //         void draw(sf::RenderTarget& renderTarget, sf::RenderStates states) const;
+        // };
+
+        class Red : public WindowPart, public Singleton<Red> {
+            friend Red* Singleton<Red>::getInstance();
+
+            private:
+                sf::RectangleShape background;
+
+            private:
+                Red();
+                void* operator new(size_t);
+
+                void draw(sf::RenderTarget&, sf::RenderStates) const;
+        };
+
+        class Blue : public WindowPart, public Singleton<Blue> {
+            friend Blue* Singleton<Blue>::getInstance();
+
+            private:
+                sf::RectangleShape background;
+
+            private:
+                Blue();
+                void* operator new(size_t);
+
+                void draw(sf::RenderTarget&, sf::RenderStates) const;
         };
 
         /*
@@ -82,9 +119,13 @@ namespace WorldWideWeb {
         */
     }
 
-    /*
     class URLBar : public WindowPart {
+        public:
+            TextField textField;
 
-    }
-    */
+        public:
+            URLBar(sf::Font&);
+
+            void draw(sf::RenderTarget&, sf::RenderStates) const;
+    };
 }

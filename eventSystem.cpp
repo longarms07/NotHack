@@ -197,24 +197,27 @@ void EventSystem::EventHandler::keyReleasedEvent(sf::Event::KeyEvent event) {
 
 /*Mouse Observers*/
 
-EventSystem::MouseMoveObserver::MouseMoveObserver() {
-    EventSystem::EventHandler::getInstance()->registerMouseMoveObserver(this);
+EventSystem::MouseMoveObserver::MouseMoveObserver(bool autoRegister) {
+    if (autoRegister)
+        EventSystem::EventHandler::getInstance()->registerMouseMoveObserver(this);
 }
 
 EventSystem::MouseMoveObserver::~MouseMoveObserver() {
     EventSystem::EventHandler::getInstance()->unregisterMouseMoveObserver(this);
 }
 
-EventSystem::MouseDownObserver::MouseDownObserver() {
-    EventSystem::EventHandler::getInstance()->registerMouseDownObserver(this);
+EventSystem::MouseDownObserver::MouseDownObserver(bool autoRegister) {
+    if (autoRegister)
+        EventSystem::EventHandler::getInstance()->registerMouseDownObserver(this);
 }
 
 EventSystem::MouseDownObserver::~MouseDownObserver() {
     EventSystem::EventHandler::getInstance()->unregisterMouseDownObserver(this);
 }
 
-EventSystem::MouseUpObserver::MouseUpObserver() {
-    EventSystem::EventHandler::getInstance()->registerMouseUpObserver(this);
+EventSystem::MouseUpObserver::MouseUpObserver(bool autoRegister) {
+    if (autoRegister)
+        EventSystem::EventHandler::getInstance()->registerMouseUpObserver(this);
 }
 
 EventSystem::MouseUpObserver::~MouseUpObserver() {
@@ -222,8 +225,9 @@ EventSystem::MouseUpObserver::~MouseUpObserver() {
 }
 
 /*Text Observers*/
-EventSystem::TextEnteredObserver::TextEnteredObserver() {
-    EventSystem::EventHandler::getInstance()->registerTextEnteredObserver(this);
+EventSystem::TextEnteredObserver::TextEnteredObserver(bool autoRegister) {
+    if (autoRegister)
+        EventSystem::EventHandler::getInstance()->registerTextEnteredObserver(this);
 }
 
 EventSystem::TextEnteredObserver::~TextEnteredObserver() {
@@ -231,16 +235,18 @@ EventSystem::TextEnteredObserver::~TextEnteredObserver() {
 }
 
 /*Key Observers*/
-EventSystem::KeyPressedObserver::KeyPressedObserver() {
-    EventSystem::EventHandler::getInstance()->registerKeyPressedObserver(this);
+EventSystem::KeyPressedObserver::KeyPressedObserver(bool autoRegister) {
+    if (autoRegister)
+        EventSystem::EventHandler::getInstance()->registerKeyPressedObserver(this);
 }
 
 EventSystem::KeyPressedObserver::~KeyPressedObserver() {
     EventSystem::EventHandler::getInstance()->unregisterKeyPressedObserver(this);
 }
 
-EventSystem::KeyReleasedObserver::KeyReleasedObserver() {
-    EventSystem::EventHandler::getInstance()->registerKeyReleasedObserver(this);
+EventSystem::KeyReleasedObserver::KeyReleasedObserver(bool autoRegister) {
+    if (autoRegister)
+        EventSystem::EventHandler::getInstance()->registerKeyReleasedObserver(this);
 }
 
 EventSystem::KeyReleasedObserver::~KeyReleasedObserver() {

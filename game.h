@@ -28,7 +28,6 @@ class Game {
         Cooler* cooler;
         IDraggable* draggable; // The current iDraggable assigned to the mouse. Can only drag one thing at a time.
         WorldWideWeb::BrowserWindow* browserWindow;
-        TextField* testTextField;
         
         void update(sf::Time deltaTime);
 
