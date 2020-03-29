@@ -1,4 +1,5 @@
 #include "game.h"
+#include "Globals.hpp"
 #include "hackerWindow.cpp" // Must import cpp files here in order to get the implementations for each class
 #include "cooler.cpp"
 #include "coolant.cpp"
@@ -8,38 +9,27 @@
 #include "eventSystem.cpp"
 #include "Singleton.cpp"
 #include "textField.cpp"
+#include "JobSystem.cpp"
 
 Game::Game()
     : renderWindow(sf::VideoMode(640,480), "NotHack: WPM"),
-      debugFPS(),
-      testCircle()
+      debugFPS()
 {
-    if(!font.loadFromFile("Oxanium-Regular.ttf")){
-        std::cout << "The font could not be loaded! Oh noes!!!\n";
-        exit(2);
-    }else{
-        std::cout << "The file loaded! Oh Frabtuous Day!!!\n";
-    }
-    debugFPS.setFont(font);
+    debugFPS.setFont(Globals::defaultFont);
     
-    l33tHackerWindow = new HackerWindow(50.f,50.f,200.f,300.f, font, sf::Color::White);
     cooler = new Cooler(400.f, 0.f, this);
 
-    browserWindow = new WorldWideWeb::BrowserWindow(sf::Vector2f(300.f,50.f), sf::Vector2f(300.f,300.f), font);
+    browserWindow = new WorldWideWeb::BrowserWindow(sf::Vector2f(300.f,50.f), sf::Vector2f(300.f,300.f), Globals::defaultFont);
 
     std::cout << "The font has been set. Ready to hacktivate.\n";
     debugFPS.setString("FPS Text Initialized");
     debugFPS.setFillColor(sf::Color::Blue);
     debugFPS.setPosition(sf::Vector2f(0.f,0.f));
-    testCircle.setRadius(200.f);
-    testCircle.setPosition(0.f,0.f);
-    testCircle.setFillColor(sf::Color::Red);
 
     EventSystem::EventHandler::getInstance();
 };
 
 Game::~Game() {
-    delete l33tHackerWindow;
     delete cooler;
     delete browserWindow;
     if (draggable != NULL) delete draggable;
@@ -50,8 +40,8 @@ void Game::run() {
     sf::Clock clock;
     sf::Time timeSinceLastUpdate = sf::Time::Zero;
 
-    l33tHackerWindow->updateHackerText();
-    l33tHackerWindow->setHackerTextFile("hello-world.txt");
+    Globals::hackerWindow->updateHackerText();
+    JobSystem::JobHandler::getInstance()->loadJob(JobSystem::Factories::genericJob());
 
     while (renderWindow.isOpen()) {
         timeSinceLastUpdate += clock.restart();
@@ -70,22 +60,14 @@ void Game::run() {
     }
 }
 
-sf::Font& Game::getFont() {
-    return font;
-}
-
 void Game::setDraggable(IDraggable* iDraggable) {
     // If there is a current draggable call onDragEnd on it.
     if (draggable != NULL) draggable->onDragEnd(draggable->getSprite().getPosition()); 
     draggable = iDraggable;
 }
 
-HackerWindow* Game::getHackerWindow() {
-    return l33tHackerWindow;
-}
-
 void Game::update(sf::Time deltaTime) {
-    l33tHackerWindow->update(deltaTime);
+    Globals::hackerWindow->update(deltaTime);
     cooler->update(deltaTime);
 }
 
@@ -100,7 +82,6 @@ void Game::processEvents() {
         switch (event.type) {
             case sf::Event::KeyReleased:
                 std::cout << "Key " << event.key.code << " has been released!!!!!\n";
-                l33tHackerWindow->loadNextChar();
                 break;
             case sf::Event::Closed:
                 renderWindow.close();
@@ -136,13 +117,12 @@ void Game::processEvents() {
 
 void Game::render() {
     renderWindow.clear();
-    //renderWindow.draw(testCircle);
     renderWindow.draw(debugFPS);
 
     renderWindow.draw(*browserWindow);
 
     renderWindow.draw(*cooler);
-    renderWindow.draw(*l33tHackerWindow);
+    renderWindow.draw(*Globals::hackerWindow);
     if (draggable!=NULL) renderWindow.draw(draggable->getSprite());
 
     renderWindow.display();
@@ -158,6 +138,14 @@ void Game::updateFPSDisplay(sf::Time t) {
 
 
 int main() {
-    Game game;
-    game.run();
+    if(!Globals::defaultFont.loadFromFile("Oxanium-Regular.ttf")){
+        std::cout << "The font could not be loaded! Oh noes!!!\n";
+        exit(2);
+    }else{
+        std::cout << "The file loaded! Oh Frabtuous Day!!!\n";
+    }
+
+    Globals::hackerWindow = new HackerWindow(50.f,50.f,200.f,300.f, Globals::defaultFont, sf::Color::White);
+
+    Globals::game.run();
 }

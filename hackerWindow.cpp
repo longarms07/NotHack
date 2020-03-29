@@ -1,8 +1,11 @@
 #include "hackerWindow.h"
+#include <iostream>
 
 HackerWindow::HackerWindow(sf::Vector2f anchorPt, sf::Vector2f wH, sf::Font& font, const sf::Color& color)
     : hackerText(), 
       hackerScreen() {
+        fireWall = NULL;
+
         anchorPoint = anchorPt;
         widthHeight = wH;
         hackerFont = font;
@@ -19,6 +22,8 @@ HackerWindow::HackerWindow(sf::Vector2f anchorPt, sf::Vector2f wH, sf::Font& fon
 HackerWindow::HackerWindow(float anchorPointX, float anchorPointY, float width, float height, sf::Font& font, const sf::Color& color)
     : hackerText(), 
       hackerScreen() {
+        fireWall = NULL;
+
         anchorPoint = sf::Vector2f(anchorPointX, anchorPointY);
         widthHeight = sf::Vector2f(width, height);
         hackerFont = font;
@@ -84,43 +89,6 @@ void HackerWindow::updateHackerText() {
         newText += line + "\n";
     }
     hackerText.setString(newText);
-}
-
-void HackerWindow::setHackerTextFile(std::string filePath) {
-    if (hackerTextFile.is_open()) {
-        hackerTextFile.close();
-    }
-
-    hackerTextFile.open(filePath);
-
-    if (hackerTextFile.bad()) {
-        std::cerr << "Failed to read file, exiting...\n";
-        exit (8);
-    }
-}
-
-void HackerWindow::loadNextChar() {
-    if (!hackerTextFile.is_open()) {
-        std::cerr << "Tried to read from unopen stream...\n";
-        exit (7); // TODO: set exit code
-    }
-
-    if (hackerTextFile.bad()) {
-        std::cerr << "Error reading from file...\n";
-        exit (8);
-    }
-
-    if (hackerTextFile.eof()) {
-        hackerTextFile.clear();
-        hackerTextFile.seekg(0, std::ios::beg);
-        updateList('\n');
-    } else {
-        char nextChar;
-        hackerTextFile >> std::noskipws >> nextChar;
-        // std::cout << nextChar << '\n';
-        updateList(nextChar);
-        if (fireWall!=NULL) fireWall->charEntered();
-    }
 }
 
 void HackerWindow::updateList(char c) {

@@ -21,14 +21,12 @@ class HackerWindow : public sf::Drawable {
         void setFont(sf::Font& font);
         void setTextColor(const sf::Color& color);
         void updateHackerText();
-        void setHackerTextFile(std::string filePath);
-        void loadNextChar();
         void startFireWall(int targetChars, sf::Time maxTime, sf::Time coolTime); // Creates a new FireWall
         void derefFireWall(); // Called by FireWall::EndFireWall(), sets the pointer to null
         void coolFireWall(); // Applies Coolant to the current FireWall, if any. 
         void update(sf::Time deltaTime); 
         bool contains(sf::Vector2f pos);
-
+        void updateList(char c);
 
     private:
         sf::Font hackerFont; // Font of the text
@@ -39,9 +37,7 @@ class HackerWindow : public sf::Drawable {
         sf::Color textColor; // Color of the text
         std::list<std::string> displayedCode = { "" };
         const int displayedCodeSize = 5;
-        std::ifstream hackerTextFile;
         FireWall* fireWall;
 
         virtual void draw(sf::RenderTarget& renderTarget, sf::RenderStates states) const;
-        void updateList(char c);
 };
