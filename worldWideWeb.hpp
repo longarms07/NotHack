@@ -2,7 +2,7 @@
 #include <SFML/Graphics.hpp>
 #include "eventSystem.hpp"
 #include "textField.hpp"
-#include "Singleton.hpp"
+#include "singleton.hpp"
 
 /*
 TODO:

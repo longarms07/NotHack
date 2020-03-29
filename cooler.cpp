@@ -1,6 +1,6 @@
 #include "cooler.h"
 #include "game.h"
-#include "Globals.hpp"
+#include "globals.hpp"
 
 Cooler::Cooler(sf::Vector2f aP, Game* g)
     : cooldownTimer(sf::Vector2f(aP.x, aP.y+14), sf::Vector2f(115, 14), sf::Color::Blue, 0.5, Globals::defaultFont, "Making Coolant...", 12) {

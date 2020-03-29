@@ -1,5 +1,5 @@
 #include "game.h"
-#include "Globals.hpp"
+#include "globals.hpp"
 #include "hackerWindow.cpp" // Must import cpp files here in order to get the implementations for each class
 #include "cooler.cpp"
 #include "coolant.cpp"
@@ -7,9 +7,9 @@
 #include "progressBar.cpp"
 #include "worldWideWeb.cpp"
 #include "eventSystem.cpp"
-#include "Singleton.cpp"
+#include "singleton.cpp"
 #include "textField.cpp"
-#include "JobSystem.cpp"
+#include "jobSystem.cpp"
 
 Game::Game()
     : renderWindow(sf::VideoMode(640,480), "NotHack: WPM"),
