@@ -13,10 +13,11 @@ Coolant::Coolant(sf::Vector2f pos, HackerWindow* hW, sf::Texture& coolantTexture
         coolantSprite.setPosition(pos);
         target = hW;  
         std::cout << "A Coolant has been made!!!\n";
+        RenderSystem::RenderHandler::getInstance()->registerDrawable(dynamic_cast<Drawable*>(this));
 }
 
 Coolant::~Coolant() {
-    RenderSystem::RenderHandler::getInstance()->unregisterDrawable(&getSprite());
+    RenderSystem::RenderHandler::getInstance()->unregisterDrawable(dynamic_cast<Drawable*>(this));
     std::cout << "The Coolant has been destroyed!\n";
 }
 
@@ -30,8 +31,12 @@ void Coolant::onDragMove(sf::Vector2f newPosition) {
     coolantSprite.setPosition(newPosition);
 }
 
-const sf::Sprite& Coolant::getSprite() {
+/*const sf::Sprite& Coolant::getSprite() {
     return coolantSprite;
+}*/
+
+sf::Vector2f Coolant::getPosition() {
+    return coolantSprite.getPosition();
 }
 
 void Coolant::draw(sf::RenderTarget& renderTarget, sf::RenderStates states) const {

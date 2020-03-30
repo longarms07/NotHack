@@ -61,7 +61,7 @@ void Cooler::getCoolant(sf::Vector2f pos) {
     if (!inCooldown) {
         Coolant* c  = new Coolant(pos, Globals::hackerWindow, coolantTexture);
         Globals::game.setDraggable(dynamic_cast<IDraggable*>(c)); // Must cast the coolant as an IDraggable
-        RenderSystem::RenderHandler::getInstance()->registerDrawable(&c->getSprite());
+        //RenderSystem::RenderHandler::getInstance()->registerDrawable(&c->getSprite());
         cooldownTimer.setProgress(0);
         inCooldown = true;
     }

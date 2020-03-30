@@ -21,8 +21,8 @@ Game::Game()
     cooler = new Cooler(400.f, 0.f);
     browserWindow = new WorldWideWeb::BrowserWindow(sf::Vector2f(300.f,50.f), sf::Vector2f(300.f,300.f), Globals::defaultFont);
 
-    RenderSystem::RenderHandler::getInstance()->registerDrawable(cooler);
     RenderSystem::RenderHandler::getInstance()->registerDrawable(browserWindow);
+    RenderSystem::RenderHandler::getInstance()->registerDrawable(cooler);
 
     std::cout << "The font has been set. Ready to hacktivate.\n";
     debugFPS.setString("FPS Text Initialized");
@@ -63,7 +63,7 @@ void Game::run() {
 
 void Game::setDraggable(IDraggable* iDraggable) {
     // If there is a current draggable call onDragEnd on it.
-    if (draggable != NULL) draggable->onDragEnd(draggable->getSprite().getPosition()); 
+    if (draggable != NULL) draggable->onDragEnd(draggable->getPosition()); 
     draggable = iDraggable;
 }
 
