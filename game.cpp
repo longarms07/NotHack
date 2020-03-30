@@ -103,6 +103,7 @@ void Game::processEvents() {
                 // Since onDragEnd will either destroy it or make the draggable not our concern, set the pointer to null.
                 if (draggable != NULL) {
                     draggable->onDragEnd(sf::Vector2f(event.mouseButton.x, event.mouseButton.y));
+                    draggable = NULL;
                     // RenderSystem::RenderHandler::getInstance()->unregisterDrawable(&draggable->getSprite());
                 }
                 if (cooler->getGlobalBounds().contains(sf::Vector2f(event.mouseButton.x, event.mouseButton.y))) {

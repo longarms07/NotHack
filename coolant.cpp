@@ -23,7 +23,7 @@ Coolant::~Coolant() {
 void Coolant::onDragEnd(sf::Vector2f position) {
     if (target->contains(position)) target->coolFireWall();
     std::cout << "Drag ended on coolant. \n";
-    // delete this; // Coolants are only ever created with the "new" keyword
+    delete this; // Coolants are only ever created with the "new" keyword
 }
 
 void Coolant::onDragMove(sf::Vector2f newPosition) {
