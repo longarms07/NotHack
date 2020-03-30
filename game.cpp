@@ -10,6 +10,7 @@
 #include "singleton.cpp"
 #include "textField.cpp"
 #include "jobSystem.cpp"
+#include "renderSystem.cpp"
 
 Game::Game()
     : renderWindow(sf::VideoMode(640,480), "NotHack: WPM"),
@@ -17,16 +18,16 @@ Game::Game()
 {
     debugFPS.setFont(Globals::defaultFont);
     
-    cooler = new Cooler(400.f, 0.f, this);
-
+    cooler = new Cooler(400.f, 0.f);
     browserWindow = new WorldWideWeb::BrowserWindow(sf::Vector2f(300.f,50.f), sf::Vector2f(300.f,300.f), Globals::defaultFont);
+
+    RenderSystem::RenderHandler::getInstance()->registerDrawable(cooler);
+    RenderSystem::RenderHandler::getInstance()->registerDrawable(browserWindow);
 
     std::cout << "The font has been set. Ready to hacktivate.\n";
     debugFPS.setString("FPS Text Initialized");
     debugFPS.setFillColor(sf::Color::Blue);
     debugFPS.setPosition(sf::Vector2f(0.f,0.f));
-
-    EventSystem::EventHandler::getInstance();
 };
 
 Game::~Game() {
@@ -71,8 +72,6 @@ void Game::update(sf::Time deltaTime) {
     cooler->update(deltaTime);
 }
 
-
-
 void Game::processEvents() {
     sf::Event event;
     while (renderWindow.pollEvent(event))
@@ -105,6 +104,7 @@ void Game::processEvents() {
                 if (draggable != NULL) {
                     draggable->onDragEnd(sf::Vector2f(event.mouseButton.x, event.mouseButton.y));
                     draggable = NULL;
+                    // RenderSystem::RenderHandler::getInstance()->unregisterDrawable(&draggable->getSprite());
                 }
                 if (cooler->getGlobalBounds().contains(sf::Vector2f(event.mouseButton.x, event.mouseButton.y))) {
                     cooler->onClick(sf::Vector2f(event.mouseButton.x, event.mouseButton.y));
@@ -118,12 +118,14 @@ void Game::processEvents() {
 void Game::render() {
     renderWindow.clear();
     renderWindow.draw(debugFPS);
+    renderWindow.draw(*RenderSystem::RenderHandler::getInstance());
 
-    renderWindow.draw(*browserWindow);
+    //renderWindow.draw(*browserWindow);
 
-    renderWindow.draw(*cooler);
-    renderWindow.draw(*Globals::hackerWindow);
-    if (draggable!=NULL) renderWindow.draw(draggable->getSprite());
+    //renderWindow.draw(*cooler);
+    //renderWindow.draw(*Globals::hackerWindow);
+
+    // if (draggable!=NULL) renderWindow.draw(draggable->getSprite());
 
     renderWindow.display();
 }
@@ -146,6 +148,7 @@ int main() {
     }
 
     Globals::hackerWindow = new HackerWindow(50.f,50.f,200.f,300.f, Globals::defaultFont, sf::Color::White);
+    RenderSystem::RenderHandler::getInstance()->registerDrawable(Globals::hackerWindow);
 
     Globals::game.run();
 }

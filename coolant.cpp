@@ -1,4 +1,6 @@
 #include "coolant.h"
+#include "renderSystem.hpp"
+#include <iostream>
 
 Coolant::Coolant(sf::Vector2f pos, HackerWindow* hW, sf::Texture& coolantTexture)
     :coolantSprite() 
@@ -14,6 +16,7 @@ Coolant::Coolant(sf::Vector2f pos, HackerWindow* hW, sf::Texture& coolantTexture
 }
 
 Coolant::~Coolant() {
+    RenderSystem::RenderHandler::getInstance()->unregisterDrawable(&getSprite());
     std::cout << "The Coolant has been destroyed!\n";
 }
 
@@ -27,7 +30,7 @@ void Coolant::onDragMove(sf::Vector2f newPosition) {
     coolantSprite.setPosition(newPosition);
 }
 
-sf::Sprite Coolant::getSprite() {
+const sf::Sprite& Coolant::getSprite() {
     return coolantSprite;
 }
 

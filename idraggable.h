@@ -6,7 +6,7 @@ class IDraggable {
         // In order to make this an abstract class, it must have pure virtual methods. These are methods that are marked with "= 0".
         virtual void onDragEnd(sf::Vector2f position) = 0; // Called when a drag is completed
         virtual void onDragMove(sf::Vector2f newPosition) = 0; // Called when the mouse moves
-        virtual sf::Sprite getSprite() = 0; // Returns the sprite of the object. Since this could not implement drawable, the draggable must be drawn through the sprite.
+        virtual const sf::Sprite& getSprite() = 0; // Returns the sprite of the object. Since this could not implement drawable, the draggable must be drawn through the sprite.
         virtual ~IDraggable() { }; // All abstract classes need virtual deconstructors
         
 
