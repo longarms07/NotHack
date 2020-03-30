@@ -18,7 +18,7 @@ class Coolant : public IDraggable {
            at the end of this function the coolant destroys itself. */
         virtual void onDragEnd(sf::Vector2f position); 
         virtual void onDragMove(sf::Vector2f newPosition); // Updates the sprite position
-        virtual sf::Sprite getSprite(); // Returns the sprite to draw
+        virtual const sf::Sprite& getSprite(); // Returns the sprite to draw
 
     private:
         HackerWindow* target; // A pointer towards the target HackerWindow

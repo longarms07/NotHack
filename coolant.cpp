@@ -1,4 +1,6 @@
 #include "coolant.h"
+#include "renderSystem.hpp"
+#include <iostream>
 
 Coolant::Coolant(sf::Vector2f pos, HackerWindow* hW, sf::Texture& coolantTexture)
     :coolantSprite() 
@@ -14,20 +16,21 @@ Coolant::Coolant(sf::Vector2f pos, HackerWindow* hW, sf::Texture& coolantTexture
 }
 
 Coolant::~Coolant() {
+    RenderSystem::RenderHandler::getInstance()->unregisterDrawable(&getSprite());
     std::cout << "The Coolant has been destroyed!\n";
 }
 
 void Coolant::onDragEnd(sf::Vector2f position) {
     if (target->contains(position)) target->coolFireWall();
     std::cout << "Drag ended on coolant. \n";
-    delete this; // Coolants are only ever created with the "new" keyword
+    // delete this; // Coolants are only ever created with the "new" keyword
 }
 
 void Coolant::onDragMove(sf::Vector2f newPosition) {
     coolantSprite.setPosition(newPosition);
 }
 
-sf::Sprite Coolant::getSprite() {
+const sf::Sprite& Coolant::getSprite() {
     return coolantSprite;
 }
 
