@@ -53,8 +53,17 @@ bool Cooler::isMouseOver() {
     return open;
 }
 
-void Cooler::onClick(sf::Vector2f pos) {
-    getCoolant(pos);
+void Cooler::mouseUp(sf::Event::MouseButtonEvent event) {
+    sf::Vector2f pos = sf::Vector2f(event.x, event.y);
+    if (getGlobalBounds().contains(pos))
+        getCoolant(pos);
+}
+
+void Cooler::mouseMove(sf::Event::MouseMoveEvent event){
+    if(getGlobalBounds().contains(sf::Vector2f(event.x, event.y))) {
+        if(!isMouseOver()) onMouseOver(true);
+    }
+    else if (isMouseOver()) onMouseOver(false);
 }
 
 void Cooler::getCoolant(sf::Vector2f pos) {

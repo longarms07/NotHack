@@ -4,19 +4,21 @@
 #include <iostream>
 #include <fstream>
 #include <list> 
+#include "eventSystem.hpp"
 #include "coolant.h"
 #include "progressBar.h"
 
 class Game; // Forward reference to game
 
-class Cooler : public sf::Drawable {
+class Cooler : public sf::Drawable, public EventSystem::MouseUpObserver, public EventSystem::MouseMoveObserver {
     public:
         Cooler(sf::Vector2f aP);
         Cooler(float aPX, float aPY);
         void getCoolant(sf::Vector2f pos); // Spawns a new coolant in the given position and assigns it as the Game's draggable
         void onMouseOver(bool mouseOver); // Sets open to the mouseOver value passed
         bool isMouseOver(); // Returns true if open (which is only true when the mouse if over this)
-        void onClick(sf::Vector2f pos); // Calls getCoolant
+        virtual void mouseUp(sf::Event::MouseButtonEvent event); // Calls getCoolant
+        virtual void mouseMove(sf::Event::MouseMoveEvent event);
         void update(sf::Time deltaTime);
         sf::FloatRect getGlobalBounds(); // Returns the bounds this object occupies
 

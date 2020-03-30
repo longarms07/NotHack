@@ -76,7 +76,6 @@ void Game::processEvents() {
     sf::Event event;
     while (renderWindow.pollEvent(event))
     {
-        EventSystem::EventHandler::getInstance()->processEvent(event);
 
         switch (event.type) {
             case sf::Event::KeyReleased:
@@ -87,7 +86,7 @@ void Game::processEvents() {
                 break;
             case sf::Event::MouseMoved:
                 if (draggable != NULL) draggable->onDragMove(sf::Vector2f(event.mouseMove.x, event.mouseMove.y));
-                if (cooler->getGlobalBounds().contains(sf::Vector2f(event.mouseMove.x, event.mouseMove.y))) {
+                /*if (cooler->getGlobalBounds().contains(sf::Vector2f(event.mouseMove.x, event.mouseMove.y))) {
                     if (!cooler->isMouseOver()) {
                         cooler->onMouseOver(true);
                         std::cout << "The Mouse is over the cooler!\n";
@@ -96,7 +95,7 @@ void Game::processEvents() {
                 else if (cooler->isMouseOver()) {
                     cooler->onMouseOver(false);
                     std::cout << "The Mouse has left the cooler!\n";
-                }
+                }*/
                 break;
             case sf::Event::MouseButtonReleased:
                 // If there is currently a draggable, when the mouse is clicked call it's onDragEnd.
@@ -106,12 +105,14 @@ void Game::processEvents() {
                     draggable = NULL;
                     // RenderSystem::RenderHandler::getInstance()->unregisterDrawable(&draggable->getSprite());
                 }
-                if (cooler->getGlobalBounds().contains(sf::Vector2f(event.mouseButton.x, event.mouseButton.y))) {
+                /*if (cooler->getGlobalBounds().contains(sf::Vector2f(event.mouseButton.x, event.mouseButton.y))) {
                     cooler->onClick(sf::Vector2f(event.mouseButton.x, event.mouseButton.y));
                     std::cout << "Clicked on Cooler!\n";
-                }
+                }*/
                 break;
         }   
+        
+        EventSystem::EventHandler::getInstance()->processEvent(event);
     }
 }
 
