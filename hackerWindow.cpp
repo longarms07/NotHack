@@ -4,7 +4,6 @@
 HackerWindow::HackerWindow(sf::Vector2f anchorPt, sf::Vector2f wH, sf::Font& font, const sf::Color& color)
     : hackerText(), 
       hackerScreen() {
-        fireWall = NULL;
 
         anchorPoint = anchorPt;
         widthHeight = wH;
@@ -16,13 +15,11 @@ HackerWindow::HackerWindow(sf::Vector2f anchorPt, sf::Vector2f wH, sf::Font& fon
         hackerScreen.setSize(widthHeight);
         hackerScreen.setFillColor(sf::Color::Green);
         hackerText.setPosition(anchorPoint);
-        startFireWall(30, sf::seconds(10.f), sf::seconds(.5f));
     };
 
 HackerWindow::HackerWindow(float anchorPointX, float anchorPointY, float width, float height, sf::Font& font, const sf::Color& color)
     : hackerText(), 
       hackerScreen() {
-        fireWall = NULL;
 
         anchorPoint = sf::Vector2f(anchorPointX, anchorPointY);
         widthHeight = sf::Vector2f(width, height);
@@ -34,7 +31,6 @@ HackerWindow::HackerWindow(float anchorPointX, float anchorPointY, float width, 
         hackerScreen.setSize(widthHeight);
         hackerScreen.setFillColor(sf::Color::Green);
         hackerText.setPosition(anchorPoint);
-        startFireWall(30, sf::seconds(10.f), sf::seconds(.5f));
     };
 
 sf::Vector2f HackerWindow::getAnchorPoint() {
@@ -79,7 +75,6 @@ void HackerWindow::setTextColor(const sf::Color& color) {
 
 void HackerWindow::draw(sf::RenderTarget& renderTarget, sf::RenderStates states) const {
     renderTarget.draw(hackerScreen, states);
-    if (fireWall!=NULL) renderTarget.draw(*fireWall);
     renderTarget.draw(hackerText, states);
 }
 
@@ -104,22 +99,7 @@ void HackerWindow::updateList(char c) {
     updateHackerText();
 }
 
-void HackerWindow::startFireWall(int targetChars, sf::Time maxTime, sf::Time coolantTime) {
-    if (fireWall == NULL) {
-        fireWall = new FireWall(this, targetChars, maxTime, coolantTime, hackerFont);
-    }
-}
-
-void HackerWindow::derefFireWall() {
-    if (fireWall!=NULL) fireWall = NULL;
-}
-
-void HackerWindow::coolFireWall() {
-    if (fireWall!=NULL) fireWall->coolantApplied();
-}
-
 void HackerWindow::update(sf::Time deltaTime) {
-    if (fireWall!=NULL) fireWall->update(deltaTime);
 }
 
 bool HackerWindow::contains(sf::Vector2f pos) {

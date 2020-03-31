@@ -3,7 +3,6 @@
 #include "hackerWindow.cpp" // Must import cpp files here in order to get the implementations for each class
 #include "cooler.cpp"
 #include "coolant.cpp"
-#include "fireWall.cpp"
 #include "progressBar.cpp"
 #include "worldWideWeb.cpp"
 #include "eventSystem.cpp"
@@ -11,6 +10,7 @@
 #include "textField.cpp"
 #include "jobSystem.cpp"
 #include "renderSystem.cpp"
+#include "complication.cpp"
 
 Game::Game()
     : renderWindow(sf::VideoMode(640,480), "NotHack: WPM"),
@@ -42,8 +42,8 @@ void Game::run() {
     sf::Time timeSinceLastUpdate = sf::Time::Zero;
 
     Globals::hackerWindow->updateHackerText();
-    JobSystem::JobHandler::getInstance()->loadJob(JobSystem::Factories::genericJob());
-
+    // JobSystem::JobHandler::getInstance()->loadJob(JobSystem::Factories::genericJob());
+    JobSystem::JobHandler::getInstance()->loadJob(JobSystem::Factories::fireWallTestJob());
     while (renderWindow.isOpen()) {
         timeSinceLastUpdate += clock.restart();
 
@@ -70,6 +70,7 @@ void Game::setDraggable(IDraggable* iDraggable) {
 void Game::update(sf::Time deltaTime) {
     Globals::hackerWindow->update(deltaTime);
     cooler->update(deltaTime);
+    JobSystem::JobHandler::getInstance()->update(deltaTime);
 }
 
 void Game::processEvents() {

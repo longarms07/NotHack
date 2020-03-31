@@ -7,6 +7,7 @@
 #include "eventSystem.hpp"
 #include "coolant.h"
 #include "progressBar.h"
+#include "renderSystem.hpp"
 
 class Game; // Forward reference to game
 

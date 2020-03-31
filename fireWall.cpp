@@ -1,7 +1,7 @@
 #include "fireWall.h"
 #include "hackerWindow.h"
 
-FireWall::FireWall(HackerWindow* parent, int targetChars, sf::Time maxTime, sf::Time coolTime, sf::Font& font)
+Complication::FireWall::FireWall(int targetChars, sf::Time maxTime, sf::Time coolTime, int activationKeys)
     : wallGraphic() {
     parentHackerWindow = parent;
     maxAnchorPoint = parent->getAnchorPoint();

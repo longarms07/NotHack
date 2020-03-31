@@ -180,8 +180,10 @@ void EventSystem::EventHandler::textEnteredEvent(sf::Event::TextEvent event) {
 }
 
 void EventSystem::EventHandler::keyPressedEvent(sf::Event::KeyEvent event) {
-    for (KeyPressedObserver* observer : keyPressedRegistrants) {
-        observer->keyPressed(event);
+    if(event.code >= 0) { // don't include -1
+        for (KeyPressedObserver* observer : keyPressedRegistrants) {
+            observer->keyPressed(event);
+        }
     }
 }
 

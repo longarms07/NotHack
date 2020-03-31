@@ -29,14 +29,21 @@ char JobSystem::JobHandler::nextCharToDisplay() {
     return currentJob->nextCharToDisplay();
 }
 
+void JobSystem::JobHandler::update(sf::Time deltaTime) {
+    if (currentJob != 0) {
+        currentJob->update(deltaTime);
+    }
+}
+
 /*EventSystem*/
 void JobSystem::JobHandler::keyPressed(sf::Event::KeyEvent event) {
     if (currentJob != 0) {
-        Globals::hackerWindow->updateList(currentJob->nextCharToDisplay());
-        currentJob->keyPressed();
-
         if (isComplete()) {
             finish();
+        }
+        else {
+            Globals::hackerWindow->updateList(currentJob->nextCharToDisplay());
+            currentJob->keyPressed();
         }
     }
 }
@@ -79,6 +86,8 @@ char JobSystem::JobInstance::nextCharToDisplay() {
     }
 }
 
+
+
 /*Factory Methods*/
 namespace { // Classes for factories to use
     class GenericJob : public JobSystem::JobInstance {
@@ -101,12 +110,85 @@ namespace { // Classes for factories to use
                 std::cout << "Generic job complete!" << std::endl;
             }
 
+            void update(sf::Time deltaTime) {
+                //Stubbed, nothing to do here.
+            }
+
             bool isComplete() {
                 return inputsRemainingToComplete <= 0;
             }
     };
+
+    class FireWallTestJob : public JobSystem::JobInstance { 
+        private:
+            int inputsRemainingToComplete;
+            int inputs;
+            bool isFinished;
+
+        public:
+            FireWallTestJob(std::string filePath)
+                : JobInstance(filePath)
+            {
+                inputsRemainingToComplete = 200;
+                inputs = 0;
+                isFinished = false;
+                Complication::FireWall* f = new Complication::FireWall(100, sf::seconds(1.f), sf::seconds(.5f), 10, 0.0);
+                complications.push_front(dynamic_cast<Complication::Complication*>(f));
+            }
+
+            ~FireWallTestJob() {
+                for (Complication::Complication* c : complications) {
+                    delete c;
+                }
+            }
+
+            void keyPressed() {
+                inputsRemainingToComplete--;
+                inputs++;
+                if(inputsRemainingToComplete == 0) isFinished = true;
+                else { 
+                    for (Complication::Complication* c : complications) {
+                        if (!c->isActive() && !c->getEndData().ended && inputs >= c->getNumberKeysRequired()) {
+                            std::cout << c->getNumberKeysRequired() << " , " << inputs;
+                            c->startComplication();
+                        }
+                        else c->keyPressed();
+                    }
+                }
+            }
+
+            void finish() {
+                if(inputsRemainingToComplete != 0) {
+                    std::cout << "Job failed!\n";
+                }
+                else {
+                    // Give a reward...
+                    std::cout << "Generic job complete!" << std::endl;
+                }
+            }
+
+            void update(sf::Time deltaTime) {
+                for (Complication::Complication* c : complications) {
+                    c->update(deltaTime);
+                    Complication::endData cData = c->getEndData();
+                    if (cData.ended && !cData.defeated) {
+                        isFinished = true;
+                        break;
+                    }
+                }
+            }
+
+            bool isComplete() {
+                return isFinished;
+            }
+    };
+
 }
 
 JobSystem::JobInstance* JobSystem::Factories::genericJob() {
     return new GenericJob("hello-world.txt");
+}
+
+JobSystem::JobInstance* JobSystem::Factories::fireWallTestJob() {
+    return new FireWallTestJob("hello-world.txt");
 }
