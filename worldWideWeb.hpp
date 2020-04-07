@@ -3,6 +3,8 @@
 #include "eventSystem.hpp"
 #include "textField.hpp"
 #include "singleton.hpp"
+#include "jobSystem.hpp"
+#include <list>
 
 /*
 TODO:
@@ -14,12 +16,7 @@ TODO:
     - Check difference between mouse0, 1, 2 and events
     - Implement states better
 
-    - Implement sf::Transform support
-    - Implement generic bounds (instead of using bounding box)
-
     - Should Drawable inheritance be virtual?
-
-    - Transform hierarchy
 
     - Better way to compare strings?
 */
@@ -27,6 +24,7 @@ TODO:
 namespace WorldWideWeb {
     class WindowPart;
     class URLBar;
+    class JobButton;
 
     class BrowserWindow : public sf::Drawable, public EventSystem::MouseMoveObserver, public EventSystem::MouseDownObserver, public EventSystem::MouseUpObserver, public EventSystem::KeyPressedObserver {
         public:
@@ -35,6 +33,8 @@ namespace WorldWideWeb {
 
         private:
             sf::RectangleShape windowBackground;
+
+            sf::Vector2f websiteOffset;
 
             /*Dragging State*/
             bool dragging;
@@ -47,11 +47,18 @@ namespace WorldWideWeb {
             /*sf::Drawable*/
             void draw(sf::RenderTarget&, sf::RenderStates) const;
 
+            /*sf::Transformable... but not really (because I don't want to stub everything)*/
+            void setPosition(float, float);
+
             /*EventSystem Observeres*/
             void mouseMove(sf::Event::MouseMoveEvent);
             void mouseDown(sf::Event::MouseButtonEvent);
             void mouseUp(sf::Event::MouseButtonEvent);
             void keyPressed(sf::Event::KeyEvent);
+
+        private:
+            void setWebsite(WindowPart*);
+            void setWebsitePosition();
     };
 
     /*
@@ -70,8 +77,9 @@ namespace WorldWideWeb {
         // Handles its own rendering and events
         public:
             virtual void draw(sf::RenderTarget&, sf::RenderStates) const = 0;
-            // virtual void mouseDown();
-            // virtual void mouseUp();
+
+            /*sf::Transformable... but not really (because I don't want to stub everything)*/
+            virtual void setPosition(float, float) = 0;
     };
 
     namespace Sites {
@@ -93,6 +101,7 @@ namespace WorldWideWeb {
                 void* operator new(size_t);
 
                 void draw(sf::RenderTarget&, sf::RenderStates) const;
+                void setPosition(float, float);
         };
 
         class Blue : public WindowPart, public Singleton<Blue> {
@@ -106,17 +115,29 @@ namespace WorldWideWeb {
                 void* operator new(size_t);
 
                 void draw(sf::RenderTarget&, sf::RenderStates) const;
+                void setPosition(float, float);
         };
 
         /*
         class IRC : public WindowPart {
 
         }
-
-        class Hackdeed : public WindowPart {
-
-        }
         */
+
+        class Hackdeed : public WindowPart, public Singleton<Hackdeed> {
+            friend Hackdeed* Singleton<Hackdeed>::getInstance();
+
+            private:
+                sf::RectangleShape background;
+                std::list<JobButton*> jobButtons;
+
+            private:
+                Hackdeed();
+                void* operator new(size_t);
+
+                void draw(sf::RenderTarget&, sf::RenderStates) const;
+                void setPosition(float, float);
+        };
     }
 
     class URLBar : public WindowPart {
@@ -127,5 +148,31 @@ namespace WorldWideWeb {
             URLBar(sf::Font&);
 
             void draw(sf::RenderTarget&, sf::RenderStates) const;
+            void setPosition(float, float);
+    };
+
+    class JobButton : public WindowPart, public EventSystem::MouseDownObserver {
+        private:
+            sf::Vector2f widthHeight;
+
+            JobSystem::JobInstance* job;
+
+            sf::RectangleShape background;
+            sf::Text jobTitle;
+            sf::Text jobPay;
+
+        public:
+            JobButton(sf::Vector2f, JobSystem::JobInstance*);
+
+            sf::Vector2f getDimensions();
+
+            /*sf::Drawable*/
+            void draw(sf::RenderTarget&, sf::RenderStates) const;
+
+            /*EventSystem Observers*/
+            void mouseDown(sf::Event::MouseButtonEvent);
+
+            /*WindowPart*/
+            void setPosition(float, float);
     };
 }

@@ -21,6 +21,9 @@ class TextField : public sf::Drawable, public EventSystem::MouseDownObserver, pu
         /*sf::Drawable*/
         void draw(sf::RenderTarget&, sf::RenderStates) const;
 
+        /*sf::Transformable... but not really (because I do not want to stub everything)*/
+        void setPosition(float, float);
+
         /*EventSystem Observers*/
         void mouseDown(sf::Event::MouseButtonEvent);
         void textEntered(sf::Event::TextEvent);

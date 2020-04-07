@@ -25,6 +25,11 @@ void TextField::draw(sf::RenderTarget& target, sf::RenderStates states) const {
     target.draw(text, states);
 }
 
+void TextField::setPosition(float x, float y) {
+    background.setPosition(x, y);
+    text.setPosition(x, y);
+}
+
 void TextField::mouseDown(sf::Event::MouseButtonEvent event) {
     sf::Vector2f eventPosition(event.x, event.y);
 
