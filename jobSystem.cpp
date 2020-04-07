@@ -22,7 +22,7 @@ void JobSystem::JobHandler::finish() {
     // SHOULD BE FINAL CODE EXECUTE DURING ITERATION OF JOBHANDLER
     // WILL CAUSE SEG-FAULTS OTHERWISE DUE TO NULL-POINTER
     delete currentJob;
-    currentJob = 0;
+    currentJob = NULL;
 }
 
 char JobSystem::JobHandler::nextCharToDisplay() {
@@ -31,7 +31,7 @@ char JobSystem::JobHandler::nextCharToDisplay() {
 
 /*EventSystem*/
 void JobSystem::JobHandler::keyPressed(sf::Event::KeyEvent event) {
-    if (currentJob != 0) {
+    if (currentJob != NULL) {
         Globals::hackerWindow->updateList(currentJob->nextCharToDisplay());
         currentJob->keyPressed();
 

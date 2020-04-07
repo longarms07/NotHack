@@ -3,11 +3,11 @@
 #include "singleton.hpp"
 
 template<typename T>
-T* Singleton<T>::instance = 0;
+T* Singleton<T>::instance = NULL;
 
 template<typename T>
 T* Singleton<T>::getInstance() {
-    if (instance == 0) {
+    if (instance == NULL) {
         instance = new T();
     }
     
