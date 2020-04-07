@@ -1,15 +1,16 @@
 #pragma once
 #include "progressBar.h"
+#include "globals.hpp"
 
 ProgressBar::ProgressBar(sf::Vector2f anchorPoint, sf::Vector2f widthHeight, sf::Color color, float maxProgress)
     : bottomLayer(), progressLayer(), text() {
     constructProgressBar(anchorPoint, widthHeight, color, maxProgress);
 }
 
-ProgressBar::ProgressBar(sf::Vector2f anchorPoint, sf::Vector2f widthHeight, sf::Color color, float maxProgress, sf::Font& f, std::string displayText, int fontSize)
+ProgressBar::ProgressBar(sf::Vector2f anchorPoint, sf::Vector2f widthHeight, sf::Color color, float maxProgress, std::string displayText, int fontSize)
     : bottomLayer(), progressLayer(), text() {
     constructProgressBar(anchorPoint, widthHeight, color, maxProgress);
-    text.setFont(f);
+    text.setFont(Globals::defaultFont);
     text.setCharacterSize(fontSize);
     text.setString(displayText);
     text.setPosition(progressLayer.getPosition());

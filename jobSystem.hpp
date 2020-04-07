@@ -2,7 +2,9 @@
 #include <SFML/Graphics.hpp>
 #include "singleton.hpp"
 #include "eventSystem.hpp"
+#include "complication.hpp"
 #include <string>
+#include <list>
 
 namespace JobSystem {
     class JobInstance;
@@ -20,6 +22,7 @@ namespace JobSystem {
             bool isComplete();
             void finish();
             char nextCharToDisplay();
+            void update(sf::Time);
 
             /*EventSystem*/
             void keyPressed(sf::Event::KeyEvent);
@@ -33,6 +36,9 @@ namespace JobSystem {
         private:
             std::ifstream programTextFile;
 
+        protected:
+            std::list<Complication::Complication*> complications;
+
         public:
             JobInstance(std::string);
             virtual ~JobInstance();
@@ -41,10 +47,14 @@ namespace JobSystem {
 
             virtual void keyPressed() = 0; // Not an observer
             virtual void finish() = 0; // Ends job, gives reward, and sets flags
+            virtual void update(sf::Time) = 0; // Standard update function
             virtual bool isComplete() = 0; // Checks if job has ended
+            
     };
 
     namespace Factories {
         JobInstance* genericJob();
+        JobInstance* fireWallTestJob();
     }
+
 }

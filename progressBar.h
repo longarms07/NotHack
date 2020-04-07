@@ -7,7 +7,7 @@ class ProgressBar : public sf::Drawable {
     public:
         ProgressBar(sf::Vector2f anchorPoint, sf::Vector2f widthHeight, sf::Color color, float maxProgress);
         // Optional constructor to display text over the progress bar
-        ProgressBar(sf::Vector2f anchorPoint, sf::Vector2f widthHeight, sf::Color color, float maxProgress, sf::Font& f, std::string displayText, int fontSize);
+        ProgressBar(sf::Vector2f anchorPoint, sf::Vector2f widthHeight, sf::Color color, float maxProgress, std::string displayText, int fontSize);
         float getProgress();
         void setProgress(float p); // Sets the total progress based on the maximum possible progress. progress < max, > 0
         void incrementProgress(float toAdd); // Adds to the progress so far, goes to at most maximum

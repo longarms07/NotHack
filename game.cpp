@@ -3,7 +3,6 @@
 #include "hackerWindow.cpp" // Must import cpp files here in order to get the implementations for each class
 #include "cooler.cpp"
 #include "coolant.cpp"
-#include "fireWall.cpp"
 #include "progressBar.cpp"
 #include "worldWideWeb.cpp"
 #include "eventSystem.cpp"
@@ -11,6 +10,7 @@
 #include "textField.cpp"
 #include "jobSystem.cpp"
 #include "renderSystem.cpp"
+#include "complication.cpp"
 
 Game::Game()
     : renderWindow(sf::VideoMode(640,480), "NotHack: WPM"),
@@ -21,8 +21,8 @@ Game::Game()
     cooler = new Cooler(400.f, 0.f);
     browserWindow = new WorldWideWeb::BrowserWindow(sf::Vector2f(300.f,50.f), sf::Vector2f(300.f,300.f), Globals::defaultFont);
 
-    RenderSystem::RenderHandler::getInstance()->registerDrawable(cooler);
     RenderSystem::RenderHandler::getInstance()->registerDrawable(browserWindow);
+    RenderSystem::RenderHandler::getInstance()->registerDrawable(cooler);
 
     std::cout << "The font has been set. Ready to hacktivate.\n";
     debugFPS.setString("FPS Text Initialized");
@@ -42,8 +42,8 @@ void Game::run() {
     sf::Time timeSinceLastUpdate = sf::Time::Zero;
 
     Globals::hackerWindow->updateHackerText();
-    JobSystem::JobHandler::getInstance()->loadJob(JobSystem::Factories::genericJob());
-
+    // JobSystem::JobHandler::getInstance()->loadJob(JobSystem::Factories::genericJob());
+    JobSystem::JobHandler::getInstance()->loadJob(JobSystem::Factories::fireWallTestJob());
     while (renderWindow.isOpen()) {
         timeSinceLastUpdate += clock.restart();
 
@@ -63,20 +63,20 @@ void Game::run() {
 
 void Game::setDraggable(IDraggable* iDraggable) {
     // If there is a current draggable call onDragEnd on it.
-    if (draggable != NULL) draggable->onDragEnd(draggable->getSprite().getPosition()); 
+    if (draggable != NULL) draggable->onDragEnd(draggable->getPosition()); 
     draggable = iDraggable;
 }
 
 void Game::update(sf::Time deltaTime) {
     Globals::hackerWindow->update(deltaTime);
     cooler->update(deltaTime);
+    JobSystem::JobHandler::getInstance()->update(deltaTime);
 }
 
 void Game::processEvents() {
     sf::Event event;
     while (renderWindow.pollEvent(event))
     {
-        EventSystem::EventHandler::getInstance()->processEvent(event);
 
         switch (event.type) {
             case sf::Event::KeyReleased:
@@ -87,7 +87,7 @@ void Game::processEvents() {
                 break;
             case sf::Event::MouseMoved:
                 if (draggable != NULL) draggable->onDragMove(sf::Vector2f(event.mouseMove.x, event.mouseMove.y));
-                if (cooler->getGlobalBounds().contains(sf::Vector2f(event.mouseMove.x, event.mouseMove.y))) {
+                /*if (cooler->getGlobalBounds().contains(sf::Vector2f(event.mouseMove.x, event.mouseMove.y))) {
                     if (!cooler->isMouseOver()) {
                         cooler->onMouseOver(true);
                         std::cout << "The Mouse is over the cooler!\n";
@@ -96,7 +96,7 @@ void Game::processEvents() {
                 else if (cooler->isMouseOver()) {
                     cooler->onMouseOver(false);
                     std::cout << "The Mouse has left the cooler!\n";
-                }
+                }*/
                 break;
             case sf::Event::MouseButtonReleased:
                 // If there is currently a draggable, when the mouse is clicked call it's onDragEnd.
@@ -106,12 +106,14 @@ void Game::processEvents() {
                     draggable = NULL;
                     // RenderSystem::RenderHandler::getInstance()->unregisterDrawable(&draggable->getSprite());
                 }
-                if (cooler->getGlobalBounds().contains(sf::Vector2f(event.mouseButton.x, event.mouseButton.y))) {
+                /*if (cooler->getGlobalBounds().contains(sf::Vector2f(event.mouseButton.x, event.mouseButton.y))) {
                     cooler->onClick(sf::Vector2f(event.mouseButton.x, event.mouseButton.y));
                     std::cout << "Clicked on Cooler!\n";
-                }
+                }*/
                 break;
         }   
+        
+        EventSystem::EventHandler::getInstance()->processEvent(event);
     }
 }
 

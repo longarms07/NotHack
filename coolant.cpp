@@ -1,27 +1,23 @@
 #include "coolant.h"
-#include "renderSystem.hpp"
 #include <iostream>
+#include "globals.hpp"
 
-Coolant::Coolant(sf::Vector2f pos, HackerWindow* hW, sf::Texture& coolantTexture)
+Coolant::Coolant(sf::Vector2f pos, sf::Texture& coolantTexture)
     :coolantSprite() 
     {
-        if (hW == NULL) {
-            std::cout << "Error! Null pointer exception in Coolant's Hackerwindow!!!\n";
-            exit (8);
-        }
         coolantSprite.setTexture(coolantTexture);  
-        coolantSprite.setPosition(pos);
-        target = hW;  
+        coolantSprite.setPosition(pos); 
         std::cout << "A Coolant has been made!!!\n";
+        RenderSystem::RenderHandler::getInstance()->registerDrawable(dynamic_cast<Drawable*>(this));
 }
 
 Coolant::~Coolant() {
-    RenderSystem::RenderHandler::getInstance()->unregisterDrawable(&getSprite());
+    RenderSystem::RenderHandler::getInstance()->unregisterDrawable(dynamic_cast<Drawable*>(this));
     std::cout << "The Coolant has been destroyed!\n";
 }
 
 void Coolant::onDragEnd(sf::Vector2f position) {
-    if (target->contains(position)) target->coolFireWall();
+    if (Globals::hackerWindow->contains(position) && fireWall != NULL) fireWall->coolantApplied();
     std::cout << "Drag ended on coolant. \n";
     delete this; // Coolants are only ever created with the "new" keyword
 }
@@ -30,8 +26,16 @@ void Coolant::onDragMove(sf::Vector2f newPosition) {
     coolantSprite.setPosition(newPosition);
 }
 
-const sf::Sprite& Coolant::getSprite() {
+/*const sf::Sprite& Coolant::getSprite() {
     return coolantSprite;
+}*/
+
+sf::Vector2f Coolant::getPosition() {
+    return coolantSprite.getPosition();
+}
+
+void Coolant::setFireWall(Complication::FireWall* pointer) {
+    fireWall = pointer;
 }
 
 void Coolant::draw(sf::RenderTarget& renderTarget, sf::RenderStates states) const {
