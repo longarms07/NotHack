@@ -4,6 +4,12 @@
 
 JobSystem::JobHandler::JobHandler() { }
 
+JobSystem::JobHandler::~JobHandler() {
+    if (currentJob != NULL) {
+        delete currentJob;
+    }
+}
+
 void* JobSystem::JobHandler::operator new(size_t size) {
     return malloc(size);
 }

@@ -66,7 +66,7 @@ namespace EventSystem {
     class MouseMoveObserver {
         public:
             MouseMoveObserver(bool autoRegister=true);
-            ~MouseMoveObserver();
+            virtual ~MouseMoveObserver();
 
             virtual void mouseMove(sf::Event::MouseMoveEvent) = 0;
     };
@@ -74,7 +74,7 @@ namespace EventSystem {
     class MouseDownObserver {
         public:
             MouseDownObserver(bool autoRegister=true);
-            ~MouseDownObserver();
+            virtual ~MouseDownObserver();
 
             virtual void mouseDown(sf::Event::MouseButtonEvent) = 0;
     };
@@ -82,7 +82,7 @@ namespace EventSystem {
     class MouseUpObserver {
         public:
             MouseUpObserver(bool autoRegister=true);
-            ~MouseUpObserver();
+            virtual ~MouseUpObserver();
 
             virtual void mouseUp(sf::Event::MouseButtonEvent) = 0;
     };
@@ -91,7 +91,7 @@ namespace EventSystem {
     class TextEnteredObserver {
         public:
             TextEnteredObserver(bool autoRegister=true);
-            ~TextEnteredObserver();
+            virtual ~TextEnteredObserver();
 
             virtual void textEntered(sf::Event::TextEvent event) = 0;
     };
@@ -100,7 +100,7 @@ namespace EventSystem {
     class KeyPressedObserver {
         public:
             KeyPressedObserver(bool autoRegister=true);
-            ~KeyPressedObserver();
+            virtual ~KeyPressedObserver();
 
             virtual void keyPressed(sf::Event::KeyEvent) = 0;
     };
@@ -108,7 +108,7 @@ namespace EventSystem {
     class KeyReleasedObserver {
         public:
             KeyReleasedObserver(bool autoRegister=true);
-            ~KeyReleasedObserver();
+            virtual ~KeyReleasedObserver();
 
             virtual void keyReleased(sf::Event::KeyEvent) = 0;
     };

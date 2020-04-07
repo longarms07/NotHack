@@ -15,6 +15,7 @@ class Singleton {
 
     protected:
         Singleton();
+        virtual ~Singleton() { delete instance; }
 
     private:
         void* operator new(size_t);

@@ -14,6 +14,8 @@ namespace JobSystem {
             JobInstance* currentJob;
 
         public:
+            ~JobHandler();
+
             void loadJob(JobInstance*);
             bool isComplete();
             void finish();
