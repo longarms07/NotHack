@@ -3,7 +3,16 @@
 
 HackerWindow::HackerWindow(sf::Vector2f anchorPt, sf::Vector2f wH, sf::Font& font, const sf::Color& color)
     : hackerText(), 
-      hackerScreen() {
+      hackerScreen(),
+      view(anchorPt, wH)
+    {
+        // Calculate percentage of screen size
+        sf::Vector2u screenSize = Globals::game->renderWindow.getSize();
+        float widthPercent = wH.x/screenSize.x;
+        float heightPercent = wH.y/screenSize.y;
+        float anchorXPercent = anchorPt.x*widthPercent;
+        float anchorYPercent = anchorPt.y*heightPercent;
+        view.setViewport(sf::FloatRect(anchorXPercent, anchorYPercent, anchorXPercent+widthPercent, anchorYPercent+heightPercent));
 
         anchorPoint = anchorPt;
         widthHeight = wH;
@@ -19,7 +28,16 @@ HackerWindow::HackerWindow(sf::Vector2f anchorPt, sf::Vector2f wH, sf::Font& fon
 
 HackerWindow::HackerWindow(float anchorPointX, float anchorPointY, float width, float height, sf::Font& font, const sf::Color& color)
     : hackerText(), 
-      hackerScreen() {
+      hackerScreen(),
+      view(sf::FloatRect(anchorPointX, anchorPointY, width, height))
+    {
+        // Calculate percentage of screen size
+        sf::Vector2u screenSize = Globals::game->renderWindow.getSize();
+        float widthPercent = width/screenSize.x;
+        float heightPercent = height/screenSize.y;
+        float anchorXPercent = anchorPointX/screenSize.x;
+        float anchorYPercent = anchorPointY/screenSize.y;
+        view.setViewport(sf::FloatRect(anchorXPercent, anchorYPercent, widthPercent, heightPercent));
 
         anchorPoint = sf::Vector2f(anchorPointX, anchorPointY);
         widthHeight = sf::Vector2f(width, height);
@@ -74,8 +92,11 @@ void HackerWindow::setTextColor(const sf::Color& color) {
 }
 
 void HackerWindow::draw(sf::RenderTarget& renderTarget, sf::RenderStates states) const {
+    Globals::game->renderWindow.setView(view);
+    renderTarget.draw(debugRect, states);
     renderTarget.draw(hackerScreen, states);
     renderTarget.draw(hackerText, states);
+    Globals::game->renderWindow.setView(Globals::game->renderWindow.getDefaultView());
 }
 
 void HackerWindow::updateHackerText() {

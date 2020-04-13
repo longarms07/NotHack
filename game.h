@@ -21,9 +21,9 @@ class Game {
         void setDraggable(IDraggable*);
         void activateWindow(Registerable*);
 
+        sf::RenderWindow renderWindow;
     
     private:
-        sf::RenderWindow renderWindow;
         sf::Text debugFPS;
         Cooler* cooler;
         IDraggable* draggable; // The current iDraggable assigned to the mouse. Can only drag one thing at a time.
