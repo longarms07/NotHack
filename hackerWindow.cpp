@@ -4,15 +4,15 @@
 HackerWindow::HackerWindow(sf::Vector2f anchorPt, sf::Vector2f wH, sf::Font& font, const sf::Color& color)
     : hackerText(), 
       hackerScreen(),
-      view(anchorPt, wH)
+      view(sf::FloatRect(anchorPt.x, anchorPt.y, wH.x, wH.y))
     {
         // Calculate percentage of screen size
         sf::Vector2u screenSize = Globals::game->renderWindow.getSize();
         float widthPercent = wH.x/screenSize.x;
         float heightPercent = wH.y/screenSize.y;
-        float anchorXPercent = anchorPt.x*widthPercent;
-        float anchorYPercent = anchorPt.y*heightPercent;
-        view.setViewport(sf::FloatRect(anchorXPercent, anchorYPercent, anchorXPercent+widthPercent, anchorYPercent+heightPercent));
+        float anchorXPercent = anchorPt.x/screenSize.x;
+        float anchorYPercent = anchorPt.y/screenSize.y;
+        view.setViewport(sf::FloatRect(anchorXPercent, anchorYPercent, widthPercent, heightPercent));
 
         anchorPoint = anchorPt;
         widthHeight = wH;
@@ -93,7 +93,6 @@ void HackerWindow::setTextColor(const sf::Color& color) {
 
 void HackerWindow::draw(sf::RenderTarget& renderTarget, sf::RenderStates states) const {
     Globals::game->renderWindow.setView(view);
-    renderTarget.draw(debugRect, states);
     renderTarget.draw(hackerScreen, states);
     renderTarget.draw(hackerText, states);
     Globals::game->renderWindow.setView(Globals::game->renderWindow.getDefaultView());
@@ -117,6 +116,12 @@ void HackerWindow::updateList(char c) {
         displayedCode.pop_front();
     }
     
+    updateHackerText();
+}
+
+void HackerWindow::clear() {
+    displayedCode.clear();
+    displayedCode.push_back("");
     updateHackerText();
 }
 

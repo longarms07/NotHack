@@ -28,6 +28,7 @@ bool JobSystem::JobHandler::isComplete() {
 void JobSystem::JobHandler::finish() {
     currentJob->finish();
     Globals::game->activateWindow(Globals::browserWindow);
+    Globals::hackerWindow->clear();
 
     // SHOULD BE FINAL CODE EXECUTE DURING ITERATION OF JOBHANDLER
     // WILL CAUSE SEG-FAULTS OTHERWISE DUE TO NULL-POINTER

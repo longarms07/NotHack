@@ -21,6 +21,7 @@ class HackerWindow : public sf::Drawable, public Registerable {
         void setFont(sf::Font& font);
         void setTextColor(const sf::Color& color);
         void updateHackerText();
+        void clear();
         void update(sf::Time deltaTime); 
         bool contains(sf::Vector2f pos);
         void updateList(char c);
