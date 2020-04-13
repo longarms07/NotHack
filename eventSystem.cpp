@@ -8,6 +8,8 @@
  * EventHandler
  ***************/
 
+// Remove observers list
+
 EventSystem::EventHandler::EventHandler() { }
 
 void* EventSystem::EventHandler::operator new(size_t size) {
@@ -96,7 +98,7 @@ bool EventSystem::EventHandler::registerKeyReleasedObserver(KeyReleasedObserver*
 
 bool EventSystem::EventHandler::unregisterMouseMoveObserver(MouseMoveObserver* observer) {
     if (std::find(mouseMoveRegistrants.begin(), mouseMoveRegistrants.end(), observer) != mouseMoveRegistrants.end()) {
-        mouseMoveRegistrants.remove(observer);
+        mouseMoveRegistrantsToRemove.push_back(observer);
         return true;
     } else {
         return false;
@@ -105,7 +107,7 @@ bool EventSystem::EventHandler::unregisterMouseMoveObserver(MouseMoveObserver* o
 
 bool EventSystem::EventHandler::unregisterMouseDownObserver(MouseDownObserver* observer) {
     if (std::find(mouseDownRegistrants.begin(), mouseDownRegistrants.end(), observer) != mouseDownRegistrants.end()) {
-        mouseDownRegistrants.remove(observer);
+        mouseDownRegistrantsToRemove.push_back(observer);
         return true;
     } else {
         return false;
@@ -114,7 +116,7 @@ bool EventSystem::EventHandler::unregisterMouseDownObserver(MouseDownObserver* o
 
 bool EventSystem::EventHandler::unregisterMouseUpObserver(MouseUpObserver* observer) {
     if (std::find(mouseUpRegistrants.begin(), mouseUpRegistrants.end(), observer) != mouseUpRegistrants.end()) {
-        mouseUpRegistrants.remove(observer);
+        mouseUpRegistrantsToRemove.push_back(observer);
         return true;
     } else {
         return false;
@@ -123,7 +125,7 @@ bool EventSystem::EventHandler::unregisterMouseUpObserver(MouseUpObserver* obser
 
 bool EventSystem::EventHandler::unregisterTextEnteredObserver(TextEnteredObserver* observer) {
     if (std::find(textEnteredRegistrants.begin(), textEnteredRegistrants.end(), observer) != textEnteredRegistrants.end()) {
-        textEnteredRegistrants.remove(observer);
+        textEnteredRegistrantsToRemove.push_back(observer);
         return true;
     } else {
         return false;
@@ -132,7 +134,7 @@ bool EventSystem::EventHandler::unregisterTextEnteredObserver(TextEnteredObserve
 
 bool EventSystem::EventHandler::unregisterKeyPressedObserver(KeyPressedObserver* observer) {
     if (std::find(keyPressedRegistrants.begin(), keyPressedRegistrants.end(), observer) != keyPressedRegistrants.end()) {
-        keyPressedRegistrants.remove(observer);
+        keyPressedRegistrantsToRemove.push_back(observer);
         return true;
     } else {
         return false;
@@ -141,11 +143,44 @@ bool EventSystem::EventHandler::unregisterKeyPressedObserver(KeyPressedObserver*
 
 bool EventSystem::EventHandler::unregisterKeyReleasedObserver(KeyReleasedObserver* observer) {
     if (std::find(keyReleasedRegistrants.begin(), keyReleasedRegistrants.end(), observer) != keyReleasedRegistrants.end()) {
-        keyReleasedRegistrants.remove(observer);
+        keyReleasedRegistrantsToRemove.push_back(observer);
         return true;
     } else {
         return false;
     }
+}
+
+/*Unregistration Update*/
+void EventSystem::EventHandler::removeClearedObservers() {
+    for (MouseMoveObserver* ob : mouseMoveRegistrantsToRemove) {
+        mouseMoveRegistrants.remove(ob);
+    }
+    mouseMoveRegistrantsToRemove.clear();
+
+    for (MouseDownObserver* ob : mouseDownRegistrantsToRemove) {
+        mouseDownRegistrants.remove(ob);
+    }
+    mouseDownRegistrantsToRemove.clear();
+
+    for (MouseUpObserver* ob : mouseUpRegistrantsToRemove) {
+        mouseUpRegistrants.remove(ob);
+    }
+    mouseUpRegistrantsToRemove.clear();
+
+    for (TextEnteredObserver* ob : textEnteredRegistrantsToRemove) {
+        textEnteredRegistrants.remove(ob);
+    }
+    textEnteredRegistrantsToRemove.clear();
+
+    for (KeyPressedObserver* ob : keyPressedRegistrantsToRemove) {
+        keyPressedRegistrants.remove(ob);
+    }
+    keyPressedRegistrantsToRemove.clear();
+
+    for (KeyReleasedObserver* ob : keyReleasedRegistrantsToRemove) {
+        keyReleasedRegistrants.remove(ob);
+    }
+    keyReleasedRegistrantsToRemove.clear();
 }
 
 /*Event Handling*/

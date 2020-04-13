@@ -6,6 +6,8 @@ DDIR = dependencies
 CFLAGS=-std=c++11 -MMD -MP
 SFMLFLAGS=-lsfml-graphics -lsfml-window -lsfml-system
 
+debug: CFLAGS+=-g -Wall
+
 $(ODIR)/%.o: %.cpp | $(ODIR) $(DDIR)
 	$(CC) -c $< -o $@ $(CFLAGS) -MF $(DDIR)/$(patsubst %.o,%.d,$(@F))
 
@@ -17,6 +19,9 @@ $(ODIR) $(DDIR):
 
 run: game.app
 	./game.app
+
+debug: clean game.app
+	gdb game.app
 
 clean:
 	rm -f sfml-app # deprecated

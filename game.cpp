@@ -1,5 +1,5 @@
 #include "game.h"
-#include "globals.hpp"
+// #include "globals.hpp"
 #include "hackerWindow.cpp" // Must import cpp files here in order to get the implementations for each class
 #include "cooler.cpp"
 #include "coolant.cpp"
@@ -16,12 +16,11 @@ Game::Game()
     : renderWindow(sf::VideoMode(640,480), "NotHack: WPM"),
       debugFPS()
 {
+    currentWindow = NULL;
     debugFPS.setFont(Globals::defaultFont);
     
     cooler = new Cooler(400.f, 0.f);
-    browserWindow = new WorldWideWeb::BrowserWindow(sf::Vector2f(300.f,50.f), sf::Vector2f(300.f,300.f), Globals::defaultFont);
 
-    RenderSystem::RenderHandler::getInstance()->registerDrawable(browserWindow);
     RenderSystem::RenderHandler::getInstance()->registerDrawable(cooler);
 
     std::cout << "The font has been set. Ready to hacktivate.\n";
@@ -32,7 +31,6 @@ Game::Game()
 
 Game::~Game() {
     delete cooler;
-    delete browserWindow;
     if (draggable != NULL) delete draggable;
 }
 
@@ -43,7 +41,7 @@ void Game::run() {
 
     Globals::hackerWindow->updateHackerText();
     // JobSystem::JobHandler::getInstance()->loadJob(JobSystem::Factories::genericJob());
-    JobSystem::JobHandler::getInstance()->loadJob(JobSystem::Factories::fireWallTestJob());
+    // JobSystem::JobHandler::getInstance()->loadJob(JobSystem::Factories::fireWallTestJob());
     while (renderWindow.isOpen()) {
         timeSinceLastUpdate += clock.restart();
 
@@ -67,10 +65,20 @@ void Game::setDraggable(IDraggable* iDraggable) {
     draggable = iDraggable;
 }
 
+void Game::activateWindow(Registerable* reg) {
+    if (currentWindow != NULL) {
+        currentWindow->deactivate();
+    }
+
+    reg->activate();
+    currentWindow = reg;
+}
+
 void Game::update(sf::Time deltaTime) {
     Globals::hackerWindow->update(deltaTime);
     cooler->update(deltaTime);
     JobSystem::JobHandler::getInstance()->update(deltaTime);
+    EventSystem::EventHandler::getInstance()->removeClearedObservers();
 }
 
 void Game::processEvents() {
@@ -149,8 +157,12 @@ int main() {
         std::cout << "The file loaded! Oh Frabtuous Day!!!\n";
     }
 
-    Globals::hackerWindow = new HackerWindow(50.f,50.f,200.f,300.f, Globals::defaultFont, sf::Color::White);
-    RenderSystem::RenderHandler::getInstance()->registerDrawable(Globals::hackerWindow);
+    Globals::game = new Game();
 
-    Globals::game.run();
+    Globals::hackerWindow = new HackerWindow(50.f,50.f,300.f,300.f, Globals::defaultFont, sf::Color::White);
+
+    Globals::browserWindow = new WorldWideWeb::BrowserWindow(sf::Vector2f(50.f,50.f), sf::Vector2f(300.f,300.f), Globals::defaultFont);
+    Globals::game->activateWindow(Globals::browserWindow);
+
+    Globals::game->run();
 }

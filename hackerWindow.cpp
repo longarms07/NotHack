@@ -105,3 +105,11 @@ void HackerWindow::update(sf::Time deltaTime) {
 bool HackerWindow::contains(sf::Vector2f pos) {
     return hackerScreen.getGlobalBounds().contains(pos);
 }
+
+void HackerWindow::activate() {
+    RenderSystem::RenderHandler::getInstance()->registerDrawable(this);
+}
+
+void HackerWindow::deactivate() {
+    RenderSystem::RenderHandler::getInstance()->unregisterDrawable(this);
+}

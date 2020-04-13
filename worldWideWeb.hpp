@@ -4,6 +4,7 @@
 #include "textField.hpp"
 #include "singleton.hpp"
 #include "jobSystem.hpp"
+#include "registerable.hpp"
 #include <list>
 
 /*
@@ -26,7 +27,13 @@ namespace WorldWideWeb {
     class URLBar;
     class JobButton;
 
-    class BrowserWindow : public sf::Drawable, public EventSystem::MouseMoveObserver, public EventSystem::MouseDownObserver, public EventSystem::MouseUpObserver, public EventSystem::KeyPressedObserver {
+    class BrowserWindow : public sf::Drawable,
+                          public EventSystem::MouseMoveObserver,
+                          public EventSystem::MouseDownObserver,
+                          public EventSystem::MouseUpObserver,
+                          public EventSystem::KeyPressedObserver,
+                          public Registerable
+    {
         public:
             URLBar* urlBar;
             WindowPart* currentSite;
@@ -56,6 +63,10 @@ namespace WorldWideWeb {
             void mouseUp(sf::Event::MouseButtonEvent);
             void keyPressed(sf::Event::KeyEvent);
 
+            /*Registerable*/
+            void activate();
+            void deactivate();
+
         private:
             void setWebsite(WindowPart*);
             void setWebsitePosition();
@@ -72,7 +83,7 @@ namespace WorldWideWeb {
      * WINDOW PARTS
      ***************/
 
-    class WindowPart : public sf::Drawable {
+    class WindowPart : public sf::Drawable, public Registerable {
         // Part of the window, inherited by everything
         // Handles its own rendering and events
         public:
@@ -131,6 +142,11 @@ namespace WorldWideWeb {
                 sf::RectangleShape background;
                 std::list<JobButton*> jobButtons;
 
+            public:
+                /*Registerable*/
+                void activate();
+                void deactivate();
+
             private:
                 Hackdeed();
                 void* operator new(size_t);
@@ -149,6 +165,10 @@ namespace WorldWideWeb {
 
             void draw(sf::RenderTarget&, sf::RenderStates) const;
             void setPosition(float, float);
+
+            /*Registerable*/
+            void activate();
+            void deactivate();
     };
 
     class JobButton : public WindowPart, public EventSystem::MouseDownObserver {
@@ -174,5 +194,9 @@ namespace WorldWideWeb {
 
             /*WindowPart*/
             void setPosition(float, float);
+
+            /*Registerable*/
+            void activate();
+            void deactivate();
     };
 }

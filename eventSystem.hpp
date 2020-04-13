@@ -32,8 +32,17 @@ namespace EventSystem {
             std::list<KeyPressedObserver*> keyPressedRegistrants;
             std::list<KeyReleasedObserver*> keyReleasedRegistrants;
 
+        private:
+            std::list<MouseMoveObserver*> mouseMoveRegistrantsToRemove;
+            std::list<MouseDownObserver*> mouseDownRegistrantsToRemove;
+            std::list<MouseUpObserver*> mouseUpRegistrantsToRemove;
+            std::list<TextEnteredObserver*> textEnteredRegistrantsToRemove;
+            std::list<KeyPressedObserver*> keyPressedRegistrantsToRemove;
+            std::list<KeyReleasedObserver*> keyReleasedRegistrantsToRemove;
+
         public:
             void processEvent(sf::Event);
+            void removeClearedObservers();
 
             bool registerMouseMoveObserver(MouseMoveObserver*);
             bool registerMouseDownObserver(MouseDownObserver*);

@@ -2,7 +2,9 @@
 #include "hackerWindow.h"
 #include <iostream>
 
-JobSystem::JobHandler::JobHandler() { }
+JobSystem::JobHandler::JobHandler() {
+    currentJob = NULL;
+}
 
 JobSystem::JobHandler::~JobHandler() {
     if (currentJob != NULL) {
@@ -16,6 +18,7 @@ void* JobSystem::JobHandler::operator new(size_t size) {
 
 void JobSystem::JobHandler::loadJob(JobInstance* jobPointer) {
         currentJob = jobPointer;
+        Globals::game->activateWindow(Globals::hackerWindow);
 }
 
 bool JobSystem::JobHandler::isComplete() {
@@ -24,6 +27,7 @@ bool JobSystem::JobHandler::isComplete() {
 
 void JobSystem::JobHandler::finish() {
     currentJob->finish();
+    Globals::game->activateWindow(Globals::browserWindow);
 
     // SHOULD BE FINAL CODE EXECUTE DURING ITERATION OF JOBHANDLER
     // WILL CAUSE SEG-FAULTS OTHERWISE DUE TO NULL-POINTER

@@ -6,17 +6,20 @@
 #include "cooler.h"
 #include "idraggable.h"
 #include "coolant.h"
+#include "globals.hpp"
 #include "worldWideWeb.hpp"
 #include "textField.hpp"
 #include "complication.hpp"
 #include "jobSystem.hpp"
+#include "registerable.hpp"
 
 class Game {
     public:
         Game();
         ~Game();      
         void run();
-        void setDraggable(IDraggable* iDraggable);
+        void setDraggable(IDraggable*);
+        void activateWindow(Registerable*);
 
     
     private:
@@ -24,14 +27,15 @@ class Game {
         sf::Text debugFPS;
         Cooler* cooler;
         IDraggable* draggable; // The current iDraggable assigned to the mouse. Can only drag one thing at a time.
-        WorldWideWeb::BrowserWindow* browserWindow;
+        Registerable* currentWindow;
+        //WorldWideWeb::BrowserWindow* browserWindow;
         
-        void update(sf::Time deltaTime);
+        void update(sf::Time);
 
         void processEvents();
         
         void render();
 
-        void updateFPSDisplay(sf::Time t);
+        void updateFPSDisplay(sf::Time);
 };
 

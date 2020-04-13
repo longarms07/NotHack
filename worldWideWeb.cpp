@@ -6,8 +6,12 @@
 
 WorldWideWeb::BrowserWindow::BrowserWindow(sf::Vector2f anchorPoint, sf::Vector2f widthHeight, sf::Font& font)
     : windowBackground(),
-      websiteOffset(0.f, 100.f)
+      websiteOffset(0.f, 100.f),
+      EventSystem::MouseDownObserver(false),
+      EventSystem::MouseMoveObserver(false),
+      EventSystem::KeyPressedObserver(false)
 {
+    currentSite = NULL;
 
     windowBackground.setPosition(anchorPoint);
     windowBackground.setSize(widthHeight);
@@ -43,23 +47,23 @@ void WorldWideWeb::BrowserWindow::setWebsitePosition() {
 }
 
 void WorldWideWeb::BrowserWindow::mouseMove(sf::Event::MouseMoveEvent event) {
-    if (dragging) {
-        sf::Vector2f eventLocation(event.x, event.y);
-        sf::Vector2f newPosition = eventLocation - mouseOffsetFromOrigin;
-        setPosition(newPosition.x, newPosition.y);
-    }
+    // if (dragging) {
+    //     sf::Vector2f eventLocation(event.x, event.y);
+    //     sf::Vector2f newPosition = eventLocation - mouseOffsetFromOrigin;
+    //     setPosition(newPosition.x, newPosition.y);
+    // }
 }
 
 void WorldWideWeb::BrowserWindow::mouseDown(sf::Event::MouseButtonEvent event) {
-    sf::Vector2f eventLocation(event.x, event.y);
+    // sf::Vector2f eventLocation(event.x, event.y);
 
-    if (windowBackground.getGlobalBounds().contains(eventLocation)) {
-        // std::cout << "Mouse down in bounds" << std::endl;
-        mouseOffsetFromOrigin = eventLocation - windowBackground.getPosition();
-        dragging = true;
-    } else {
-        // std::cout << "Mouse down outside bounds" << std::endl;
-    }
+    // if (windowBackground.getGlobalBounds().contains(eventLocation)) {
+    //     // std::cout << "Mouse down in bounds" << std::endl;
+    //     mouseOffsetFromOrigin = eventLocation - windowBackground.getPosition();
+    //     dragging = true;
+    // } else {
+    //     // std::cout << "Mouse down outside bounds" << std::endl;
+    // }
 }
 
 void WorldWideWeb::BrowserWindow::keyPressed(sf::Event::KeyEvent event) {
@@ -83,9 +87,38 @@ void WorldWideWeb::BrowserWindow::mouseUp(sf::Event::MouseButtonEvent event) {
 }
 
 void WorldWideWeb::BrowserWindow::setWebsite(WindowPart* newSite) {
+    if (currentSite != NULL) {
+        currentSite->deactivate();
+    }
+
     currentSite = newSite;
     setWebsitePosition();
+    currentSite->activate();
 }
+
+
+void WorldWideWeb::BrowserWindow::activate() {
+    RenderSystem::RenderHandler::getInstance()->registerDrawable(this);
+    EventSystem::EventHandler* handlerInstance = EventSystem::EventHandler::getInstance();
+    handlerInstance->registerMouseMoveObserver(this);
+    handlerInstance->registerMouseDownObserver(this);
+    handlerInstance->registerKeyPressedObserver(this);
+    urlBar->activate();
+    currentSite->activate();
+}
+
+void WorldWideWeb::BrowserWindow::deactivate() {
+    RenderSystem::RenderHandler::getInstance()->unregisterDrawable(this);
+    EventSystem::EventHandler* handlerInstance = EventSystem::EventHandler::getInstance();
+    handlerInstance->unregisterMouseMoveObserver(this);
+    handlerInstance->unregisterMouseDownObserver(this);
+    handlerInstance->unregisterKeyPressedObserver(this);
+    urlBar->deactivate();
+    currentSite->deactivate();
+}
+
+
+// URLBar
 
 WorldWideWeb::URLBar::URLBar(sf::Font& font)
     : textField(sf::Vector2f(0.f, 0.f), sf::Vector2f(300.f, 50.f), font)
@@ -97,6 +130,20 @@ void WorldWideWeb::URLBar::draw(sf::RenderTarget& target, sf::RenderStates state
 
 void WorldWideWeb::URLBar::setPosition(float x, float y) {
     textField.setPosition(x, y);
+}
+
+void WorldWideWeb::URLBar::activate() {
+    EventSystem::EventHandler* handlerInstance = EventSystem::EventHandler::getInstance();
+    handlerInstance->registerMouseDownObserver(&textField);
+    handlerInstance->registerTextEnteredObserver(&textField);
+    handlerInstance->registerKeyPressedObserver(&textField);
+}
+
+void WorldWideWeb::URLBar::deactivate() {
+    EventSystem::EventHandler* handlerInstance = EventSystem::EventHandler::getInstance();
+    handlerInstance->unregisterMouseDownObserver(&textField);
+    handlerInstance->unregisterTextEnteredObserver(&textField);
+    handlerInstance->unregisterKeyPressedObserver(&textField);
 }
 
 
@@ -178,9 +225,22 @@ void WorldWideWeb::Sites::Hackdeed::setPosition(float x, float y) {
     }
 }
 
+void WorldWideWeb::Sites::Hackdeed::activate() {
+    for (JobButton* jobButton : jobButtons) {
+        jobButton->activate();
+    }
+}
+
+void WorldWideWeb::Sites::Hackdeed::deactivate() {
+    for (JobButton* jobButton : jobButtons) {
+        jobButton->deactivate();
+    }
+}
+
 // JobButton
 WorldWideWeb::JobButton::JobButton(sf::Vector2f pWidthHeight, JobSystem::JobInstance* instance)
-    : background(pWidthHeight)
+    : background(pWidthHeight),
+      MouseDownObserver(false)
 {
     widthHeight = pWidthHeight;
 
@@ -220,4 +280,14 @@ void WorldWideWeb::JobButton::setPosition(float x, float y) {
     background.setPosition(x, y);
     jobTitle.setPosition(x, y);
     jobPay.setPosition(x, y+widthHeight.y/2);
+}
+
+void WorldWideWeb::JobButton::activate() {
+    EventSystem::EventHandler* handlerInstance = EventSystem::EventHandler::getInstance();
+    handlerInstance->registerMouseDownObserver(this);
+}
+
+void WorldWideWeb::JobButton::deactivate() {
+    EventSystem::EventHandler* handlerInstance = EventSystem::EventHandler::getInstance();
+    handlerInstance->unregisterMouseDownObserver(this);
 }

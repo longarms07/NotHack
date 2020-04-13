@@ -3,6 +3,7 @@
 #include "singleton.hpp"
 #include "eventSystem.hpp"
 #include "complication.hpp"
+#include "globals.hpp"
 #include <string>
 #include <list>
 

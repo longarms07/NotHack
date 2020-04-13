@@ -3,9 +3,10 @@
 #include <string>
 #include <iostream>
 #include <fstream>
-#include <list> 
+#include <list>
+#include "registerable.hpp"
 
-class HackerWindow : public sf::Drawable {
+class HackerWindow : public sf::Drawable, public Registerable {
     public:
         HackerWindow(sf::Vector2f anchorPt, sf::Vector2f wH, sf::Font& font, const sf::Color& color);
         HackerWindow(float anchorPointX, float anchorPointY, float width, float height, sf::Font& font, const sf::Color& color);
@@ -23,6 +24,10 @@ class HackerWindow : public sf::Drawable {
         void update(sf::Time deltaTime); 
         bool contains(sf::Vector2f pos);
         void updateList(char c);
+
+        /*Registerable*/
+        void activate();
+        void deactivate();
 
     private:
         sf::Font hackerFont; // Font of the text

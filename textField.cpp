@@ -2,7 +2,11 @@
 #include <iostream>
 
 TextField::TextField(sf::Vector2f position, sf::Vector2f widthHeight, sf::Font& font)
-    : background(widthHeight) {
+    : background(widthHeight),
+      EventSystem::MouseDownObserver(false),
+      EventSystem::TextEnteredObserver(false),
+      EventSystem::KeyPressedObserver(false)
+{
     focused = false;
 
     background.setPosition(position.x, position.y);

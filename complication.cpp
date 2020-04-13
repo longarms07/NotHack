@@ -1,4 +1,5 @@
 #pragma once
+#include <iostream>
 #include "complication.hpp"
 #include "globals.hpp"
 
@@ -42,7 +43,7 @@ Complication::FireWall::FireWall(int targetChars, sf::Time maxTime, sf::Time coo
     numKeysReq = activationKeys;
     progressBar = new ProgressBar(minAnchorPoint, sf::Vector2f(maxBounds.x, 30), sf::Color::Green, numTargetChars, "Breaking Firewall", 20);
     Coolant::setFireWall(this);
-    RenderSystem::RenderHandler::getInstance()->registerDrawable(this);
+    RenderSystem::RenderHandler::getInstance()->registerDrawable(this, 1);
     std::cout << "The firewall has been created!\n";
 }
 
