@@ -5,6 +5,8 @@
 
 namespace Globals {
     sf::Font defaultFont;
+    sf::Texture computerSpriteSheet;
+
     Game* game;
     HackerWindow* hackerWindow;
     WorldWideWeb::BrowserWindow* browserWindow;

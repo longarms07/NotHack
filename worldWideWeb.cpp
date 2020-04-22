@@ -4,21 +4,24 @@
 #include <iostream>
 #include <string>
 
-WorldWideWeb::BrowserWindow::BrowserWindow(sf::Vector2f anchorPoint, sf::Vector2f widthHeight, sf::Font& font)
-    : windowBackground(),
-      websiteOffset(0.f, 100.f),
+WorldWideWeb::BrowserWindow::BrowserWindow(sf::Vector2f anchorPoint, sf::Vector2f widthHeightScale, sf::Font& font)
+    : hackscapeSprite(),
+      monitorOffset(204.f, 85.f),
+      urlOffset(58.f, 25.f),
+      websiteOffset(38.f, 150.f),
       EventSystem::MouseDownObserver(false),
       EventSystem::MouseMoveObserver(false),
       EventSystem::KeyPressedObserver(false)
 {
     currentSite = NULL;
 
-    windowBackground.setPosition(anchorPoint);
-    windowBackground.setSize(widthHeight);
-    windowBackground.setFillColor(sf::Color(85, 85, 85));
+    hackscapeSprite.setTexture(Globals::computerSpriteSheet);
+    hackscapeSprite.setTextureRect(sf::IntRect(979, 492, 312, 237));
+    hackscapeSprite.setPosition(monitorOffset+anchorPoint);
+    hackscapeSprite.setScale(widthHeightScale);
 
     urlBar = new URLBar(font);
-    urlBar->setPosition(anchorPoint.x, anchorPoint.y);
+    urlBar->setPosition(urlOffset.x+monitorOffset.x+anchorPoint.x, urlOffset.y+monitorOffset.y+anchorPoint.y);
     setWebsite(WorldWideWeb::Sites::Red::getInstance());
 
     dragging = false;
@@ -29,20 +32,20 @@ WorldWideWeb::BrowserWindow::~BrowserWindow() {
 }
 
 void WorldWideWeb::BrowserWindow::draw(sf::RenderTarget& target, sf::RenderStates states) const {
-    target.draw(windowBackground, states);
+    target.draw(hackscapeSprite, states);
 
     target.draw(*urlBar, states);
     target.draw(*currentSite, states);
 }
 
 void WorldWideWeb::BrowserWindow::setPosition(float x, float y) {
-    windowBackground.setPosition(x, y);
-    urlBar->setPosition(x, y);
+    hackscapeSprite.setPosition(monitorOffset.x+x, monitorOffset.x+x);
+    urlBar->setPosition(urlOffset.x+monitorOffset.x+x, urlOffset.y+monitorOffset.y+y);
     setWebsitePosition();
 }
 
 void WorldWideWeb::BrowserWindow::setWebsitePosition() {
-    sf::Vector2f newSitePosition = websiteOffset+windowBackground.getPosition();
+    sf::Vector2f newSitePosition = monitorOffset+websiteOffset;
     currentSite->setPosition(newSitePosition.x, newSitePosition.y);
 }
 
@@ -121,7 +124,7 @@ void WorldWideWeb::BrowserWindow::deactivate() {
 // URLBar
 
 WorldWideWeb::URLBar::URLBar(sf::Font& font)
-    : textField(sf::Vector2f(0.f, 0.f), sf::Vector2f(300.f, 50.f), font)
+    : textField(sf::Vector2f(0.f, 0.f), sf::Vector2f(186.f, 17.f), font)
 { }
 
 void WorldWideWeb::URLBar::draw(sf::RenderTarget& target, sf::RenderStates states) const {
@@ -151,7 +154,7 @@ void WorldWideWeb::URLBar::deactivate() {
 WorldWideWeb::Sites::Red::Red()
     : background()
 {
-    background.setSize(sf::Vector2f(300.f, 200.f));
+    background.setSize(sf::Vector2f(235.f, 132.f));
     background.setFillColor(sf::Color::Red);
 }
 
@@ -172,7 +175,7 @@ void WorldWideWeb::Sites::Red::setPosition(float x, float y) {
 WorldWideWeb::Sites::Blue::Blue()
     : background()
 {
-    background.setSize(sf::Vector2f(300.f, 200.f));
+    background.setSize(sf::Vector2f(235.f, 132.f));
     background.setFillColor(sf::Color::Blue);
 }
 
@@ -191,14 +194,15 @@ void WorldWideWeb::Sites::Blue::setPosition(float x, float y) {
 
 // Hackdeed
 WorldWideWeb::Sites::Hackdeed::Hackdeed()
-    : background()
+    : background(),
+      buttonOffset(6.f, 10.f)
 {
-    background.setSize(sf::Vector2f(300.f, 200.f));
+    background.setSize(sf::Vector2f(235.f, 132.f));
     background.setFillColor(sf::Color::Yellow);
 
     // Initialize buttons
-    jobButtons.push_back(new JobButton(sf::Vector2f(300.f, 100.f), JobSystem::Factories::genericJob()));
-    jobButtons.push_back(new JobButton(sf::Vector2f(300.f, 100.f), JobSystem::Factories::fireWallTestJob()));
+    jobButtons.push_back(new JobButton(sf::Vector2f(220.f, 55.f), JobSystem::Factories::genericJob()));
+    jobButtons.push_back(new JobButton(sf::Vector2f(220.f, 55.f), JobSystem::Factories::fireWallTestJob()));
 }
 
 void* WorldWideWeb::Sites::Hackdeed::operator new(size_t size) {
@@ -220,7 +224,7 @@ void WorldWideWeb::Sites::Hackdeed::setPosition(float x, float y) {
     // Set button positions
     int i=0;
     for (JobButton* jobButton : jobButtons) {
-        jobButton->setPosition(x, y+(1.1*i*jobButton->getDimensions().y));
+        jobButton->setPosition(buttonOffset.x+x, buttonOffset.y+y+(i*5)+(i*jobButton->getDimensions().y));
         i++;
     }
 }
@@ -248,10 +252,12 @@ WorldWideWeb::JobButton::JobButton(sf::Vector2f pWidthHeight, JobSystem::JobInst
 
     jobTitle.setString("Test");
     jobTitle.setFont(Globals::defaultFont);
+    jobTitle.setCharacterSize(10);
     jobTitle.setFillColor(sf::Color::Black);
 
     jobPay.setString("$???");
     jobPay.setFont(Globals::defaultFont);
+    jobPay.setCharacterSize(10);
     jobPay.setFillColor(sf::Color::Black);
     jobPay.setPosition(0, widthHeight.y/2);
 }

@@ -25,6 +25,7 @@ class Game {
     
     private:
         sf::Text debugFPS;
+        sf::Sprite* computerSprite;
         Cooler* cooler;
         IDraggable* draggable; // The current iDraggable assigned to the mouse. Can only drag one thing at a time.
         Registerable* currentWindow;

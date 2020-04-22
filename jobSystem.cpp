@@ -111,7 +111,7 @@ namespace { // Classes for factories to use
             GenericJob(std::string filePath)
                 : JobInstance(filePath)
             {
-                inputsRemainingToComplete = 20;
+                inputsRemainingToComplete = 100;
             }
 
             void keyPressed() {
