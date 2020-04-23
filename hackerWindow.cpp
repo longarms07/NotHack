@@ -4,33 +4,24 @@
 HackerWindow::HackerWindow(sf::Vector2f anchorPt, sf::Vector2f wH, sf::Font& font, const sf::Color& color)
     : hackerText(), 
       hackerScreen(),
-      textOffset(9.f, 38.f),
-      view(sf::FloatRect(anchorPt.x, anchorPt.y, wH.x, wH.y))
-    {
-        // Calculate percentage of screen size
-        sf::Vector2u screenSize = Globals::game->renderWindow.getSize();
-        float widthPercent = wH.x/screenSize.x;
-        float heightPercent = wH.y/screenSize.y;
-        float anchorXPercent = anchorPt.x/screenSize.x;
-        float anchorYPercent = anchorPt.y/screenSize.y;
-        view.setViewport(sf::FloatRect(anchorXPercent, anchorYPercent, widthPercent, heightPercent));
+      textOffset(9.f, 38.f)
+{
+    anchorPoint = anchorPt;
+    widthHeight = wH;
+    hackerFont = font;
+    textColor = color;
 
-        anchorPoint = anchorPt;
-        widthHeight = wH;
-        hackerFont = font;
-        textColor = color;
+    hackerText.setFont(hackerFont);
+    hackerText.setCharacterSize(14);
+    hackerText.setString("Testing One Too Three");
+    hackerText.setPosition(textOffset+anchorPoint);
 
-        hackerText.setFont(hackerFont);
-        hackerText.setCharacterSize(14);
-        hackerText.setString("Testing One Too Three");
-        hackerText.setPosition(textOffset+anchorPoint);
-
-        hackerScreen.setTexture(Globals::computerSpriteSheet);
-        hackerScreen.setTextureRect(sf::IntRect(979, 783, 312, 237));
-        hackerScreen.setScale(sf::Vector2f(0.8f, 0.8f)); // TODO: Un-hardcode
-        hackerScreen.setPosition(anchorPoint);
-        // hackerScreen.setFillColor(sf::Color::Green);
-    };
+    hackerScreen.setTexture(Globals::computerSpriteSheet);
+    hackerScreen.setTextureRect(sf::IntRect(979, 783, 312, 237));
+    hackerScreen.setScale(sf::Vector2f(0.8f, 0.8f)); // TODO: Un-hardcode
+    hackerScreen.setPosition(anchorPoint);
+    // hackerScreen.setFillColor(sf::Color::Green);
+}
 
 HackerWindow::HackerWindow(float anchorPointX, float anchorPointY, float width, float height, sf::Font& font, const sf::Color& color)
     : HackerWindow(sf::Vector2f(anchorPointX, anchorPointY), sf::Vector2f(width, height), font, color)
@@ -49,7 +40,8 @@ void HackerWindow::setAnchorPoint(float anchorPointX, float anchorPointY) {
 }
 
 sf::Vector2f HackerWindow::getWidthHeight() {
-    return widthHeight;
+    sf::FloatRect bounds = hackerScreen.getGlobalBounds();
+    return sf::Vector2f(bounds.width, bounds.height);
 }
 
 void HackerWindow::setWidthHeight(sf::Vector2f wH) {
@@ -77,7 +69,13 @@ void HackerWindow::setTextColor(const sf::Color& color) {
 }
 
 void HackerWindow::draw(sf::RenderTarget& renderTarget, sf::RenderStates states) const {
-    Globals::game->renderWindow.setView(view);
+    Globals::game->renderWindow.setView(Globals::computerView);
+
+    // sf::RectangleShape debugRect(sf::Vector2f(2000, 2000));
+    // debugRect.setPosition(0, 0);
+    // debugRect.setFillColor(sf::Color::Green);
+    // renderTarget.draw(debugRect);
+    
     renderTarget.draw(hackerScreen, states);
     renderTarget.draw(hackerText, states);
     Globals::game->renderWindow.setView(Globals::game->renderWindow.getDefaultView());

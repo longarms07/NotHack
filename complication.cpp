@@ -24,13 +24,31 @@ bool Complication::Complication::isActive() {
 // FireWall Functions 
 
 Complication::FireWall::FireWall(int targetChars, sf::Time maxTime, sf::Time coolTime, int activationKeys, double penaltyAmount)
-    : wallGraphic() {
+    : fireLayer1(),
+      fireLayer2(),
+      fireLayer3(),
+      barOffset(0.f, 80.f),
+      firewallOffset(-10.f, 0.f)
+{
     maxAnchorPoint = Globals::hackerWindow->getAnchorPoint();
     maxBounds = Globals::hackerWindow->getWidthHeight();
     minAnchorPoint = sf::Vector2f(maxAnchorPoint.x, maxAnchorPoint.y+maxBounds.y);
-    wallGraphic.setPosition(minAnchorPoint);
-    wallGraphic.setSize(sf::Vector2f(maxBounds.x, 0.f));
-    wallGraphic.setFillColor(sf::Color::Red);
+    
+    fireLayer1.setPosition(minAnchorPoint);
+    fireLayer1.setScale(sf::Vector2f(0.8f, 0.8f)); // TODO: Un-hardcode
+    fireLayer1.setTexture(Globals::computerSpriteSheet);
+    fireLayer1.setTextureRect(sf::IntRect(2, 7, 348, 326));
+    
+    fireLayer2.setPosition(minAnchorPoint);
+    fireLayer2.setScale(sf::Vector2f(0.8f, 0.8f)); // TODO: Un-hardcode
+    fireLayer2.setTexture(Globals::computerSpriteSheet);
+    fireLayer2.setTextureRect(sf::IntRect(367, 26, 348, 326));
+    
+    fireLayer3.setPosition(minAnchorPoint);
+    fireLayer3.setScale(sf::Vector2f(0.8f, 0.8f)); // TODO: Un-hardcode
+    fireLayer3.setTexture(Globals::computerSpriteSheet);
+    fireLayer3.setTextureRect(sf::IntRect(721, 16, 348, 326));
+    
     maximumTime = maxTime;
     coolantTime = coolTime;
     elapsedTime = sf::Time::Zero;
@@ -41,7 +59,8 @@ Complication::FireWall::FireWall(int targetChars, sf::Time maxTime, sf::Time coo
     endingData.ended = false;
     penalty = penaltyAmount;
     numKeysReq = activationKeys;
-    progressBar = new ProgressBar(minAnchorPoint, sf::Vector2f(maxBounds.x, 30), sf::Color::Green, numTargetChars, "Breaking Firewall", 20);
+    
+    progressBar = new ProgressBar(barOffset+minAnchorPoint, sf::Vector2f(maxBounds.x, 20), sf::Color::Blue, numTargetChars, "Firewall detected... hacking...", 14);
     Coolant::setFireWall(this);
     RenderSystem::RenderHandler::getInstance()->registerDrawable(this, 1);
     std::cout << "The firewall has been created!\n";
@@ -55,7 +74,7 @@ Complication::FireWall::~FireWall() {
 
 void Complication::FireWall::startComplication() {
     active = true;
-    updateWallGraphic();
+    updateGraphics();
 }
 
 void Complication::FireWall::endComplication(bool defeated) {
@@ -80,7 +99,7 @@ void Complication::FireWall::update(sf::Time deltaTime) {
         elapsedTime+= deltaTime;
         //std::cout << "The firewall has " << (maximumTime.asSeconds()-elapsedTime.asSeconds()) << " seconds left!\n";
         if (elapsedTime >= maximumTime) endComplication(false);
-        else updateWallGraphic();
+        else updateGraphics();
     }
 }
 
@@ -88,11 +107,11 @@ void Complication::FireWall::coolantApplied() {
     if(active) {
         elapsedTime-= coolantTime;
         if(elapsedTime < sf::Time::Zero) elapsedTime = sf::Time::Zero;
-        updateWallGraphic();
+        updateGraphics();
     }
 }
 
-void Complication::FireWall::updateWallGraphic() {
+void Complication::FireWall::updateGraphics() {
     if(active) {
         // Step 1: Get the percentage of the time that is left. 
         // This is done by dividing the elapsed time by the maximum time.
@@ -102,15 +121,23 @@ void Complication::FireWall::updateWallGraphic() {
         float wallHeight = (elapsedTimePercent * maxBounds.y);
         // Step 3: Figure out the anchor point that should be at this height and set the position
         sf::Vector2f newAnchorPoint = sf::Vector2f(minAnchorPoint.x, minAnchorPoint.y-wallHeight);
-        wallGraphic.setPosition(newAnchorPoint);
+        fireLayer1.setPosition(firewallOffset+newAnchorPoint);
+        fireLayer2.setPosition(firewallOffset+newAnchorPoint);
+        fireLayer3.setPosition(firewallOffset+newAnchorPoint);
         // Step 4: Set the height of the wall
-        wallGraphic.setSize(sf::Vector2f(maxBounds.x, wallHeight));
+        //fireLayer1.setSize(sf::Vector2f(maxBounds.x, wallHeight));
     }
 }
 
 void Complication::FireWall::draw(sf::RenderTarget& renderTarget, sf::RenderStates states) const {
     if(active) {
-        renderTarget.draw(wallGraphic, states);
+        Globals::game->renderWindow.setView(Globals::computerView);
+
+        renderTarget.draw(fireLayer3, states);
+        renderTarget.draw(fireLayer2, states);
+        renderTarget.draw(fireLayer1, states);
         renderTarget.draw(*progressBar, states);
+
+        Globals::game->renderWindow.setView(Globals::game->renderWindow.getDefaultView());
     }
 }

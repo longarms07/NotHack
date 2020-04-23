@@ -175,7 +175,15 @@ int main() {
 
     Globals::game = new Game();
 
-    Globals::hackerWindow = new HackerWindow(235.f, 187.f, 300.f,300.f, Globals::defaultFont, sf::Color::White);
+    Globals::computerView.reset(sf::FloatRect(235.f, 187.f, 248.f, 186.f)); // Define what the view sees in the global world
+    sf::Vector2u screenSize = Globals::game->renderWindow.getSize();
+    float widthPercent = 248.f/screenSize.x;
+    float heightPercent = 186.f/screenSize.y;
+    float anchorXPercent = 235.f/screenSize.x;
+    float anchorYPercent = 187.f/screenSize.y;
+    Globals::computerView.setViewport(sf::FloatRect(anchorXPercent, anchorYPercent, widthPercent, heightPercent)); // Define how the view is displayed on screen
+
+    Globals::hackerWindow = new HackerWindow(235.f, 187.f, 248.f, 186.f, Globals::defaultFont, sf::Color::White);
 
     Globals::browserWindow = new WorldWideWeb::BrowserWindow(sf::Vector2f(30.f, 100.f), sf::Vector2f(0.8f, 0.8f), Globals::defaultFont);
     Globals::game->activateWindow(Globals::browserWindow);

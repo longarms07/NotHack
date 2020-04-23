@@ -42,7 +42,6 @@ class HackerWindow : public sf::Drawable, public Registerable {
         sf::Vector2f textOffset;
         
         sf::Color textColor; // Color of the text
-        sf::View view; // To mask the hackerwindow display
         std::list<std::string> displayedCode = { "" };
         const int displayedCodeSize = 8;
 
