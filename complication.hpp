@@ -4,6 +4,7 @@
 #include <iostream>
 #include "progressBar.h"
 #include "renderSystem.hpp"
+#include "spriteAnimations.hpp"
  
 namespace Complication {
 
@@ -50,9 +51,9 @@ namespace Complication {
             sf::Vector2f barOffset;
             sf::Vector2f firewallOffset;
             
-            sf::Sprite fireLayer1; // Layers for fire graphic
-            sf::Sprite fireLayer2;
-            sf::Sprite fireLayer3;
+            SpriteAnimations::HorizontalSine* fireLayer1; // Layers for fire graphic
+            SpriteAnimations::HorizontalSine* fireLayer2;
+            SpriteAnimations::HorizontalSine* fireLayer3;
             
             ProgressBar* progressBar;
 

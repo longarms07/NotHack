@@ -11,6 +11,7 @@
 #include "jobSystem.cpp"
 #include "renderSystem.cpp"
 #include "complication.cpp"
+#include "spriteAnimations.cpp"
 
 Game::Game()
     : renderWindow(sf::VideoMode(800,600), "NotHack: WPM"),
