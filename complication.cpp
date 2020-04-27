@@ -77,6 +77,7 @@ Complication::FireWall::~FireWall() {
     delete fireLayer3;
     Coolant::setFireWall(NULL);
     RenderSystem::RenderHandler::getInstance()->unregisterDrawable(this);
+
 }
 
 void Complication::FireWall::startComplication() {

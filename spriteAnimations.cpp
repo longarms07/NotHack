@@ -13,7 +13,7 @@ SpriteAnimations::HorizontalSine::HorizontalSine(sf::Sprite* spriteToWrap, float
 }
 
 SpriteAnimations::HorizontalSine::~HorizontalSine() {
-    delete &originalSprite;
+    delete originalSprite;
 }
 
 void SpriteAnimations::HorizontalSine::update(sf::Time deltaTime) {
