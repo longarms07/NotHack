@@ -145,7 +145,7 @@ namespace { // Classes for factories to use
                 inputsRemainingToComplete = 200;
                 inputs = 0;
                 isFinished = false;
-                Complication::FireWall* f = new Complication::FireWall(100, sf::seconds(1.f), sf::seconds(.5f), 10, 0.0);
+                Complication::FireWall* f = new Complication::FireWall(100, sf::seconds(10.f), sf::seconds(5.f), 10, 0.0);
                 complications.push_front(dynamic_cast<Complication::Complication*>(f));
             }
 

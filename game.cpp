@@ -38,6 +38,7 @@ void Game::run() {
     const sf::Time timePerFrame = sf::seconds(1.f / 60.f);
     sf::Clock clock;
     sf::Time timeSinceLastUpdate = sf::Time::Zero;
+    sf::Time accumulator = sf::Time::Zero;
 
     Globals::hackerWindow->updateHackerText();
     // JobSystem::JobHandler::getInstance()->loadJob(JobSystem::Factories::genericJob());
@@ -52,7 +53,7 @@ void Game::run() {
         while (timeSinceLastUpdate > timePerFrame) {
             timeSinceLastUpdate -= timePerFrame;
             processEvents();
-            update(timeSinceLastUpdate);
+            update(timePerFrame);
         }
 
         render();

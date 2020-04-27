@@ -78,7 +78,7 @@ void Complication::FireWall::keyPressed() {
 void Complication::FireWall::update(sf::Time deltaTime) {
     if(active) {
         elapsedTime+= deltaTime;
-        //std::cout << "The firewall has " << (maximumTime.asSeconds()-elapsedTime.asSeconds()) << " seconds left!\n";
+        std::cout << "The firewall has " << (maximumTime.asSeconds()-elapsedTime.asSeconds()) << " seconds left!\n";
         if (elapsedTime >= maximumTime) endComplication(false);
         else updateWallGraphic();
     }
