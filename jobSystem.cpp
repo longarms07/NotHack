@@ -54,10 +54,10 @@ void JobSystem::JobHandler::keyPressed(sf::Event::KeyEvent event) {
         if (isComplete()) {
             finish();
         }
-        else {
+        /*else {
             Globals::hackerWindow->updateList(currentJob->nextCharToDisplay());
             currentJob->keyPressed();
-        }
+        }*/
     }
 }
 
@@ -171,12 +171,12 @@ namespace { // Classes for factories to use
             }
 
             void finish() {
-                if(inputsRemainingToComplete != 0) {
-                    std::cout << "Job failed!\n";
+                if(inputsRemainingToComplete > 0) {
+                    std::cout << "Job failed! "<< inputsRemainingToComplete << " inputs left to complete!\n";
                 }
                 else {
                     // Give a reward...
-                    std::cout << "Generic job complete!" << std::endl;
+                    std::cout << "Firewall job complete!" << std::endl;
                 }
             }
 
