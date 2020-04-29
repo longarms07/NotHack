@@ -33,7 +33,7 @@ class Cooler : public sf::Drawable, public EventSystem::MouseUpObserver, public 
         ProgressBar cooldownTimer; 
         const sf::Vector2f widthHeight = sf::Vector2f(115, 99); // Dimensions of the Cooler sprite
         const float lidHeight = 38.f; // Size of the lid in the cooler sprite, used for calculating bounds.
-        const float cooldownTime = 0.5;
+        const float cooldownTime = 6.f;
         bool inCooldown;
         bool open; // Marks whether or not the sprite is the open sprite (true) or closed (false).
         virtual void draw(sf::RenderTarget& renderTarget, sf::RenderStates states) const;

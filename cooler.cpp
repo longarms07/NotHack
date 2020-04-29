@@ -3,7 +3,7 @@
 #include "globals.hpp"
 
 Cooler::Cooler(sf::Vector2f aP)
-    : cooldownTimer(sf::Vector2f(aP.x, aP.y+14), sf::Vector2f(115, 14), sf::Color::Blue, 0.5, "Making Coolant...", 12) {
+    : cooldownTimer(sf::Vector2f(aP.x, aP.y+14), sf::Vector2f(115, 14), sf::Color::Blue, 6.f, "Making Coolant...", 12) {
     anchorPoint = aP;
     if (!coolerTexture.loadFromFile("Cooler.png")) {
         std::cout << "Error! Could not load Cooler.png!!!";
@@ -24,7 +24,7 @@ Cooler::Cooler(sf::Vector2f aP)
 }
 
 Cooler::Cooler(float aPX, float aPY) 
-    : cooldownTimer(sf::Vector2f(aPX, aPY+14), sf::Vector2f(115, 14), sf::Color::Blue, 0.5, "Making Coolant...", 12) {
+    : cooldownTimer(sf::Vector2f(aPX, aPY+14), sf::Vector2f(115, 14), sf::Color::Blue, 6.f, "Making Coolant...", 12) {
     anchorPoint = sf::Vector2f(aPX, aPY);
     if (!coolerTexture.loadFromFile("Cooler.png")) {
         std::cout << "Error! Could not load Cooler.png!!!";

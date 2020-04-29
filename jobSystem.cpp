@@ -54,10 +54,10 @@ void JobSystem::JobHandler::keyPressed(sf::Event::KeyEvent event) {
         if (isComplete()) {
             finish();
         }
-        else {
+        /*else {
             Globals::hackerWindow->updateList(currentJob->nextCharToDisplay());
             currentJob->keyPressed();
-        }
+        }*/
     }
 }
 
@@ -145,7 +145,7 @@ namespace { // Classes for factories to use
                 inputsRemainingToComplete = 200;
                 inputs = 0;
                 isFinished = false;
-                Complication::FireWall* f = new Complication::FireWall(100, sf::seconds(1.f), sf::seconds(.5f), 10, 0.0);
+                Complication::FireWall* f = new Complication::FireWall(100, sf::seconds(10.f), sf::seconds(5.f), 10, 0.0);
                 complications.push_front(dynamic_cast<Complication::Complication*>(f));
             }
 
@@ -171,12 +171,12 @@ namespace { // Classes for factories to use
             }
 
             void finish() {
-                if(inputsRemainingToComplete != 0) {
-                    std::cout << "Job failed!\n";
+                if(inputsRemainingToComplete > 0) {
+                    std::cout << "Job failed! "<< inputsRemainingToComplete << " inputs left to complete!\n";
                 }
                 else {
                     // Give a reward...
-                    std::cout << "Generic job complete!" << std::endl;
+                    std::cout << "Firewall job complete!" << std::endl;
                 }
             }
 
