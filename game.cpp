@@ -22,7 +22,7 @@ Game::Game()
 
     debugFPS.setFont(Globals::defaultFont);
     
-    cooler = new Cooler(400.f, 0.f);
+    cooler = new Cooler(490.f, 120.f);
     computerSprite = new sf::Sprite();
     computerSprite->setTexture(Globals::computerSpriteSheet);
     computerSprite->setTextureRect(sf::IntRect(10, 490, 920, 560));
