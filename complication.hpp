@@ -5,6 +5,7 @@
 #include "progressBar.h"
 #include "renderSystem.hpp"
 #include "spriteAnimations.hpp"
+#include <cstdlib>
  
 namespace Complication {
 
@@ -73,4 +74,7 @@ namespace Complication {
             virtual void draw(sf::RenderTarget& renderTarget, sf::RenderStates states) const;
     };
 
+    namespace ComplicationFactories{
+         bool generateFirewalls(std::list<Complication*> &complications, int jobInputs, int number, int maxLength, int minLength, float timeScale);
+    };
 }

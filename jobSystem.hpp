@@ -6,6 +6,7 @@
 #include "globals.hpp"
 #include <string>
 #include <list>
+#include <cassert>
 
 namespace JobSystem {
     class JobInstance;
@@ -54,8 +55,17 @@ namespace JobSystem {
     };
 
     namespace Factories {
+
         JobInstance* genericJob();
         JobInstance* fireWallTestJob();
+
+        JobInstance* testPGJob();
+
+        JobInstance* easyRandomJob();
+        JobInstance* mediumRandomJob();
+        JobInstance* hardRandomJob();
+
+        int randomFromRange(int min, int max);
     }
 
 }

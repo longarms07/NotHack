@@ -196,6 +196,79 @@ namespace { // Classes for factories to use
             }
     };
 
+
+    class ProcedurallyGeneratedJob : public JobSystem::JobInstance {
+        private:
+            int inputsRemainingToComplete;
+            int inputs;
+            bool isFinished;
+        public:
+            ProcedurallyGeneratedJob(int numInputs, int numComplications, float timeScale, std::string filePath)
+                : JobInstance(filePath) {
+                inputsRemainingToComplete = numInputs;
+                inputs = 0;
+                isFinished = false;
+
+                std::cout << "Making new procedurally generated job...\n";
+
+                if(numComplications > 0) {
+                    int maxComp = numInputs/numComplications;
+                    int minComp = (numInputs/numComplications)/4;
+                    std::cout << "PGJob:: num inputs: " << numInputs << " , numComplications: " << numComplications << " , max complication input: " << maxComp << " , min comp input: "<< minComp << "\n";  
+                    assert(Complication::ComplicationFactories::generateFirewalls(complications, numInputs, numComplications, maxComp, minComp, timeScale));
+                    std::cout << "PGJob:: length of complications list: " << complications.size() << "\n";
+                }
+
+            }
+
+             ~ProcedurallyGeneratedJob() {
+                for (Complication::Complication* c : complications) {
+                    delete c;
+                }
+            }
+
+            void keyPressed() {
+                inputsRemainingToComplete--;
+                inputs++;
+                if(inputsRemainingToComplete == 0) isFinished = true;
+                else { 
+                    for (Complication::Complication* c : complications) {
+                        if (!c->isActive() && !c->getEndData().ended && inputs >= c->getNumberKeysRequired()) {
+                            std::cout << c->getNumberKeysRequired() << " , " << inputs;
+                            c->startComplication();
+                        }
+                        else c->keyPressed();
+                    }
+                }
+            }
+
+            void finish() {
+                if(inputsRemainingToComplete > 0) {
+                    std::cout << "Job failed! "<< inputsRemainingToComplete << " inputs left to complete!\n";
+                }
+                else {
+                    // Give a reward...
+                    std::cout << "Procedurally Generated job complete!" << std::endl;
+                }
+            }
+
+            void update(sf::Time deltaTime) {
+                for (Complication::Complication* c : complications) {
+                    c->update(deltaTime);
+                    Complication::endData cData = c->getEndData();
+                    if (cData.ended && !cData.defeated) {
+                        isFinished = true;
+                        break;
+                    }
+                }
+            }
+
+            bool isComplete() {
+                return isFinished;
+            }
+    };
+
+
 }
 
 JobSystem::JobInstance* JobSystem::Factories::genericJob() {
@@ -204,4 +277,37 @@ JobSystem::JobInstance* JobSystem::Factories::genericJob() {
 
 JobSystem::JobInstance* JobSystem::Factories::fireWallTestJob() {
     return new FireWallTestJob("hello-world.txt");
+}
+
+
+JobSystem::JobInstance* JobSystem::Factories::testPGJob() {
+    return new ProcedurallyGeneratedJob(400, 2, 20.f, "hello-world.txt");
+}
+
+
+int JobSystem::Factories::randomFromRange(int min, int max) {
+    return (rand() % (max-min)+1) + min;
+}
+
+JobSystem::JobInstance* JobSystem::Factories::easyRandomJob() {
+    int numKeys = randomFromRange(20, 100);
+    int numComplications = 0;
+    int complicationTimeScale = 0.f;
+    return new ProcedurallyGeneratedJob(numKeys, numComplications, complicationTimeScale, "hello-world.txt");
+}
+
+
+JobSystem::JobInstance* JobSystem::Factories::mediumRandomJob() {
+    int numKeys = randomFromRange(100, 250);
+    int numComplications = 1;
+    int complicationTimeScale = 10.f;
+    return new ProcedurallyGeneratedJob(numKeys, numComplications, complicationTimeScale, "hello-world.txt");
+}
+
+
+JobSystem::JobInstance* JobSystem::Factories::hardRandomJob() {
+    int numKeys = randomFromRange(250, 500);
+    int numComplications = randomFromRange(1,2);
+    int complicationTimeScale = 20.f;
+    return new ProcedurallyGeneratedJob(numKeys, numComplications, complicationTimeScale, "hello-world.txt");
 }

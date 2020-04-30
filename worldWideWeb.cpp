@@ -201,8 +201,8 @@ WorldWideWeb::Sites::Hackdeed::Hackdeed()
     background.setFillColor(sf::Color::Yellow);
 
     // Initialize buttons
-    jobButtons.push_back(new JobButton(sf::Vector2f(220.f, 55.f), JobSystem::Factories::genericJob()));
-    jobButtons.push_back(new JobButton(sf::Vector2f(220.f, 55.f), JobSystem::Factories::fireWallTestJob()));
+    jobButtons.push_back(new JobButton(sf::Vector2f(220.f, 55.f), JobSystem::Factories::easyRandomJob()));
+    jobButtons.push_back(new JobButton(sf::Vector2f(220.f, 55.f), JobSystem::Factories::mediumRandomJob()));
 }
 
 void* WorldWideWeb::Sites::Hackdeed::operator new(size_t size) {
@@ -278,7 +278,8 @@ void WorldWideWeb::JobButton::mouseDown(sf::Event::MouseButtonEvent event) {
     if (background.getGlobalBounds().contains(eventPosition)) {
         JobSystem::JobHandler::getInstance()->loadJob(job);
         // Should get a new job because job is deleted when finished
-        job = JobSystem::Factories::genericJob();
+        //job = JobSystem::Factories::genericJob();
+        job = JobSystem::Factories::hardRandomJob();
     }
 }
 
