@@ -31,15 +31,19 @@ class HackerWindow : public sf::Drawable, public Registerable {
         void deactivate();
 
     private:
+
         sf::Font hackerFont; // Font of the text
-        sf::Text hackerText; // Textbox that the text is stored within. 
-        sf::RectangleShape hackerScreen; // The background screen of the window
+        sf::Text hackerText; // Textbox that the text is stored within.
+        sf::Sprite hackerScreen; // The background screen of the window
+        
         sf::Vector2f anchorPoint; // Top-left pixel of the hacker window
-        sf::Vector2f widthHeight; // Width and height of the window
+        sf::Vector2f widthHeight; // Width and height of the view
+
+        sf::Vector2f textOffset;
+        
         sf::Color textColor; // Color of the text
-        sf::View view; // To mask the hackerwindow display
         std::list<std::string> displayedCode = { "" };
-        const int displayedCodeSize = 5;
+        const int displayedCodeSize = 8;
 
         virtual void draw(sf::RenderTarget& renderTarget, sf::RenderStates states) const;
 };

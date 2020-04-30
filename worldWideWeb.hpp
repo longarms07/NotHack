@@ -39,8 +39,10 @@ namespace WorldWideWeb {
             WindowPart* currentSite;
 
         private:
-            sf::RectangleShape windowBackground;
+            sf::Sprite hackscapeSprite;
 
+            sf::Vector2f monitorOffset;
+            sf::Vector2f urlOffset;
             sf::Vector2f websiteOffset;
 
             /*Dragging State*/
@@ -140,6 +142,9 @@ namespace WorldWideWeb {
 
             private:
                 sf::RectangleShape background;
+
+                sf::Vector2f buttonOffset;
+
                 std::list<JobButton*> jobButtons;
 
             public:

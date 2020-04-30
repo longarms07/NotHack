@@ -3,13 +3,15 @@
 #include "globals.hpp"
 
 ProgressBar::ProgressBar(sf::Vector2f anchorPoint, sf::Vector2f widthHeight, sf::Color color, float maxProgress)
-    : bottomLayer(), progressLayer(), text() {
-    constructProgressBar(anchorPoint, widthHeight, color, maxProgress);
+    : bottomLayer(), progressLayer(), text()
+{
+    sf::Vector2f barPosition = sf::Vector2f(anchorPoint.x, anchorPoint.y-widthHeight.x);
+    constructProgressBar(barPosition, widthHeight, color, maxProgress);
 }
 
 ProgressBar::ProgressBar(sf::Vector2f anchorPoint, sf::Vector2f widthHeight, sf::Color color, float maxProgress, std::string displayText, int fontSize)
-    : bottomLayer(), progressLayer(), text() {
-    constructProgressBar(anchorPoint, widthHeight, color, maxProgress);
+    : ProgressBar(anchorPoint, widthHeight, color, maxProgress)
+{
     text.setFont(Globals::defaultFont);
     text.setCharacterSize(fontSize);
     text.setString(displayText);

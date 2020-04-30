@@ -12,6 +12,7 @@ TextField::TextField(sf::Vector2f position, sf::Vector2f widthHeight, sf::Font& 
     background.setPosition(position.x, position.y);
 
     text.setFont(font);
+    text.setCharacterSize(12);
     text.setFillColor(sf::Color::Black);
     text.setPosition(position.x, position.y);
 }

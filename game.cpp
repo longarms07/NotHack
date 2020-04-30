@@ -11,17 +11,26 @@
 #include "jobSystem.cpp"
 #include "renderSystem.cpp"
 #include "complication.cpp"
+#include "spriteAnimations.cpp"
 
 Game::Game()
-    : renderWindow(sf::VideoMode(640,480), "NotHack: WPM"),
+    : renderWindow(sf::VideoMode(800,600), "NotHack: WPM"),
       debugFPS()
 {
     currentWindow = NULL;
+    draggable = NULL;
+
     debugFPS.setFont(Globals::defaultFont);
     
     cooler = new Cooler(400.f, 0.f);
+    computerSprite = new sf::Sprite();
+    computerSprite->setTexture(Globals::computerSpriteSheet);
+    computerSprite->setTextureRect(sf::IntRect(10, 490, 920, 560));
+    computerSprite->setPosition(30.f, 100.f);
+    computerSprite->setScale(0.8f, 0.8f);
 
     RenderSystem::RenderHandler::getInstance()->registerDrawable(cooler);
+    RenderSystem::RenderHandler::getInstance()->registerDrawable(computerSprite);
 
     std::cout << "The font has been set. Ready to hacktivate.\n";
     debugFPS.setString("FPS Text Initialized");
@@ -31,6 +40,7 @@ Game::Game()
 
 Game::~Game() {
     delete cooler;
+    delete computerSprite;
     if (draggable != NULL) delete draggable;
 }
 
@@ -151,18 +161,33 @@ void Game::updateFPSDisplay(sf::Time t) {
 
 
 int main() {
-    if(!Globals::defaultFont.loadFromFile("Oxanium-Regular.ttf")){
+    if (!Globals::defaultFont.loadFromFile("Oxanium-Regular.ttf")) {
         std::cout << "The font could not be loaded! Oh noes!!!\n";
         exit(2);
-    }else{
+    } else {
         std::cout << "The file loaded! Oh Frabtuous Day!!!\n";
+    }
+
+    if (!Globals::computerSpriteSheet.loadFromFile("hackigaSpriteSheet.png")) {
+        std::cout << "Failed to load computer sprite sheet" << std::endl;
+        exit(2);
+    } else {
+        std::cout << "Computer sprite sheet loaded" << std::endl;
     }
 
     Globals::game = new Game();
 
-    Globals::hackerWindow = new HackerWindow(50.f,50.f,300.f,300.f, Globals::defaultFont, sf::Color::White);
+    Globals::computerView.reset(sf::FloatRect(235.f, 187.f, 248.f, 186.f)); // Define what the view sees in the global world
+    sf::Vector2u screenSize = Globals::game->renderWindow.getSize();
+    float widthPercent = 248.f/screenSize.x;
+    float heightPercent = 186.f/screenSize.y;
+    float anchorXPercent = 235.f/screenSize.x;
+    float anchorYPercent = 187.f/screenSize.y;
+    Globals::computerView.setViewport(sf::FloatRect(anchorXPercent, anchorYPercent, widthPercent, heightPercent)); // Define how the view is displayed on screen
 
-    Globals::browserWindow = new WorldWideWeb::BrowserWindow(sf::Vector2f(50.f,50.f), sf::Vector2f(300.f,300.f), Globals::defaultFont);
+    Globals::hackerWindow = new HackerWindow(235.f, 187.f, 248.f, 186.f, Globals::defaultFont, sf::Color::White);
+
+    Globals::browserWindow = new WorldWideWeb::BrowserWindow(sf::Vector2f(30.f, 100.f), sf::Vector2f(0.8f, 0.8f), Globals::defaultFont);
     Globals::game->activateWindow(Globals::browserWindow);
 
     Globals::game->run();
