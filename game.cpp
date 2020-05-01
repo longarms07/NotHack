@@ -12,11 +12,15 @@
 #include "renderSystem.cpp"
 #include "complication.cpp"
 #include "spriteAnimations.cpp"
+#include "textCrawl.cpp"
 
 Game::Game()
     : renderWindow(sf::VideoMode(800,600), "NotHack: WPM"),
-      debugFPS()
+      debugFPS(),
+      textCrawl(800,600)
 {
+    currentState = INTRO;
+
     currentWindow = NULL;
     draggable = NULL;
 
@@ -86,17 +90,20 @@ void Game::activateWindow(Registerable* reg) {
 }
 
 void Game::update(sf::Time deltaTime) {
-    Globals::hackerWindow->update(deltaTime);
-    cooler->update(deltaTime);
-    JobSystem::JobHandler::getInstance()->update(deltaTime);
-    EventSystem::EventHandler::getInstance()->removeClearedObservers();
+    if (currentState == GAME) {
+        Globals::hackerWindow->update(deltaTime);
+        cooler->update(deltaTime);
+        JobSystem::JobHandler::getInstance()->update(deltaTime);
+        EventSystem::EventHandler::getInstance()->removeClearedObservers();
+    } else if (currentState == INTRO) {
+        textCrawl.update(deltaTime);
+    }
 }
 
 void Game::processEvents() {
     sf::Event event;
     while (renderWindow.pollEvent(event))
     {
-
         switch (event.type) {
             case sf::Event::KeyReleased:
                 std::cout << "Key " << event.key.code << " has been released!!!!!\n";
@@ -105,48 +112,59 @@ void Game::processEvents() {
                 renderWindow.close();
                 break;
             case sf::Event::MouseMoved:
-                if (draggable != NULL) draggable->onDragMove(sf::Vector2f(event.mouseMove.x, event.mouseMove.y));
-                /*if (cooler->getGlobalBounds().contains(sf::Vector2f(event.mouseMove.x, event.mouseMove.y))) {
-                    if (!cooler->isMouseOver()) {
-                        cooler->onMouseOver(true);
-                        std::cout << "The Mouse is over the cooler!\n";
+                if (currentState == GAME) {
+                    if (draggable != NULL) draggable->onDragMove(sf::Vector2f(event.mouseMove.x, event.mouseMove.y));
+                    /*if (cooler->getGlobalBounds().contains(sf::Vector2f(event.mouseMove.x, event.mouseMove.y))) {
+                        if (!cooler->isMouseOver()) {
+                            cooler->onMouseOver(true);
+                            std::cout << "The Mouse is over the cooler!\n";
+                        }
                     }
+                    else if (cooler->isMouseOver()) {
+                        cooler->onMouseOver(false);
+                        std::cout << "The Mouse has left the cooler!\n";
+                    }*/
                 }
-                else if (cooler->isMouseOver()) {
-                    cooler->onMouseOver(false);
-                    std::cout << "The Mouse has left the cooler!\n";
-                }*/
                 break;
             case sf::Event::MouseButtonReleased:
                 // If there is currently a draggable, when the mouse is clicked call it's onDragEnd.
                 // Since onDragEnd will either destroy it or make the draggable not our concern, set the pointer to null.
-                if (draggable != NULL) {
-                    draggable->onDragEnd(sf::Vector2f(event.mouseButton.x, event.mouseButton.y));
-                    draggable = NULL;
-                    // RenderSystem::RenderHandler::getInstance()->unregisterDrawable(&draggable->getSprite());
+                if (currentState == GAME) {
+                    if (draggable != NULL) {
+                        draggable->onDragEnd(sf::Vector2f(event.mouseButton.x, event.mouseButton.y));
+                        draggable = NULL;
+                        // RenderSystem::RenderHandler::getInstance()->unregisterDrawable(&draggable->getSprite());
+                    }
+                    /*if (cooler->getGlobalBounds().contains(sf::Vector2f(event.mouseButton.x, event.mouseButton.y))) {
+                        cooler->onClick(sf::Vector2f(event.mouseButton.x, event.mouseButton.y));
+                        std::cout << "Clicked on Cooler!\n";
+                    }*/
                 }
-                /*if (cooler->getGlobalBounds().contains(sf::Vector2f(event.mouseButton.x, event.mouseButton.y))) {
-                    cooler->onClick(sf::Vector2f(event.mouseButton.x, event.mouseButton.y));
-                    std::cout << "Clicked on Cooler!\n";
-                }*/
                 break;
         }   
         
-        EventSystem::EventHandler::getInstance()->processEvent(event);
+        if (currentState == GAME) {
+            EventSystem::EventHandler::getInstance()->processEvent(event);
+        }
     }
 }
 
 void Game::render() {
     renderWindow.clear();
-    renderWindow.draw(debugFPS);
-    renderWindow.draw(*RenderSystem::RenderHandler::getInstance());
 
-    //renderWindow.draw(*browserWindow);
+    if (currentState == GAME) {
+        renderWindow.draw(debugFPS);
+        renderWindow.draw(*RenderSystem::RenderHandler::getInstance());
 
-    //renderWindow.draw(*cooler);
-    //renderWindow.draw(*Globals::hackerWindow);
+        //renderWindow.draw(*browserWindow);
 
-    // if (draggable!=NULL) renderWindow.draw(draggable->getSprite());
+        //renderWindow.draw(*cooler);
+        //renderWindow.draw(*Globals::hackerWindow);
+
+        // if (draggable!=NULL) renderWindow.draw(draggable->getSprite());
+    } else if (currentState == INTRO) {
+        renderWindow.draw(textCrawl);
+    }
 
     renderWindow.display();
 }

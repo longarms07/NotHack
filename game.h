@@ -12,8 +12,22 @@
 #include "complication.hpp"
 #include "jobSystem.hpp"
 #include "registerable.hpp"
+#include "textCrawl.hpp"
 
 class Game {
+    public:
+        enum state {INTRO, GAME, OUTRO}currentState;
+
+    private:
+        sf::Text debugFPS;
+        sf::Sprite* computerSprite;
+        Cooler* cooler;
+        IDraggable* draggable; // The current iDraggable assigned to the mouse. Can only drag one thing at a time.
+        Registerable* currentWindow;
+        //WorldWideWeb::BrowserWindow* browserWindow;
+
+        TextCrawl textCrawl;
+
     public:
         Game();
         ~Game();      
@@ -24,13 +38,6 @@ class Game {
         sf::RenderWindow renderWindow;
     
     private:
-        sf::Text debugFPS;
-        sf::Sprite* computerSprite;
-        Cooler* cooler;
-        IDraggable* draggable; // The current iDraggable assigned to the mouse. Can only drag one thing at a time.
-        Registerable* currentWindow;
-        //WorldWideWeb::BrowserWindow* browserWindow;
-        
         void update(sf::Time);
 
         void processEvents();
