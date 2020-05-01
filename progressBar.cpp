@@ -5,7 +5,7 @@
 ProgressBar::ProgressBar(sf::Vector2f anchorPoint, sf::Vector2f widthHeight, sf::Color color, float maxProgress)
     : bottomLayer(), progressLayer(), text()
 {
-    sf::Vector2f barPosition = sf::Vector2f(anchorPoint.x, anchorPoint.y-widthHeight.x);
+    sf::Vector2f barPosition = sf::Vector2f(anchorPoint.x, anchorPoint.y);
     constructProgressBar(barPosition, widthHeight, color, maxProgress);
 }
 
@@ -42,11 +42,12 @@ void ProgressBar::decrementProgress(float toRemove) {
 }
 
 void ProgressBar::constructProgressBar(sf::Vector2f anchorPoint, sf::Vector2f widthHeight, sf::Color color, float maxProgress) {
+    std::cout << "Contsructed progress bar" << std::endl;
     bottomLayer.setPosition(anchorPoint);
     bottomLayer.setSize(widthHeight);
     bottomLayer.setFillColor(sf::Color(112,128,144)); // Grey
-    progressLayer.setPosition(sf::Vector2f(anchorPoint.x+(widthHeight.x * 0.05), anchorPoint.y+(widthHeight.y * 0.1))); // Offset by 10% of dimensions 
-    maxProgressDimensions = sf::Vector2f(widthHeight.x * 0.9, widthHeight.y * 0.8);
+    progressLayer.setPosition(sf::Vector2f(anchorPoint.x+(widthHeight.x * 0.05f), anchorPoint.y+(widthHeight.y * 0.1f))); // Offset by 10% of dimensions 
+    maxProgressDimensions = sf::Vector2f(widthHeight.x * 0.9f, widthHeight.y * 0.8f);
     progressLayer.setFillColor(color);
     max = maxProgress;
     progress = 0;

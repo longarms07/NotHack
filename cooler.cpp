@@ -3,7 +3,7 @@
 #include "globals.hpp"
 
 Cooler::Cooler(sf::Vector2f aP)
-    : cooldownTimer(sf::Vector2f(aP.x, aP.y+14), sf::Vector2f(115, 14), sf::Color::Blue, 6.f, "Making Coolant...", 12) {
+    : cooldownTimer(sf::Vector2f(aP.x+60, aP.y+210), sf::Vector2f(150, 32), sf::Color::Blue, 6.f, "Making Coolant...", 17) {
     anchorPoint = aP;
     if (!coolerTexture.loadFromFile("Cooler.png")) {
         std::cout << "Error! Could not load Cooler.png!!!";
@@ -13,36 +13,23 @@ Cooler::Cooler(sf::Vector2f aP)
         std::cout << "Error! Could not load Coolant.png!!!";
         exit (8);
     }
+
     coolerOpenSprite.setTexture(coolerTexture);
     coolerOpenSprite.setTextureRect(sf::IntRect(0,0,widthHeight.x, widthHeight.y));
     coolerOpenSprite.setPosition(anchorPoint);
+    coolerOpenSprite.setScale(2.f, 2.f);
     coolerClosedSprite.setTexture(coolerTexture);
     coolerClosedSprite.setTextureRect(sf::IntRect(widthHeight.x,0,widthHeight.x, widthHeight.y));
     coolerClosedSprite.setPosition(anchorPoint);
-    closedFloatRect = sf::FloatRect(anchorPoint.x, anchorPoint.y+lidHeight, widthHeight.x, widthHeight.y-lidHeight);
+    coolerClosedSprite.setScale(2.f, 2.f);
+    closedFloatRect = sf::FloatRect(anchorPoint.x, anchorPoint.y+lidHeight, 2*widthHeight.x, 2*widthHeight.y-lidHeight);
     open = false;
+    inCooldown = false;
 }
 
 Cooler::Cooler(float aPX, float aPY) 
-    : cooldownTimer(sf::Vector2f(aPX, aPY+14), sf::Vector2f(115, 14), sf::Color::Blue, 6.f, "Making Coolant...", 12) {
-    anchorPoint = sf::Vector2f(aPX, aPY);
-    if (!coolerTexture.loadFromFile("Cooler.png")) {
-        std::cout << "Error! Could not load Cooler.png!!!";
-        exit (8);
-    }
-    if (!coolantTexture.loadFromFile("Coolant.png")) {
-        std::cout << "Error! Could not load Coolant.png!!!";
-        exit (8);
-    }
-    coolerOpenSprite.setTexture(coolerTexture);
-    coolerOpenSprite.setTextureRect(sf::IntRect(0,0,widthHeight.x, widthHeight.y));
-    coolerOpenSprite.setPosition(anchorPoint);
-    coolerClosedSprite.setTexture(coolerTexture);
-    coolerClosedSprite.setTextureRect(sf::IntRect(widthHeight.x,0,widthHeight.x, widthHeight.y));
-    coolerClosedSprite.setPosition(anchorPoint);
-    closedFloatRect = sf::FloatRect(anchorPoint.x, anchorPoint.y+lidHeight, widthHeight.x, widthHeight.y-lidHeight);
-    open = false;
-}
+    : Cooler(sf::Vector2f(aPX, aPY))
+{ }
 
 void Cooler::onMouseOver(bool mouseOver) {
     open = mouseOver;   
@@ -87,7 +74,13 @@ sf::FloatRect Cooler::getGlobalBounds() {
 }
 
 void Cooler::draw(sf::RenderTarget& renderTarget, sf::RenderStates states) const {
-    if (open) renderTarget.draw(coolerOpenSprite, states);
-    else renderTarget.draw(coolerClosedSprite, states);
-    if (inCooldown) renderTarget.draw(cooldownTimer, states);
+    if (open) {
+        renderTarget.draw(coolerOpenSprite, states);
+    } else {
+        renderTarget.draw(coolerClosedSprite, states);
+    }
+
+    if (inCooldown) {
+        renderTarget.draw(cooldownTimer, states);
+    }
 }
