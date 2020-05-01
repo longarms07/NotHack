@@ -65,7 +65,7 @@ Complication::FireWall::FireWall(int targetChars, sf::Time maxTime, sf::Time coo
     numKeysReq = activationKeys;
     
     progressBar = new ProgressBar(barOffset+minAnchorPoint, sf::Vector2f(maxBounds.x, 20), sf::Color::Blue, numTargetChars, "Firewall detected... coding anti-fire...", 14);
-    Coolant::setFireWall(this);
+    
     RenderSystem::RenderHandler::getInstance()->registerDrawable(this, 1);
     std::cout << "The firewall has been created!\n";
 }
@@ -82,6 +82,7 @@ Complication::FireWall::~FireWall() {
 
 void Complication::FireWall::startComplication() {
     active = true;
+    Coolant::setFireWall(this);
     updateGraphics();
 }
 
@@ -105,7 +106,7 @@ void Complication::FireWall::keyPressed() {
 void Complication::FireWall::update(sf::Time deltaTime) {
     if(active) {
         elapsedTime+= deltaTime;
-        std::cout << "The firewall has " << (maximumTime.asSeconds()-elapsedTime.asSeconds()) << " seconds left!\n";
+        //std::cout << "The firewall has " << (maximumTime.asSeconds()-elapsedTime.asSeconds()) << " seconds left!\n";
         if (elapsedTime >= maximumTime) endComplication(false);
         else {
             updateGraphics();
@@ -153,4 +154,22 @@ void Complication::FireWall::draw(sf::RenderTarget& renderTarget, sf::RenderStat
 
         Globals::game->renderWindow.setView(Globals::game->renderWindow.getDefaultView());
     }
+}
+
+bool Complication::ComplicationFactories::generateFirewalls(std::list<Complication*> &complications, int jobInputs, int number, int maxLength, int minLength, float timeScale) {
+    if(minLength > maxLength) return false;
+    if(maxLength*number > jobInputs) return false;
+    if(number == 0 || timeScale == 0) return false;
+    
+    for (int i=0; i<number; i++) {
+        int numKeys = (rand() % (maxLength-minLength)+1) + minLength; 
+        int complicationStartKeys = (i*maxLength) + maxLength-numKeys;
+        float duration = float(numKeys/timeScale);
+        float cooldownTime = duration/3.f;
+        std::cout << "Firewall number " << i << ":: NumKeys: " << numKeys << " , Start Keys: " << complicationStartKeys << " , duration: " << duration << " , CooldownTime: " << cooldownTime << "\n";
+        FireWall* firewall = new FireWall(numKeys, sf::seconds(duration), sf::seconds(cooldownTime), complicationStartKeys, 0.0);
+        complications.push_back(dynamic_cast<Complication*>(firewall));
+
+    }
+    return true;
 }

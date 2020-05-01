@@ -201,8 +201,8 @@ WorldWideWeb::Sites::Hackdeed::Hackdeed()
     background.setFillColor(sf::Color::Yellow);
 
     // Initialize buttons
-    jobButtons.push_back(new JobButton(sf::Vector2f(220.f, 32.f), JobSystem::Factories::genericJob()));
-    jobButtons.push_back(new JobButton(sf::Vector2f(220.f, 32.f), JobSystem::Factories::genericJob()));
+    jobButtons.push_back(new JobButton(sf::Vector2f(220.f, 32.f), JobSystem::Factories::easyRandomJob()));
+    jobButtons.push_back(new JobButton(sf::Vector2f(220.f, 32.f), JobSystem::Factories::mediumRandomJob()));
     jobButtons.push_back(new JobButton(sf::Vector2f(220.f, 32.f), JobSystem::Factories::fireWallTestJob()));
 }
 
@@ -251,17 +251,22 @@ WorldWideWeb::JobButton::JobButton(sf::Vector2f pWidthHeight, JobSystem::JobInst
 
     job = instance;
 
-    jobTitle.setString(instance->getNameString());
     jobTitle.setFont(Globals::defaultFont);
     jobTitle.setCharacterSize(10);
     jobTitle.setFillColor(sf::Color::Black);
     jobPay.setPosition(5, 0);
 
-    jobPay.setString(instance->getRewardString());
     jobPay.setFont(Globals::defaultFont);
     jobPay.setCharacterSize(10);
     jobPay.setFillColor(sf::Color::Black);
     jobPay.setPosition(5, widthHeight.y/2);
+
+    loadStrings();
+}
+
+void WorldWideWeb::JobButton::loadStrings() {
+    jobTitle.setString(job->getNameString());
+    jobPay.setString(job->getRewardString());
 }
 
 sf::Vector2f WorldWideWeb::JobButton::getDimensions() {
@@ -280,7 +285,8 @@ void WorldWideWeb::JobButton::mouseDown(sf::Event::MouseButtonEvent event) {
     if (background.getGlobalBounds().contains(eventPosition)) {
         JobSystem::JobHandler::getInstance()->loadJob(job);
         // Should get a new job because job is deleted when finished
-        job = JobSystem::Factories::genericJob();
+        job = JobSystem::Factories::mediumOrHardRandomJob();
+        loadStrings();
     }
 }
 

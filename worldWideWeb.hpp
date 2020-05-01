@@ -203,5 +203,8 @@ namespace WorldWideWeb {
             /*Registerable*/
             void activate();
             void deactivate();
+
+        private:
+            void loadStrings();
     };
 }

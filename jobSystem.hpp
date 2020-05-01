@@ -6,8 +6,20 @@
 #include "globals.hpp"
 #include <string>
 #include <list>
+#include <cassert>
 
 namespace JobSystem {
+    sf::String jobNames[] = {"Fix HackTube", "Contract Trace Virus", "Scrub HackSpace Presence",
+                             "Program More RAM", "Download a Car", "Catch Web Surfers",
+                             "Make the Web Less Extreme", "Make the Web More Xtreme (dude)!",
+                             "Connect the Uplink to the Download", "Defeat Dr. Wiwy",
+                             "Make Ukelele Cat Popular", "Leak the Presidents Hax Returns",
+                             "Locate Security Holes", "Mother 3 When?", "Hack the Gibdaughter Supercomputer",
+                             "Steal the Leo Virus", "Challenge Norad's Computer to Tic-Tac-Toe",
+                             "Beat the Maverick Computer Program at Virtual Frisbee",
+                             "Crack All of Modern Encryption", "Fix Modern Encryption", "Remove the Ghost from the Shell",
+                             "Insert Kung Fu Skills into The Uno's Brain", "Erik Wrote These"};
+
     class JobInstance;
 
     class JobHandler : public Singleton<JobHandler>, public EventSystem::KeyPressedObserver {
@@ -56,8 +68,18 @@ namespace JobSystem {
     };
 
     namespace Factories {
+
         JobInstance* genericJob();
         JobInstance* fireWallTestJob();
+
+        JobInstance* testPGJob();
+
+        JobInstance* easyRandomJob();
+        JobInstance* mediumRandomJob();
+        JobInstance* hardRandomJob();
+        JobInstance* mediumOrHardRandomJob();
+
+        int randomFromRange(int min, int max);
     }
 
 }
