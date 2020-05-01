@@ -50,7 +50,9 @@ namespace JobSystem {
             virtual void finish() = 0; // Ends job, gives reward, and sets flags
             virtual void update(sf::Time) = 0; // Standard update function
             virtual bool isComplete() = 0; // Checks if job has ended
-            
+
+            virtual sf::String getNameString() = 0;
+            virtual sf::String getRewardString() = 0;
     };
 
     namespace Factories {

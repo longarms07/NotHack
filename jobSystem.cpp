@@ -130,6 +130,14 @@ namespace { // Classes for factories to use
             bool isComplete() {
                 return inputsRemainingToComplete <= 0;
             }
+
+            sf::String getNameString() {
+                return "Normal Job";
+            }
+
+            sf::String getRewardString() {
+                return "approx. $0.2-1 Big";
+            }
     };
 
     class FireWallTestJob : public JobSystem::JobInstance { 
@@ -193,6 +201,14 @@ namespace { // Classes for factories to use
 
             bool isComplete() {
                 return isFinished;
+            }
+
+            sf::String getNameString() {
+                return "Hack NotHack Demo";
+            }
+
+            sf::String getRewardString() {
+                return "The full game?";
             }
     };
 

@@ -250,12 +250,12 @@ WorldWideWeb::JobButton::JobButton(sf::Vector2f pWidthHeight, JobSystem::JobInst
 
     job = instance;
 
-    jobTitle.setString("Test");
+    jobTitle.setString(instance->getNameString());
     jobTitle.setFont(Globals::defaultFont);
     jobTitle.setCharacterSize(10);
     jobTitle.setFillColor(sf::Color::Black);
 
-    jobPay.setString("$???");
+    jobPay.setString(instance->getRewardString());
     jobPay.setFont(Globals::defaultFont);
     jobPay.setCharacterSize(10);
     jobPay.setFillColor(sf::Color::Black);
