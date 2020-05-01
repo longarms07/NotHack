@@ -25,7 +25,7 @@ bool Complication::Complication::isActive() {
 // FireWall Functions 
 
 Complication::FireWall::FireWall(int targetChars, sf::Time maxTime, sf::Time coolTime, int activationKeys, double penaltyAmount)
-    : barOffset(0.f, 80.f),
+    : barOffset(0.f, -165.f),
       firewallOffset(-10.f, 0.f)
 {
     maxAnchorPoint = Globals::hackerWindow->getAnchorPoint();
