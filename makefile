@@ -4,7 +4,7 @@ ODIR = objects
 DDIR = dependencies
 
 CFLAGS=-std=c++11 -MMD -MP
-SFMLFLAGS=-lsfml-graphics -lsfml-window -lsfml-system
+SFMLFLAGS=-lsfml-graphics -lsfml-window -lsfml-audio -lsfml-system
 
 debug: CFLAGS+=-g -Wall
 

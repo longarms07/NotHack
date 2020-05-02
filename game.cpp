@@ -48,6 +48,13 @@ Game::Game()
     debugFPS.setString("FPS Text Initialized");
     debugFPS.setFillColor(sf::Color::Blue);
     debugFPS.setPosition(sf::Vector2f(0.f,0.f));
+
+    if (!Globals::backgroundMusic.openFromFile(Globals::openingMusicPath)) {
+        std::cout << "File to load music" << std::endl;
+        exit(2);
+    }
+    Globals::backgroundMusic.setLoop(true);
+    Globals::backgroundMusic.play();
 };
 
 Game::~Game() {
@@ -156,6 +163,11 @@ void Game::processEvents() {
             EventSystem::EventHandler::getInstance()->processEvent(event);
         } else if (currentState == INTRO) {
             if (event.key.code == sf::Keyboard::Space) {
+                if (!Globals::backgroundMusic.openFromFile(Globals::hackingMusicPath)) {
+                    std::cout << "File to load music" << std::endl;
+                    exit(2);
+                }
+                Globals::backgroundMusic.play();
                 currentState = GAME;
             }
         }
