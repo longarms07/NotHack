@@ -27,12 +27,20 @@ Game::Game()
     debugFPS.setFont(Globals::defaultFont);
     
     cooler = new Cooler(490.f, 120.f);
+
     computerSprite = new sf::Sprite();
     computerSprite->setTexture(Globals::computerSpriteSheet);
     computerSprite->setTextureRect(sf::IntRect(10, 490, 920, 560));
     computerSprite->setPosition(30.f, 100.f);
     computerSprite->setScale(0.8f, 0.8f);
 
+    backgroundSprite = new sf::Sprite();
+    backgroundSprite->setTexture(Globals::computerSpriteSheet);
+    backgroundSprite->setTextureRect(sf::IntRect(1516, 327, 1182, 755));
+    backgroundSprite->setPosition(-40.f, 0.f);
+    backgroundSprite->setScale(0.8f, 0.8f);
+
+    RenderSystem::RenderHandler::getInstance()->registerDrawable(backgroundSprite);
     RenderSystem::RenderHandler::getInstance()->registerDrawable(cooler);
     RenderSystem::RenderHandler::getInstance()->registerDrawable(computerSprite);
 
@@ -45,6 +53,7 @@ Game::Game()
 Game::~Game() {
     delete cooler;
     delete computerSprite;
+    delete backgroundSprite;
     if (draggable != NULL) delete draggable;
 }
 
@@ -190,7 +199,7 @@ int main() {
         std::cout << "The file loaded! Oh Frabtuous Day!!!\n";
     }
 
-    if (!Globals::computerSpriteSheet.loadFromFile("hackigaSpriteSheet.png")) {
+    if (!Globals::computerSpriteSheet.loadFromFile("hackigaSpriteSheet2.png")) {
         std::cout << "Failed to load computer sprite sheet" << std::endl;
         exit(2);
     } else {
