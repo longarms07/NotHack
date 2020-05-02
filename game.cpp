@@ -145,6 +145,10 @@ void Game::processEvents() {
         
         if (currentState == GAME) {
             EventSystem::EventHandler::getInstance()->processEvent(event);
+        } else if (currentState == INTRO) {
+            if (event.key.code == sf::Keyboard::Space) {
+                currentState = GAME;
+            }
         }
     }
 }
