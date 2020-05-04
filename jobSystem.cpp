@@ -298,6 +298,85 @@ namespace { // Classes for factories to use
             }
     };
 
+    class OutroJob : public JobSystem::JobInstance { 
+        private:
+            int inputsRemainingToComplete;
+            int inputs;
+            bool isFinished;
+
+        public:
+            OutroJob()
+                : JobInstance("last_job.txt")
+            {
+                inputsRemainingToComplete = 1602;
+                //inputsRemainingToComplete = 1;
+                inputs = 0;
+                isFinished = false;
+                Complication::FireWall* f = new Complication::FireWall(134, sf::seconds(10.f), sf::seconds(5.f), 154, 0.0);
+                Complication::FireWall* f1 = new Complication::FireWall(334, sf::seconds(15.f), sf::seconds(5.f), 410, 0.0);
+                Complication::FireWall* f2 = new Complication::FireWall(619, sf::seconds(20.f), sf::seconds(5.f), 945, 0.0);
+                complications.push_back(dynamic_cast<Complication::Complication*>(f));
+                complications.push_back(dynamic_cast<Complication::Complication*>(f1));
+                complications.push_back(dynamic_cast<Complication::Complication*>(f2));
+            }
+
+            ~OutroJob() {
+                for (Complication::Complication* c : complications) {
+                    delete c;
+                }
+            }
+
+            void keyPressed() {
+                inputsRemainingToComplete--;
+                inputs++;
+                if(inputsRemainingToComplete == 0) isFinished = true;
+                else { 
+                    for (Complication::Complication* c : complications) {
+                        if (!c->isActive() && !c->getEndData().ended && inputs >= c->getNumberKeysRequired()) {
+                            std::cout << c->getNumberKeysRequired() << " , " << inputs;
+                            c->startComplication();
+                        }
+                        else c->keyPressed();
+                    }
+                }
+            }
+
+            void finish() {
+                if(inputsRemainingToComplete > 0) {
+                    std::cout << "Job failed! "<< inputsRemainingToComplete << " inputs left to complete!\n";
+                }
+                else {
+                    // Give a reward...
+                    std::cout << "Last job complete!" << std::endl;
+                    Globals::game->startOutro();
+                }
+            }
+
+            void update(sf::Time deltaTime) {
+                for (Complication::Complication* c : complications) {
+                    c->update(deltaTime);
+                    Complication::endData cData = c->getEndData();
+                    if (cData.ended && !cData.defeated) {
+                        isFinished = true;
+                        break;
+                    }
+                }
+            }
+
+            bool isComplete() {
+                return isFinished;
+            }
+
+            sf::String getNameString() {
+                return "Hack the NotHack Demo";
+            }
+
+            sf::String getRewardString() {
+                return "The full game?";
+            }
+    };
+
+
 
 }
 
@@ -348,4 +427,8 @@ JobSystem::JobInstance* JobSystem::Factories::mediumOrHardRandomJob() {
     } else {
         return hardRandomJob();
     }
+}
+
+JobSystem::JobInstance* JobSystem::Factories::storyJob() {
+    return new OutroJob();
 }

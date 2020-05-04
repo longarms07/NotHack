@@ -203,7 +203,7 @@ WorldWideWeb::Sites::Hackdeed::Hackdeed()
     // Initialize buttons
     jobButtons.push_back(new JobButton(sf::Vector2f(220.f, 32.f), JobSystem::Factories::easyRandomJob()));
     jobButtons.push_back(new JobButton(sf::Vector2f(220.f, 32.f), JobSystem::Factories::mediumRandomJob()));
-    jobButtons.push_back(new JobButton(sf::Vector2f(220.f, 32.f), JobSystem::Factories::fireWallTestJob()));
+    jobButtons.push_back(new JobButton(sf::Vector2f(220.f, 32.f), JobSystem::Factories::storyJob()));
 }
 
 void* WorldWideWeb::Sites::Hackdeed::operator new(size_t size) {

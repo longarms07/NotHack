@@ -66,6 +66,7 @@ namespace JobSystem {
             virtual sf::String getNameString() = 0;
             virtual sf::String getRewardString() = 0;
     };
+    
 
     namespace Factories {
 
@@ -78,6 +79,7 @@ namespace JobSystem {
         JobInstance* mediumRandomJob();
         JobInstance* hardRandomJob();
         JobInstance* mediumOrHardRandomJob();
+        JobInstance* storyJob();
 
         int randomFromRange(int min, int max);
     }

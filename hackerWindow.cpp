@@ -20,6 +20,8 @@ HackerWindow::HackerWindow(sf::Vector2f anchorPt, sf::Vector2f wH, sf::Font& fon
     hackerScreen.setTextureRect(sf::IntRect(979, 783, 312, 237));
     hackerScreen.setScale(sf::Vector2f(0.8f, 0.8f)); // TODO: Un-hardcode
     hackerScreen.setPosition(anchorPoint);
+
+    
     // hackerScreen.setFillColor(sf::Color::Green);
 }
 

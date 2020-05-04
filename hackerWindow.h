@@ -47,3 +47,4 @@ class HackerWindow : public sf::Drawable, public Registerable {
 
         virtual void draw(sf::RenderTarget& renderTarget, sf::RenderStates states) const;
 };
+

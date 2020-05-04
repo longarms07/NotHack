@@ -13,6 +13,7 @@
 #include "jobSystem.hpp"
 #include "registerable.hpp"
 #include "textCrawl.hpp"
+#include "outro.hpp"
 
 class Game {
     public:
@@ -28,6 +29,7 @@ class Game {
         //WorldWideWeb::BrowserWindow* browserWindow;
 
         TextCrawl textCrawl;
+        Outro* outro;
 
     public:
         Game();
@@ -35,7 +37,7 @@ class Game {
         void run();
         void setDraggable(IDraggable*);
         void activateWindow(Registerable*);
-
+        void startOutro();
         sf::RenderWindow renderWindow;
     
     private:

@@ -13,6 +13,7 @@
 #include "complication.cpp"
 #include "spriteAnimations.cpp"
 #include "textCrawl.cpp"
+#include "outro.cpp"
 
 Game::Game()
     : renderWindow(sf::VideoMode(800,600), "NotHack: WPM"),
@@ -50,7 +51,7 @@ Game::Game()
     debugFPS.setPosition(sf::Vector2f(0.f,0.f));
 
     if (!Globals::backgroundMusic.openFromFile(Globals::openingMusicPath)) {
-        std::cout << "File to load music" << std::endl;
+        std::cout << "Failed to load music" << std::endl;
         exit(2);
     }
     Globals::backgroundMusic.setLoop(true);
@@ -61,6 +62,7 @@ Game::~Game() {
     delete cooler;
     delete computerSprite;
     delete backgroundSprite;
+    delete outro;
     if (draggable != NULL) delete draggable;
 }
 
@@ -113,6 +115,8 @@ void Game::update(sf::Time deltaTime) {
         EventSystem::EventHandler::getInstance()->removeClearedObservers();
     } else if (currentState == INTRO) {
         textCrawl.update(deltaTime);
+    } else if (currentState == OUTRO) {
+        outro->update(deltaTime);
     }
 }
 
@@ -170,14 +174,19 @@ void Game::processEvents() {
                 Globals::backgroundMusic.play();
                 currentState = GAME;
             }
+        } else if (currentState == OUTRO) {
+            if (event.KeyReleased && event.key.code == sf::Keyboard::Space) {
+                outro->next();
+            }
         }
+
     }
 }
 
 void Game::render() {
     renderWindow.clear();
 
-    if (currentState == GAME) {
+    /*if (currentState == GAME) {
         renderWindow.draw(debugFPS);
         renderWindow.draw(*RenderSystem::RenderHandler::getInstance());
 
@@ -187,7 +196,16 @@ void Game::render() {
         //renderWindow.draw(*Globals::hackerWindow);
 
         // if (draggable!=NULL) renderWindow.draw(draggable->getSprite());
-    } else if (currentState == INTRO) {
+    } else if(currentState == INTRO) {
+        renderWindow.draw(textCrawl);
+    } else if(currentState == OUTRO) {
+        renderWindow.draw(*outro);
+    }*/
+
+    if (currentState != INTRO) {
+        renderWindow.draw(debugFPS);
+        renderWindow.draw(*RenderSystem::RenderHandler::getInstance());
+    } else if(currentState == INTRO) {
         renderWindow.draw(textCrawl);
     }
 
@@ -200,6 +218,11 @@ void Game::updateFPSDisplay(sf::Time t) {
     if(denominator != 0.f)
         fps = 1 / denominator;
     debugFPS.setString("FPS = "+std::to_string(fps));
+}
+
+void Game::startOutro() {
+    currentState = OUTRO;
+    outro = new Outro();
 }
 
 
