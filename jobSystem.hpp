@@ -14,11 +14,11 @@ namespace JobSystem {
                              "Make the Web Less Extreme", "Make the Web More Xtreme (dude)!",
                              "Connect the Uplink to the Download", "Defeat Dr. Wiwy",
                              "Make Ukelele Cat Popular", "Leak the Presidents Hax Returns",
-                             "Locate Security Holes", "Mother 3 When?", "Hack the Gibdaughter Supercomputer",
-                             "Steal the Leo Virus", "Challenge Norad's Computer to Tic-Tac-Toe",
-                             "Beat the Maverick Computer Program at Virtual Frisbee",
+                             "Locate Security Holes", "Mother 3 When?", "Hack the Gibson Supercomputer",
+                             "Steal the Leo Virus", "Challenge WHOPR to Tic-Tac-Toe",
+                             "Beat the MCP at Virtual Frisbee",
                              "Crack All of Modern Encryption", "Fix Modern Encryption", "Remove the Ghost from the Shell",
-                             "Insert Kung Fu Skills into The Uno's Brain", "Erik Wrote These"};
+                             "Hack Kung Fu Skills into The Uno", "Erik Wrote These"};
 
     class JobInstance;
 

@@ -222,7 +222,7 @@ namespace { // Classes for factories to use
             sf::String name;
 
         public:
-            ProcedurallyGeneratedJob(int numInputs, int numComplications, float timeScale, std::string filePath)
+            ProcedurallyGeneratedJob(int numInputs, int numComplications, float timeScale, std::string filePath, std::string difficulty)
                 : JobInstance(filePath)
             {
                 inputsRemainingToComplete = numInputs;
@@ -240,8 +240,8 @@ namespace { // Classes for factories to use
                 }
 
                 name = JobSystem::jobNames[JobSystem::Factories::randomFromRange(0, sizeof(JobSystem::jobNames))/sizeof(JobSystem::jobNames[0])];
-
-            }
+                name = difficulty + ": " + name;
+            }   
 
              ~ProcedurallyGeneratedJob() {
                 for (Complication::Complication* c : complications) {
@@ -368,7 +368,7 @@ namespace { // Classes for factories to use
             }
 
             sf::String getNameString() {
-                return "Hack the NotHack Demo";
+                return "Expert: Hack the NotHack Demo";
             }
 
             sf::String getRewardString() {
@@ -390,7 +390,7 @@ JobSystem::JobInstance* JobSystem::Factories::fireWallTestJob() {
 
 
 JobSystem::JobInstance* JobSystem::Factories::testPGJob() {
-    return new ProcedurallyGeneratedJob(400, 2, 20.f, "hello-world.txt");
+    return new ProcedurallyGeneratedJob(400, 2, 20.f, "hello-world.txt", "med");
 }
 
 
@@ -402,7 +402,7 @@ JobSystem::JobInstance* JobSystem::Factories::easyRandomJob() {
     int numKeys = randomFromRange(20, 100);
     int numComplications = 0;
     int complicationTimeScale = 0.f;
-    return new ProcedurallyGeneratedJob(numKeys, numComplications, complicationTimeScale, "hello-world.txt");
+    return new ProcedurallyGeneratedJob(numKeys, numComplications, complicationTimeScale, "hello-world.txt", "Easy");
 }
 
 
@@ -410,7 +410,7 @@ JobSystem::JobInstance* JobSystem::Factories::mediumRandomJob() {
     int numKeys = randomFromRange(100, 250);
     int numComplications = 1;
     int complicationTimeScale = 10.f;
-    return new ProcedurallyGeneratedJob(numKeys, numComplications, complicationTimeScale, "hello-world.txt");
+    return new ProcedurallyGeneratedJob(numKeys, numComplications, complicationTimeScale, "hello-world.txt", "Medium");
 }
 
 
@@ -418,7 +418,7 @@ JobSystem::JobInstance* JobSystem::Factories::hardRandomJob() {
     int numKeys = randomFromRange(250, 500);
     int numComplications = randomFromRange(1,2);
     int complicationTimeScale = 20.f;
-    return new ProcedurallyGeneratedJob(numKeys, numComplications, complicationTimeScale, "hello-world.txt");
+    return new ProcedurallyGeneratedJob(numKeys, numComplications, complicationTimeScale, "hello-world.txt", "Hard");
 }
 
 JobSystem::JobInstance* JobSystem::Factories::mediumOrHardRandomJob() {
