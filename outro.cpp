@@ -113,7 +113,7 @@ void Outro::displayFinalText() {
     textQueue.push_back("But we promise that what you have experienced so far\n");
     textQueue.push_back("has just been the easy part...\n\n");
     textQueue.push_back("Thank you for playing our proof of concept for\n");
-    textQueue.push_back("'NotHack: Weaponized Polymorphic Measures'!");
+    textQueue.push_back("'NotHack: Weaponized Polymorphic Methods'!");
     startTimer();
 }
 
@@ -124,12 +124,12 @@ void Outro::startTimer() {
 
 
 void Outro::draw(sf::RenderTarget& renderTarget, sf::RenderStates states) const {
-    /*if(state == accessFullGame || state == hackerWindowBlueScreen)
-        Globals::game->renderWindow.setView(Globals::computerView);*/
+    if(state == accessFullGame || state == hackerWindowBlueScreen)
+        Globals::game->renderWindow.setView(Globals::computerView);
 
     renderTarget.draw(outroSprite, states);
     renderTarget.draw(outroText, states);
     
-    /*if(state == accessFullGame || state == hackerWindowBlueScreen)
-        Globals::game->renderWindow.setView(Globals::game->renderWindow.getDefaultView());*/
+    if(state == accessFullGame || state == hackerWindowBlueScreen)
+        Globals::game->renderWindow.setView(Globals::game->renderWindow.getDefaultView());
 }
