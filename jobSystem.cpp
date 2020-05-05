@@ -308,13 +308,13 @@ namespace { // Classes for factories to use
             OutroJob()
                 : JobInstance("last_job.txt")
             {
-                inputsRemainingToComplete = 1602;
+                inputsRemainingToComplete = 1604;
                 //inputsRemainingToComplete = 1;
                 inputs = 0;
                 isFinished = false;
                 Complication::FireWall* f = new Complication::FireWall(134, sf::seconds(10.f), sf::seconds(5.f), 154, 0.0);
                 Complication::FireWall* f1 = new Complication::FireWall(334, sf::seconds(15.f), sf::seconds(5.f), 410, 0.0);
-                Complication::FireWall* f2 = new Complication::FireWall(619, sf::seconds(20.f), sf::seconds(5.f), 945, 0.0);
+                Complication::FireWall* f2 = new Complication::FireWall(619, sf::seconds(25.f), sf::seconds(5.f), 947, 0.0);
                 complications.push_back(dynamic_cast<Complication::Complication*>(f));
                 complications.push_back(dynamic_cast<Complication::Complication*>(f1));
                 complications.push_back(dynamic_cast<Complication::Complication*>(f2));

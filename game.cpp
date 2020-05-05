@@ -14,6 +14,7 @@
 #include "spriteAnimations.cpp"
 #include "textCrawl.cpp"
 #include "outro.cpp"
+#include "hackerText.cpp"
 
 Game::Game()
     : renderWindow(sf::VideoMode(800,600), "NotHack: WPM"),

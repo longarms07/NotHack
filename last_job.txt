@@ -65,7 +65,7 @@ Hack Progress: 50%
 Continuing Hack...
 
 OutputFile *fullGame;
-fullGame = new OutputFile; 
+fullGame = new OutputFile(); 
 
 while (!NotHackDemo.hacked) {
 

@@ -5,6 +5,8 @@
 #include <fstream>
 #include <list>
 #include "registerable.hpp"
+#include "hackerText.hpp"
+
 
 class HackerWindow : public sf::Drawable, public Registerable {
     public:
@@ -33,7 +35,7 @@ class HackerWindow : public sf::Drawable, public Registerable {
     private:
 
         sf::Font hackerFont; // Font of the text
-        sf::Text hackerText; // Textbox that the text is stored within.
+        HackerText hackerText; // Textbox that the text is stored within.
         sf::Sprite hackerScreen; // The background screen of the window
         
         sf::Vector2f anchorPoint; // Top-left pixel of the hacker window
@@ -47,4 +49,6 @@ class HackerWindow : public sf::Drawable, public Registerable {
 
         virtual void draw(sf::RenderTarget& renderTarget, sf::RenderStates states) const;
 };
+
+
 

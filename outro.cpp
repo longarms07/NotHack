@@ -27,12 +27,12 @@ void Outro::update(sf::Time deltaTime) {
                     textQueue.pop_front();
                     outroText.setString(outroText.getString()+"\n");
                 }
-                if(textQueue.empty()) maxTime = sf::seconds(3.f);
+                if(textQueue.empty()) maxTime = sf::seconds(2.f);
                 startTimer();
             }
             else {
                 timeActive = false;
-                maxTime = sf::seconds(5.f);
+                maxTime = sf::seconds(2.f);
                 switch(state) {
                     case hackerWindowBlueScreen:
                         displayFullBlueScreen();

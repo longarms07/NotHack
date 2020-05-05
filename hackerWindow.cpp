@@ -124,3 +124,5 @@ void HackerWindow::activate() {
 void HackerWindow::deactivate() {
     RenderSystem::RenderHandler::getInstance()->unregisterDrawable(this);
 }
+
+

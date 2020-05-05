@@ -14,6 +14,7 @@
 #include "registerable.hpp"
 #include "textCrawl.hpp"
 #include "outro.hpp"
+#include "hackerText.hpp"
 
 class Game {
     public:
