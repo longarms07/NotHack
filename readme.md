@@ -6,7 +6,7 @@
  3. The program can be run with `make run` or `./game.app`
  4. A debug build can be make with `make debug`
 
-## SFML on Linux
+## SFML on Ubuntu/Debian
 
 1. Run `apt install sfml`
 
