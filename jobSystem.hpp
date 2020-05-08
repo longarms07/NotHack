@@ -70,18 +70,18 @@ namespace JobSystem {
 
     namespace Factories {
 
-        JobInstance* genericJob();
-        JobInstance* fireWallTestJob();
+        JobInstance* genericJob(); // Returns a generic, easy job
+        JobInstance* fireWallTestJob(); // Returns a job with a firewall
 
-        JobInstance* testPGJob();
+        JobInstance* testPGJob(); // Test function for Procedurally Generated Jobs
 
-        JobInstance* easyRandomJob();
-        JobInstance* mediumRandomJob();
-        JobInstance* hardRandomJob();
-        JobInstance* mediumOrHardRandomJob();
-        JobInstance* storyJob();
+        JobInstance* easyRandomJob(); // Generates an easy job.
+        JobInstance* mediumRandomJob(); // Generates a hard job.
+        JobInstance* hardRandomJob(); // Generates a medium job.
+        JobInstance* mediumOrHardRandomJob(); // Generates a medium or a hard job.
+        JobInstance* storyJob(); // Returns the LastJob of the demo
 
-        int randomFromRange(int min, int max);
+        int randomFromRange(int min, int max); // Returns a random integer from the range specified
     }
 
 }

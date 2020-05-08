@@ -3,6 +3,16 @@
 #include <string>
 #include <iostream>
 
+
+/******************************************************************************
+ * ProgressBar:                                                               *
+ *      -A GUI element that displays the progress towards a certain goal.     *
+ *      -A derived class of Drawable                                          *
+ * Visual:                                                                    *
+ *      -A Grey Rectangle with a colored rectangle inside of it that grows as *
+ *        the amount of progress made increased.                              *
+ *      -Optional: A message displayed over the progress bar.                 *
+ ******************************************************************************/
 class ProgressBar : public sf::Drawable {
     private:
         sf::Text text; // The text that is displayed over the progress bar, optional
@@ -24,6 +34,6 @@ class ProgressBar : public sf::Drawable {
 
     private:
         void constructProgressBar(sf::Vector2f anchorPoint, sf::Vector2f widthHeight, sf::Color color, float maxProgress); // Called by constructors for common code
-        void setProgressDimensions();
+        void setProgressDimensions(); // Updates the dimensions of the progress bar
         virtual void draw(sf::RenderTarget& renderTarget, sf::RenderStates states) const;
 };
