@@ -1,0 +1,122 @@
+Initiating Hack...
+
+HackProgress: 0%
+
+cd NotHack/SourceCode/Forbidden_
+Folder
+
+Warning! Warning! 
+Forbidden_Folder is Forbidden! 
+Proceed? [y/n]
+
+You: y
+
+Firewall Detected!
+
+Installing digital coolant...
+
+Calling the Cyberfire Dept...
+
+Releasing digital Coolant...
+
+Firewall Extinguished!
+
+HackProgress: 10%
+
+Accessing Forbidden Folder.
+
+ls
+
+Half_Lyfe_3
+NotHack_Demo
+Not_Pirated_Software
+
+
+Hack(NotHack_Demo)
+
+Firewall detected!
+
+#include <stdio.h>
+
+GameInfo game_info *game_info;
+
+for (int i=0; 
+i<NotHack_Demo.getNumPixels();
+i++) {
+
+game_info->HackPixel(NotHack_Dem
+o, i);
+
+}
+
+You've Got Mail!
+
+NotDev: "So, you think that you 
+can just hack your way into the 
+full game? Don't make me laugh!"
+
+Respond? [y/n]
+
+You: n
+
+Firewall Extinguished!
+
+Hack Progress: 50%
+Continuing Hack...
+
+OutputFile *fullGame;
+fullGame = new OutputFile(); 
+
+while (!NotHackDemo.hacked) {
+
+fullGame->hackSourceCode(NotHa
+ckDemo);
+
+}
+
+fullGame->SaveAs("NotHack.cpp");
+
+Firewall Detected!
+
+NotDev: "Impossible! No ordinary 
+hacker could have gotten this 
+far! We weren't ready for this! 
+Please, stop before it is too late!"
+
+Respond? [y/n]
+
+You: n
+
+Connecting the uplink to 
+the download...
+
+Playing epic synthwave...
+
+Exporting game_info into the
+install directory...
+
+Warning! Out of digital coolant!
+
+HackProgress: 71%
+Continuing Hack...
+
+NotDev: "Fine, continue hacking.
+Don't blame us 
+when your computer melts."
+
+NotDev has logged off.
+
+Warning! Cyberfire dept on
+lunch break! No one can help!
+
+HackProgress: 98%...
+
+Error! 
+Err0r!
+3Rr0l?
+c0mpUt3r 0v3rH3Ati-
+
+Firewall Extinguished!
+
+HackProgress: 100%! 
+Hack Completed!
