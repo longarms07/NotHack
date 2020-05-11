@@ -16,6 +16,15 @@
 #include "outro.cpp"
 #include "hackerText.cpp"
 
+/*********************
+ * Create the game by:
+ * 1) Instantiate the application window
+ * 2) Create the INTRO text crawl
+ * 3) Set the state to INTRO
+ * 4) Set the FPS counter font to the default
+ * 5) Instantiate and add the background, cooler, and computer to the RenderHandler
+ * 6) Load the music file
+ **********************/
 Game::Game()
     : renderWindow(sf::VideoMode(800,600), "NotHack: WPM"),
       debugFPS(),
@@ -67,6 +76,8 @@ Game::~Game() {
     if (draggable != NULL) delete draggable;
 }
 
+// Main loop for the program
+// Calls processEvents and update when the time since last update exceeds the target framerate
 void Game::run() {
     const sf::Time timePerFrame = sf::seconds(1.f / 60.f);
     sf::Clock clock;
@@ -93,12 +104,14 @@ void Game::run() {
     }
 }
 
+// Set what IDraggable (coolant) the mouse is dragging
 void Game::setDraggable(IDraggable* iDraggable) {
     // If there is a current draggable call onDragEnd on it.
     if (draggable != NULL) draggable->onDragEnd(draggable->getPosition()); 
     draggable = iDraggable;
 }
 
+// Display the hacking or browser window, close the other
 void Game::activateWindow(Registerable* reg) {
     if (currentWindow != NULL) {
         currentWindow->deactivate();
@@ -108,6 +121,8 @@ void Game::activateWindow(Registerable* reg) {
     currentWindow = reg;
 }
 
+// Call the update function on the relevant systems/objects
+// This triggers time-related events
 void Game::update(sf::Time deltaTime) {
     if (currentState == GAME) {
         Globals::hackerWindow->update(deltaTime);
@@ -121,6 +136,8 @@ void Game::update(sf::Time deltaTime) {
     }
 }
 
+// If the state is GAME, pass events to EventHandler
+// Otherwise, if not OUTRO, if a space is pressed, change the state from INTRO to GAME
 void Game::processEvents() {
     sf::Event event;
     while (renderWindow.pollEvent(event))
@@ -184,6 +201,7 @@ void Game::processEvents() {
     }
 }
 
+// Draw the intro if the state is INTRO, otherwise draw whatever is in the RenderHandler
 void Game::render() {
     renderWindow.clear();
 
@@ -213,6 +231,7 @@ void Game::render() {
     renderWindow.display();
 }
 
+// Display the new framerate on the FPS counter
 void Game::updateFPSDisplay(sf::Time t) {
     float denominator = t.asSeconds();
     float fps = -1.f;
@@ -221,12 +240,22 @@ void Game::updateFPSDisplay(sf::Time t) {
     debugFPS.setString("FPS = "+std::to_string(fps));
 }
 
+// Play the outro
 void Game::startOutro() {
     currentState = OUTRO;
     outro = new Outro();
 }
 
 
+/**************************
+ * Performs the following setup before running:
+ * 1) Loads in all art and font files (note: this does not include audio)
+ * 2) Create the game object
+ * 3) Create the view for the computer monitor (used to crop images within the monitor)
+ * 4) Create the hacking window for the hacking gameplay
+ * 5) Create the WWW browsing window
+ * 6) Run the game
+ **************************/
 int main() {
     if (!Globals::defaultFont.loadFromFile("Oxanium-Regular.ttf")) {
         std::cout << "The font could not be loaded! Oh noes!!!\n";

@@ -2,9 +2,18 @@
 #include <typeinfo>
 #include "singleton.hpp"
 
+/**********************
+ * Implementation of Singleton pattern
+ **********************/
+
 template<typename T>
 T* Singleton<T>::instance = NULL;
 
+/**********************
+ * If an instance has not been created,
+ * create it.
+ * Return the instance.
+ **********************/
 template<typename T>
 T* Singleton<T>::getInstance() {
     if (instance == NULL) {

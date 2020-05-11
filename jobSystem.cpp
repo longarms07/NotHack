@@ -2,6 +2,10 @@
 #include "hackerWindow.h"
 #include <iostream>
 
+/*************
+ * JobHandler
+ *************/
+
 JobSystem::JobHandler::JobHandler() {
     currentJob = NULL;
 }
@@ -16,15 +20,24 @@ void* JobSystem::JobHandler::operator new(size_t size) {
     return malloc(size);
 }
 
+
+/**************
+ * Load the provided job
+ * and display the hacking window
+ * (and close the browser window)
+ **************/
 void JobSystem::JobHandler::loadJob(JobInstance* jobPointer) {
         currentJob = jobPointer;
         Globals::game->activateWindow(Globals::hackerWindow);
 }
 
+// Returns if the current job is complete
 bool JobSystem::JobHandler::isComplete() {
     return currentJob->isComplete();
 }
 
+
+// Finishes the current job, changes back to the browsing window, and cleans up
 void JobSystem::JobHandler::finish() {
     currentJob->finish();
     Globals::game->activateWindow(Globals::browserWindow);
@@ -36,17 +49,30 @@ void JobSystem::JobHandler::finish() {
     currentJob = NULL;
 }
 
+
+// Return the next character to display
 char JobSystem::JobHandler::nextCharToDisplay() {
     return currentJob->nextCharToDisplay();
 }
 
+// Pass the deltaTime to the current job for time-sensitive events
 void JobSystem::JobHandler::update(sf::Time deltaTime) {
     if (currentJob != 0) {
         currentJob->update(deltaTime);
     }
 }
 
-/*EventSystem*/
+
+
+/******************************
+ * If a job is active, display the next character and call keyPressed() on the current job
+ * and then check if the job is complete (after processing the event)
+ *
+ * Note: currentJob.keyPressed() is unrelated to the event system
+ *
+ * Parameters:
+ *  - sf::Event:KeyEvent event: keyPressed event (unused) 
+ ******************************/
 void JobSystem::JobHandler::keyPressed(sf::Event::KeyEvent event) {
     if (currentJob != NULL) {
         Globals::hackerWindow->updateList(currentJob->nextCharToDisplay());
@@ -61,7 +87,16 @@ void JobSystem::JobHandler::keyPressed(sf::Event::KeyEvent event) {
     }
 }
 
-/*JobInstance*/
+
+/******************
+ * JobInstance
+ ******************/
+
+/*****************
+ * Parameters:
+ *  - std::string filePath: path to dummy text file to load
+ *****************/
+
 JobSystem::JobInstance::JobInstance(std::string filePath) {
     programTextFile.open(filePath);
 
@@ -75,6 +110,16 @@ JobSystem::JobInstance::~JobInstance() {
     programTextFile.close();
 }
 
+/*******************
+ * With exception handling, attempt to read the
+ * next character from the dummy text file
+ *
+ * Returns:
+ *  - The next character in the stream
+ *
+ * Note: If the end of the file is reached, the stream is moved back to
+ *       the beginning of the file
+ *******************/
 char JobSystem::JobInstance::nextCharToDisplay() {
     /*Exception Handling*/
     if (!programTextFile.is_open()) {
@@ -101,8 +146,14 @@ char JobSystem::JobInstance::nextCharToDisplay() {
 
 
 
-/*Factory Methods*/
+/******************
+ * Factory Methods
+ ******************/
 namespace { // Classes for factories to use
+    /******************
+     * Deprecated test job
+     * All values are predefined
+     ******************/
     class GenericJob : public JobSystem::JobInstance {
         private:
             int inputsRemainingToComplete;
