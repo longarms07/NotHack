@@ -3,6 +3,12 @@
 #include "globals.hpp"
 #include "game.h"
 
+/**************************
+ * Parameters:
+ *  - sf::pText: Full text to display
+ *  - bool pClearScreen: If true, the previous text will be cleared before loading this node's text
+ *  - bool pSameLine: If false, add a newline before displaying this text
+ ***************************/
 TextNode::TextNode(sf::String pText, float pDelay, bool pClearScreen=false, bool pSameLine=false) {
     text = pText;
     delay = pDelay;
@@ -10,6 +16,15 @@ TextNode::TextNode(sf::String pText, float pDelay, bool pClearScreen=false, bool
     sameLine = pSameLine;
 }
 
+/****************
+ * TextCrawl
+ ****************/
+
+/***********************
+ * Instantiate the TextCrawl for the given
+ * screen dimensions and instantiate its
+ * pre-programmed text crawl
+ ***********************/
 TextCrawl::TextCrawl(float screenWidth, float screenHeight)
     : crawlTextbox(),
       skipTextbox(),
@@ -67,6 +82,11 @@ TextCrawl::TextCrawl(float screenWidth, float screenHeight)
     timeUntilNextNode = textNodesList[currentNode].delay;
 }
 
+/************************
+ * Given the deltaTime, display
+ * the next character, if applicable, or
+ * load the next node, if applicable.
+ ************************/
 void TextCrawl::update(sf::Time deltaTime) {
     // Crawl display
     timeUntilNextChar -= deltaTime.asSeconds();
@@ -101,6 +121,12 @@ void TextCrawl::draw(sf::RenderTarget& target, sf::RenderStates states) const {
     }
 }
 
+
+/********************
+ * Load the next node, if any.
+ *
+ * Returns: If a new node was loaded
+ ********************/
 bool TextCrawl::next() {
     if (currentNode+1 < textNodesList.size()) {
         TextNode nextNode = textNodesList[++currentNode];

@@ -4,6 +4,16 @@
 #include <iostream>
 #include <string>
 
+/****************
+ * BrowserWindow
+ ****************/
+
+/************************
+ * Parameters:
+ *  - sf::Vector2f anchorPoint: Screen coordinates to anchor the window
+ *  - sf::Vector2f widthHeightScale: dimensions of the browser window, in % of the screen size
+ *  - sf::Font& font: Font to use for text
+ ************************/
 WorldWideWeb::BrowserWindow::BrowserWindow(sf::Vector2f anchorPoint, sf::Vector2f widthHeightScale, sf::Font& font)
     : hackscapeSprite(),
       monitorOffset(204.f, 85.f),
@@ -44,11 +54,13 @@ void WorldWideWeb::BrowserWindow::setPosition(float x, float y) {
     setWebsitePosition();
 }
 
+// When a website is loaded, its position should be set to the position of the computer/browser
 void WorldWideWeb::BrowserWindow::setWebsitePosition() {
     sf::Vector2f newSitePosition = monitorOffset+websiteOffset;
     currentSite->setPosition(newSitePosition.x, newSitePosition.y);
 }
 
+// Deprecated
 void WorldWideWeb::BrowserWindow::mouseMove(sf::Event::MouseMoveEvent event) {
     // if (dragging) {
     //     sf::Vector2f eventLocation(event.x, event.y);
@@ -57,6 +69,7 @@ void WorldWideWeb::BrowserWindow::mouseMove(sf::Event::MouseMoveEvent event) {
     // }
 }
 
+// Deprecated
 void WorldWideWeb::BrowserWindow::mouseDown(sf::Event::MouseButtonEvent event) {
     // sf::Vector2f eventLocation(event.x, event.y);
 
@@ -69,6 +82,7 @@ void WorldWideWeb::BrowserWindow::mouseDown(sf::Event::MouseButtonEvent event) {
     // }
 }
 
+// If return is pressed and the URLBar is focused, load the website URL (if valid)
 void WorldWideWeb::BrowserWindow::keyPressed(sf::Event::KeyEvent event) {
     if (event.code == sf::Keyboard::Return && urlBar->textField.isFocused()) {
         std::string comparableString = static_cast<std::string>(urlBar->textField.getText());
@@ -84,11 +98,14 @@ void WorldWideWeb::BrowserWindow::keyPressed(sf::Event::KeyEvent event) {
     }
 }
 
+// Deprecated
 void WorldWideWeb::BrowserWindow::mouseUp(sf::Event::MouseButtonEvent event) {
     // std::cout << "Mouse up event" << std::endl;
     dragging = false;
 }
 
+
+// Set the current website to the provided pointer; deactive the old website
 void WorldWideWeb::BrowserWindow::setWebsite(WindowPart* newSite) {
     if (currentSite != NULL) {
         currentSite->deactivate();
@@ -99,7 +116,7 @@ void WorldWideWeb::BrowserWindow::setWebsite(WindowPart* newSite) {
     currentSite->activate();
 }
 
-
+// Register the BrowserWindow to be displayed
 void WorldWideWeb::BrowserWindow::activate() {
     RenderSystem::RenderHandler::getInstance()->registerDrawable(this);
     EventSystem::EventHandler* handlerInstance = EventSystem::EventHandler::getInstance();
@@ -110,6 +127,7 @@ void WorldWideWeb::BrowserWindow::activate() {
     currentSite->activate();
 }
 
+// Unregister the BrowserWindow from event and render handling
 void WorldWideWeb::BrowserWindow::deactivate() {
     RenderSystem::RenderHandler::getInstance()->unregisterDrawable(this);
     EventSystem::EventHandler* handlerInstance = EventSystem::EventHandler::getInstance();
@@ -121,8 +139,9 @@ void WorldWideWeb::BrowserWindow::deactivate() {
 }
 
 
-// URLBar
-
+/****************
+ * URLBar
+ ****************/
 WorldWideWeb::URLBar::URLBar(sf::Font& font)
     : textField(sf::Vector2f(0.f, 0.f), sf::Vector2f(186.f, 17.f), font)
 { }
@@ -135,6 +154,7 @@ void WorldWideWeb::URLBar::setPosition(float x, float y) {
     textField.setPosition(x, y);
 }
 
+// Register the URLBar to the EventSystem
 void WorldWideWeb::URLBar::activate() {
     EventSystem::EventHandler* handlerInstance = EventSystem::EventHandler::getInstance();
     handlerInstance->registerMouseDownObserver(&textField);
@@ -142,6 +162,7 @@ void WorldWideWeb::URLBar::activate() {
     handlerInstance->registerKeyPressedObserver(&textField);
 }
 
+// Unregister the URLBar from the EventSystem
 void WorldWideWeb::URLBar::deactivate() {
     EventSystem::EventHandler* handlerInstance = EventSystem::EventHandler::getInstance();
     handlerInstance->unregisterMouseDownObserver(&textField);
@@ -150,7 +171,9 @@ void WorldWideWeb::URLBar::deactivate() {
 }
 
 
-// Red
+/************
+ * Red testing website
+ ************/
 WorldWideWeb::Sites::Red::Red()
     : background()
 {
@@ -171,7 +194,10 @@ void WorldWideWeb::Sites::Red::setPosition(float x, float y) {
 }
 
 
-// Blue
+/************
+ * Blue testing website
+ ************/
+
 WorldWideWeb::Sites::Blue::Blue()
     : background()
 {
@@ -192,7 +218,14 @@ void WorldWideWeb::Sites::Blue::setPosition(float x, float y) {
 }
 
 
-// Hackdeed
+/************
+ * Hackdeed job board website
+ ************/
+
+/*************
+ * In addition to the website,
+ * three job buttons are instantiated
+ *************/
 WorldWideWeb::Sites::Hackdeed::Hackdeed()
     : background(),
       buttonOffset(6.f, 10.f)
@@ -230,19 +263,29 @@ void WorldWideWeb::Sites::Hackdeed::setPosition(float x, float y) {
     }
 }
 
+// Call activate() for all jobButtons; registers buttons for event handling
 void WorldWideWeb::Sites::Hackdeed::activate() {
     for (JobButton* jobButton : jobButtons) {
         jobButton->activate();
     }
 }
 
+// Call deactivate() for all jobButtons; unregisters buttons for event handling
 void WorldWideWeb::Sites::Hackdeed::deactivate() {
     for (JobButton* jobButton : jobButtons) {
         jobButton->deactivate();
     }
 }
 
-// JobButton
+/*************
+ * JobButton
+ *************/
+
+/*****************
+ * Parameters:
+ *  - sf::Vector2f pWidthHeight: Dimensions of the button
+ *  - JobInstance* instance: Job that will be loaded when the button is clicked
+ *****************/
 WorldWideWeb::JobButton::JobButton(sf::Vector2f pWidthHeight, JobSystem::JobInstance* instance)
     : background(pWidthHeight),
       MouseDownObserver(false)
@@ -264,6 +307,8 @@ WorldWideWeb::JobButton::JobButton(sf::Vector2f pWidthHeight, JobSystem::JobInst
     loadStrings();
 }
 
+// Display the name and reward strings on the button
+// Note: This should be called after JobButton::job is changed
 void WorldWideWeb::JobButton::loadStrings() {
     jobTitle.setString(job->getNameString());
     jobPay.setString(job->getRewardString());
@@ -279,6 +324,7 @@ void WorldWideWeb::JobButton::draw(sf::RenderTarget& target, sf::RenderStates st
     target.draw(jobPay, states);
 }
 
+// Detect if button was clicked
 void WorldWideWeb::JobButton::mouseDown(sf::Event::MouseButtonEvent event) {
     sf::Vector2f eventPosition(event.x, event.y);
 
@@ -296,11 +342,13 @@ void WorldWideWeb::JobButton::setPosition(float x, float y) {
     jobPay.setPosition(5+x, y+widthHeight.y/2);
 }
 
+// Register the button for event handling
 void WorldWideWeb::JobButton::activate() {
     EventSystem::EventHandler* handlerInstance = EventSystem::EventHandler::getInstance();
     handlerInstance->registerMouseDownObserver(this);
 }
 
+// Unregister the button from event handling
 void WorldWideWeb::JobButton::deactivate() {
     EventSystem::EventHandler* handlerInstance = EventSystem::EventHandler::getInstance();
     handlerInstance->unregisterMouseDownObserver(this);

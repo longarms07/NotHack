@@ -3,6 +3,13 @@
 #include <cmath>
 #include <iostream>
 
+/***************************
+ * Parameters:
+ *  - sf::Sprite* spriteToWrap: Pointer to sprite to animate and draw
+ *  - float pHeight: amplitude of sine (how far left and right the object moves)
+ *  - float pPeriod: duration of the animation in seconds
+ *  - float startTime: Option to start mid-animation
+ ***************************/
 SpriteAnimations::HorizontalSine::HorizontalSine(sf::Sprite* spriteToWrap, float pHeight, float pPeriod, float startTime) {
     originalSprite = spriteToWrap;
 
@@ -16,6 +23,12 @@ SpriteAnimations::HorizontalSine::~HorizontalSine() {
     delete originalSprite;
 }
 
+/***********************
+ * Update the animation, given how much time has passed
+ *
+ * Parameters:
+ *  - sf::deltaTime: time since last frame
+ ***********************/
 void SpriteAnimations::HorizontalSine::update(sf::Time deltaTime) {
     currentTime = fmod((currentTime + deltaTime.asSeconds()), period*(2.f*3.1516f));
 

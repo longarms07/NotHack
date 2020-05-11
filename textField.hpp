@@ -1,16 +1,15 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 
-/**************
- TODO:
-    - Make Textfield have bounds and an optional background (to show bounds)
-***************/
+/*********************************
+ * Class for text field (such as URL bar)
+ *********************************/
 
 class TextField : public sf::Drawable, public EventSystem::MouseDownObserver, public EventSystem::TextEnteredObserver, public EventSystem::KeyPressedObserver {
     private:
-        sf::Text text;
-        sf::RectangleShape background;
-        bool focused;
+        sf::Text text; // Text being displayed
+        sf::RectangleShape background; // Background for the field (shows bounds)
+        bool focused; // Is the field currently receiving inputs?
 
     public:
         TextField(sf::Vector2f, sf::Vector2f, sf::Font&);

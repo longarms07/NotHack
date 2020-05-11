@@ -8,14 +8,18 @@
  * EventHandler
  ***************/
 
-// Remove observers list
-
 EventSystem::EventHandler::EventHandler() { }
 
 void* EventSystem::EventHandler::operator new(size_t size) {
     return malloc(size);
 }
 
+/*************
+ * The function that game passes events to.
+ * Events are then handed off to the relevant processing functions.
+ * Parameters:
+ *  - sf::Event event: the event to be processed
+ *************/
 void EventSystem::EventHandler::processEvent(sf::Event event) {
     switch (event.type) {
         case sf::Event::MouseMoved:
@@ -40,7 +44,10 @@ void EventSystem::EventHandler::processEvent(sf::Event event) {
 }
 
 
-/*Un/Registration*/
+/******************
+ * Each method takes a specific observer
+ * and registers it to receive events
+ ******************/
 
 bool EventSystem::EventHandler::registerMouseMoveObserver(MouseMoveObserver* observer) {
     if (std::find(mouseMoveRegistrants.begin(), mouseMoveRegistrants.end(), observer) != mouseMoveRegistrants.end()) {
@@ -96,6 +103,14 @@ bool EventSystem::EventHandler::registerKeyReleasedObserver(KeyReleasedObserver*
     }
 }
 
+
+/******************
+ * Unregistration works similar to registration,
+ * but observers are removed after all events are processed
+ * (end of frame) by removeClearedObservers(). This hapens after the unregistration
+ * process
+ ******************/
+
 bool EventSystem::EventHandler::unregisterMouseMoveObserver(MouseMoveObserver* observer) {
     if (std::find(mouseMoveRegistrants.begin(), mouseMoveRegistrants.end(), observer) != mouseMoveRegistrants.end()) {
         mouseMoveRegistrantsToRemove.push_back(observer);
@@ -150,7 +165,12 @@ bool EventSystem::EventHandler::unregisterKeyReleasedObserver(KeyReleasedObserve
     }
 }
 
-/*Unregistration Update*/
+
+/***************
+ * Removes unregistered observers.
+ * Occurs after all events are processed (end of frame)
+ ***************/
+
 void EventSystem::EventHandler::removeClearedObservers() {
     for (MouseMoveObserver* ob : mouseMoveRegistrantsToRemove) {
         mouseMoveRegistrants.remove(ob);
@@ -184,6 +204,9 @@ void EventSystem::EventHandler::removeClearedObservers() {
 }
 
 /*Event Handling*/
+/****************
+ * Methods that pass event handling to the relevant observers
+ ****************/
 
 void EventSystem::EventHandler::mouseMoveEvent(sf::Event::MouseMoveEvent event) {
     for (MouseMoveObserver* observer : mouseMoveRegistrants) {
@@ -231,6 +254,12 @@ void EventSystem::EventHandler::keyReleasedEvent(sf::Event::KeyEvent event) {
 /**************
  * Observers
  **************/
+
+/********************
+ * All observer constructors take an optional parameter (default is true)
+ * autoRegisters that, if true, automatically subscribes the observer to
+ * EventHandler.
+ ********************/
 
 /*Mouse Observers*/
 
