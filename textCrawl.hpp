@@ -2,12 +2,16 @@
 #include <SFML/Graphics.hpp>
 #include <vector>
 
+/**************************************************
+ * TextNode:
+ *  - Information on the current text to display
+ **************************************************/
 class TextNode {
     public:
         sf::String text;
-        float delay;
-        bool clearScreen;
-        bool sameLine;
+        float delay; // How long to wait before displaying next text
+        bool clearScreen; // Should the previous text be cleared?
+        bool sameLine; // Should this text be on the same line as the previous?
 
     public:
         TextNode(sf::String, float, bool, bool);
@@ -15,21 +19,21 @@ class TextNode {
 
 class TextCrawl : public sf::Drawable {
     private:
-        int currentNode;
+        int currentNode; // Current TextNode being displayed
         std::vector<TextNode> textNodesList;
 
-        float timeUntilNextChar;
-        float timeUntilNextNode;
-        float skipBlinkTimer;
+        float timeUntilNextChar; // Time until the next character of the currentNode should be displayed
+        float timeUntilNextNode; // How long until the next TextNode should be loaded
+        float skipBlinkTimer; // Timer for the skip text's blinking
 
-        int nextCharIndex;
-        sf::String targetText;
+        int nextCharIndex; // Index of the next char to display
+        sf::String targetText; // Full text, once all characters have been displayed; the substring targetText(0, nextCharIndex) is displayed
 
-        sf::Text crawlTextbox;
-        sf::Text skipTextbox;
+        sf::Text crawlTextbox; // Textbox for the text crawl
+        sf::Text skipTextbox; // Textbox for the skip button
 
-        const float charDelay = 0.035f;
-        const float skipBlinkDelay = 2.5f;
+        const float charDelay = 0.035f; // Delay before displaying the next character
+        const float skipBlinkDelay = 2.5f; // Delay before blinking the skip text off
 
     public:
         TextCrawl(float, float);
@@ -39,5 +43,5 @@ class TextCrawl : public sf::Drawable {
         void draw(sf::RenderTarget&, sf::RenderStates) const;
 
     private:
-        bool next();
+        bool next(); // Load next TextNode
 };

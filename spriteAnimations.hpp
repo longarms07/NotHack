@@ -1,14 +1,23 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 
+/**********************************
+ * Namespace for sprite animations
+ **********************************/
 namespace SpriteAnimations {
+    /******************************
+     * HorizontalSinge:
+     *  - A class that moves its sprite
+     *    back and forth
+     *  - Used for firewall layers
+     ******************************/
     class HorizontalSine : public sf::Drawable {
         private:
-            float height;
-            float period;
-            sf::Sprite* originalSprite;
+            float height; // Amplitude of the sine
+            float period; // Period of sine
+            sf::Sprite* originalSprite; // Sprite to draw
 
-            double currentTime;
+            double currentTime; // Time into the animation
 
         public:
             HorizontalSine(sf::Sprite*, float height, float period, float startTime=0);

@@ -1,10 +1,8 @@
 #pragma once
 
-/*****************
- TODO:
-  - Prevent race conditions on instance
-******************/
-
+/**************************************
+ * Implementation of Singleton pattern
+ **************************************/
 template<typename T>
 class Singleton {
     private:

@@ -2,14 +2,11 @@
 #include <SFML/Graphics.hpp>
 #include "singleton.hpp"
 
-/*
-TODO:
-    - Maybe all the event passing should instead be done by const reference instead
-        of by copy?
-
-    - Should observers automatically register themselves?
-    - Should observers automatically unregister themselves when destroyed?
-*/
+/*****************************************************
+ * EventSystem:
+ *      - namespace for all subjects and observers
+ *        relating to event (input) handling
+ * ***************************************************/
 
 namespace EventSystem {
     class MouseMoveObserver;
@@ -19,12 +16,19 @@ namespace EventSystem {
     class KeyPressedObserver;
     class KeyReleasedObserver;
 
-    // Should be singleton
+    /********************************
+     * Subject responsible for handling
+     * events and passing them to the
+     * appropriate observers
+     ********************************/
     class EventHandler : public Singleton<EventHandler> {
         friend EventHandler* Singleton<EventHandler>::getInstance();
 
         private:
-            // Collection should maybe be a map/skiplist
+            /************************************
+             * Each list corresponds to a group
+             * of observers for a specific event
+             **************************************/
             std::list<MouseMoveObserver*> mouseMoveRegistrants;
             std::list<MouseDownObserver*> mouseDownRegistrants;
             std::list<MouseUpObserver*> mouseUpRegistrants;
@@ -40,9 +44,11 @@ namespace EventSystem {
             std::list<KeyReleasedObserver*> keyReleasedRegistrantsToRemove;
 
         public:
-            void processEvent(sf::Event);
-            void removeClearedObservers();
+            void processEvent(sf::Event); // Process event and call the event handling functions for the relevant observers
+            void removeClearedObservers(); // Function called at the very end of event handling; some objects are told to
+                                           // unsubscribe after an event, but still need to finish event processing before that)
 
+            // Functions for registering and unregistering observers
             bool registerMouseMoveObserver(MouseMoveObserver*);
             bool registerMouseDownObserver(MouseDownObserver*);
             bool registerMouseUpObserver(MouseUpObserver*);
@@ -61,6 +67,7 @@ namespace EventSystem {
             EventHandler(); // Should never be called
             void* operator new(size_t); // Should never be called
 
+            // Processing for specific events
             void mouseMoveEvent(sf::Event::MouseMoveEvent);
             void mouseDownEvent(sf::Event::MouseButtonEvent);
             void mouseUpEvent(sf::Event::MouseButtonEvent);
@@ -69,8 +76,9 @@ namespace EventSystem {
             void keyReleasedEvent(sf::Event::KeyEvent);
     };
 
-    /*Mouse Observers*/
 
+
+    /*Mouse Observers*/
     class MouseMoveObserver {
         public:
             MouseMoveObserver(bool autoRegister=true);

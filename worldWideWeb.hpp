@@ -7,26 +7,25 @@
 #include "registerable.hpp"
 #include <list>
 
-/*
-TODO:
-    - Maybe all the event passing should instead be done by const reference instead
-        of by copy?
-
-    - Abstract dragable
-
-    - Check difference between mouse0, 1, 2 and events
-    - Implement states better
-
-    - Should Drawable inheritance be virtual?
-
-    - Better way to compare strings?
-*/
-
+/*****************************
+ * Namespace for all classes
+ * related to the WorldWideWeb
+ * and browser
+ *****************************/
 namespace WorldWideWeb {
     class WindowPart;
     class URLBar;
     class JobButton;
 
+    /************************************
+     * BrowserWindow:
+     *  - Class responsible for all event
+     *    handling and rendering relating
+     *    to the WWW and browser
+     * Visual:
+     *  - The browser windows inside the
+    *     computer monitor
+     ************************************/
     class BrowserWindow : public sf::Drawable,
                           public EventSystem::MouseMoveObserver,
                           public EventSystem::MouseDownObserver,
@@ -35,17 +34,18 @@ namespace WorldWideWeb {
                           public Registerable
     {
         public:
-            URLBar* urlBar;
-            WindowPart* currentSite;
+            URLBar* urlBar; // TextField for website URLs
+            WindowPart* currentSite; // Current site being shown
 
         private:
-            sf::Sprite hackscapeSprite;
+            sf::Sprite hackscapeSprite; // Sprite for the browser background
 
             sf::Vector2f monitorOffset;
             sf::Vector2f urlOffset;
             sf::Vector2f websiteOffset;
 
             /*Dragging State*/
+            // Deprecated, used to dragging windows around
             bool dragging;
             sf::Vector2f mouseOffsetFromOrigin;
 
@@ -66,6 +66,7 @@ namespace WorldWideWeb {
             void keyPressed(sf::Event::KeyEvent);
 
             /*Registerable*/
+            // Show/hide the browser
             void activate();
             void deactivate();
 
@@ -74,20 +75,19 @@ namespace WorldWideWeb {
             void setWebsitePosition();
     };
 
-    /*
-    class Internet {
-        // Keeps track of sites; the "topography" of the net
-    }
-    */
-
 
     /***************
      * WINDOW PARTS
      ***************/
 
+    /*********************
+     * An abstrct class for
+     * all objects that make up a website
+     * or browser window;
+     * includes event handling
+     * and rendering
+     *********************/
     class WindowPart : public sf::Drawable, public Registerable {
-        // Part of the window, inherited by everything
-        // Handles its own rendering and events
         public:
             virtual void draw(sf::RenderTarget&, sf::RenderStates) const = 0;
 
@@ -95,14 +95,15 @@ namespace WorldWideWeb {
             virtual void setPosition(float, float) = 0;
     };
 
+    /********************************************
+     * Namespace for websites. Website follow
+     * the singleton pattern because there is always
+     * only one instance of a website at any given time.
+     ********************************************/
     namespace Sites {
-        // Sites should all follow the singleton pattern, since they have state
-
-        // class Bank : public WindowPart {
-        //     public:
-        //         void draw(sf::RenderTarget& renderTarget, sf::RenderStates states) const;
-        // };
-
+        /********************
+         * Testing website that displays red
+         ********************/
         class Red : public WindowPart, public Singleton<Red> {
             friend Red* Singleton<Red>::getInstance();
 
@@ -117,6 +118,9 @@ namespace WorldWideWeb {
                 void setPosition(float, float);
         };
 
+        /********************
+         * Testing website that displays blue
+         ********************/
         class Blue : public WindowPart, public Singleton<Blue> {
             friend Blue* Singleton<Blue>::getInstance();
 
@@ -131,26 +135,25 @@ namespace WorldWideWeb {
                 void setPosition(float, float);
         };
 
-        /*
-        class IRC : public WindowPart {
-
-        }
-        */
-
+        /********************
+         * Job board website where
+         * player goes to select
+         * hacking jobs
+         ********************/
         class Hackdeed : public WindowPart, public Singleton<Hackdeed> {
             friend Hackdeed* Singleton<Hackdeed>::getInstance();
 
             private:
-                sf::RectangleShape background;
+                sf::RectangleShape background; // Background of website
 
-                sf::Vector2f buttonOffset;
+                sf::Vector2f buttonOffset; // Margin between each job button
 
-                std::list<JobButton*> jobButtons;
+                std::list<JobButton*> jobButtons; // List of buttons for each job available
 
             public:
                 /*Registerable*/
-                void activate();
-                void deactivate();
+                void activate(); // Show site
+                void deactivate(); // Hide site
 
             private:
                 Hackdeed();
@@ -161,6 +164,10 @@ namespace WorldWideWeb {
         };
     }
 
+    /**********************************
+     * Class responsible for taking in
+     * URLs and using them to switch sites
+     **********************************/
     class URLBar : public WindowPart {
         public:
             TextField textField;
@@ -176,15 +183,24 @@ namespace WorldWideWeb {
             void deactivate();
     };
 
+    /******************************
+     * JobButton:
+     *  - Class that allows player to select
+     *    (and activate) a hacking job
+     *  - Is the interface between the browser,
+     *    job, player, and JobSystem
+     * Visual:
+     *   - Displays a clickable button
+     ******************************/
     class JobButton : public WindowPart, public EventSystem::MouseDownObserver {
         private:
-            sf::Vector2f widthHeight;
+            sf::Vector2f widthHeight; // Dimensions of the button
 
-            JobSystem::JobInstance* job;
+            JobSystem::JobInstance* job; // Job the button is representing
 
-            sf::RectangleShape background;
+            sf::RectangleShape background; // Background for hte button
             sf::Text jobTitle;
-            sf::Text jobPay;
+            sf::Text jobPay; // Text for job reward
 
         public:
             JobButton(sf::Vector2f, JobSystem::JobInstance*);
@@ -205,6 +221,6 @@ namespace WorldWideWeb {
             void deactivate();
 
         private:
-            void loadStrings();
+            void loadStrings(); // Load the correct text for jobTitle and jobPay, mainly called when the job changes
     };
 }

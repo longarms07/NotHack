@@ -8,6 +8,10 @@
 #include <list>
 #include <cassert>
 
+/************************
+ * Namespace for all classes related
+ * to the hacking jobs.
+ ************************/
 namespace JobSystem {
     sf::String jobNames[] = {"Fix HackTube", "Contract Trace Virus", "Scrub HackSpace Presence",
                              "Program More RAM", "Download a Car", "Catch Web Surfers",
@@ -22,6 +26,10 @@ namespace JobSystem {
 
     class JobInstance;
 
+    /****************************************
+     * Class respoonsible for changing jobs
+     * and updating state
+     ****************************************/
     class JobHandler : public Singleton<JobHandler>, public EventSystem::KeyPressedObserver {
         friend JobHandler* Singleton<JobHandler>::getInstance();
 
@@ -32,10 +40,10 @@ namespace JobSystem {
             ~JobHandler();
 
             void loadJob(JobInstance*);
-            bool isComplete();
-            void finish();
-            char nextCharToDisplay();
-            void update(sf::Time);
+            bool isComplete(); // Is the current job complete?
+            void finish(); // Called the finish function on the job and cleans up
+            char nextCharToDisplay(); // Display the next character from the dummy text file
+            void update(sf::Time); // Called every frame for time-related events
 
             /*EventSystem*/
             void keyPressed(sf::Event::KeyEvent);
@@ -45,29 +53,36 @@ namespace JobSystem {
             void* operator new(size_t); // Should never be called
     };
 
+    /***************************************
+     * An instance of a particular job type,
+     * used by JobHandler to represent a
+     * job in progress
+     ***************************************/
     class JobInstance {
         private:
-            std::ifstream programTextFile;
+            std::ifstream programTextFile; // Dummy text file to display text from
 
         protected:
-            std::list<Complication::Complication*> complications;
+            std::list<Complication::Complication*> complications; // All complications (ex. firewalls) in the job
 
         public:
             JobInstance(std::string);
             virtual ~JobInstance();
 
-            char nextCharToDisplay();
+            char nextCharToDisplay(); // Return the next character that should be displayed from programTextFile
 
             virtual void keyPressed() = 0; // Not an observer
             virtual void finish() = 0; // Ends job, gives reward, and sets flags
             virtual void update(sf::Time) = 0; // Standard update function
             virtual bool isComplete() = 0; // Checks if job has ended
 
-            virtual sf::String getNameString() = 0;
-            virtual sf::String getRewardString() = 0;
+            virtual sf::String getNameString() = 0; // Get the name of the job (for display purposes)
+            virtual sf::String getRewardString() = 0; // Get a description of the job's reward (for display purposes)
     };
     
-
+    /**************************************
+     * Factories for creating JobInstances
+     **************************************/
     namespace Factories {
 
         JobInstance* genericJob(); // Returns a generic, easy job
